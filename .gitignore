@@ -1,0 +1,11 @@
+# OS / editor noise
+.DS_Store
+._*
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Course handouts: kept local, not redistributed in a public repo
+Project.pdf
+project-guide.pdf
