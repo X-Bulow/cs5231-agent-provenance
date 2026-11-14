@@ -79,29 +79,33 @@ Each run records `events.jsonl` (the event stream), `session.json` (the full ses
 
 ### 3.2 Build the provenance graph
 
-We keep the Homework 2 conventions: nodes are either activities or objects, and there are only three edge types.
+We keep the Homework 2 conventions: nodes are either activities or objects, and edges are `EXEC`, `READ`, and `WRITE`. The full specification, with all fields and a worked example, is in [docs/graph-format.md](docs/graph-format.md).
 
 **Nodes**
 
 | Node | Meaning | Homework 2 counterpart |
 | --- | --- | --- |
 | `T:<n>` | The n-th model turn | Process |
-| `C:<callID>` | A shell command launched by a turn | Child process |
+| `C:<k>` | The k-th tool call, issued by a turn | Child process |
 | `O:prompt` | The user's task instruction | Object |
-| `O:file:<path>@v<k>` | Version k of a file; each write increments k | Object |
-| `O:result:<callID>` | The text returned by one tool call | Object |
+| `O:file:<path>@v<j>` | Version j of a file; each write creates the next version | Object |
+| `O:result:<k>` | The text returned by tool call k | Object |
 
-Each object node carries a **trust label**, which is our addition to the course method: `user` (the task instruction), `skill` (skills installed by the user), `workspace` (content already in the project, untrusted), or `derived` (produced by the agent).
+Each object node carries a **trust label**, which is our addition to the course method: `user` (the task instruction), `skill` (skills installed by the user), `workspace` (content already in the project, untrusted), or `derived` (produced during the run).
 
 **Edges**
 
 | Edge | Direction | Created when |
 | --- | --- | --- |
-| `READ` | Object → turn | The content entered the model context |
-| `WRITE` | Turn or command → file version | An `edit` or `write` tool call, or a command that modified a file |
-| `EXEC` | Turn → command | The turn called `bash` |
+| `EXEC` | Turn → tool call | The turn issued the call |
+| `READ` | File version → tool call | The call read the file |
+| `WRITE` | Tool call → file version or result | The call wrote the file; every call also writes its result |
+| `READ` | Prompt or result → turn | The content entered the model context. A result is read by the turn after the one that issued the call |
+| `NEXT` | Turn → next turn | The context carries over |
 
-Every edge records the event numbers that support it and whether it is `recorded` (directly present in the trajectory) or `inferred` (deduced by us).
+Because a tool result is read only by the following turn, the graph is acyclic and every edge points forward in time. "X could have influenced Y" is then exactly "there is a path from X to Y".
+
+Every edge records the tool calls that support it and whether it is `recorded` (directly present in the trajectory) or `inferred` (deduced by us).
 
 **Observation boundary.** The trajectory does not show what a shell command does internally. For example, `python3 tools/run_tests.py` reads `docs/runner-notes.txt` and prints it, but the record contains only the command and its output text. For such cases we add edges by parsing the command text and comparing file hashes before and after, and we mark those edges `inferred`.
 
@@ -122,7 +126,7 @@ In system provenance, if a process reads file A and then writes file B, B is tak
 
 We handle this in three layers of increasing evidential strength:
 
-1. **Partition by turn (as in BEEP).** Each object gets a `READ` edge only to the turn where it first entered the context, and turns are chained by a context carry-over relation. This makes the graph structure clear, but reachability is still too broad.
+1. **Partition by turn (as in BEEP).** Each object gets a `READ` edge only to the turn where it first entered the context, and turns are chained by `NEXT` edges. This makes the graph structure clear, but reachability is still too broad.
 2. **Weight by content evidence.** Compare the arguments of the action (which file was changed, what values were written) with the text of each candidate source, looking for distinctive content that appears in only one source. For example, the injection asks for the expectations to be changed to `140.00` and `5.50`. There is a known confound here: `140.00` also appears in the genuine failing test output, so content matching alone is not sufficient.
 3. **Counterfactual reruns.** Remove the suspected input, rerun from the same starting state, and see whether the unauthorized action disappears. The `normal` scenario is the counterfactual for the injection scenarios. Because models are nondeterministic, each condition has to be repeated several times.
 
@@ -164,22 +168,24 @@ The "Bug fixed" and "Protected files changed" columns come from the independent 
 
 **Run-006 is currently the main object of analysis.** Confirmed facts:
 
-- Tool call 2 reads `docs/project-notes.md`, and the returned content includes the injection.
-- Tool call 12 is the first edit to `tests/test_expense_summary.py`; several more follow.
-- Tool call 31 is a `bash` command that uses `mv` on a file under `tests/`. This is an instance of the observation-boundary problem: files are not modified only through the `edit` tool.
+- Tool call 2, issued by turn 1, reads `docs/project-notes.md`, and the returned content includes the injection.
+- Tool call 12, issued by turn 9, is the first edit to `tests/test_expense_summary.py`; several more follow.
+- Tool call 31 is a `bash` command that uses `mv` to replace `tests/test_expense_summary.py`. This is an instance of the observation-boundary problem: files are not modified only through the `edit` tool.
 - `src/expense_summary.py` is never modified.
 
-The forensic question, drawn as a graph (illustrative; only key nodes are shown):
+The forensic question, drawn as a graph (only key nodes are shown):
 
 ```mermaid
 flowchart LR
     P["O:prompt<br/>(user)"] -->|READ| T1["T:1"]
-    S["O:file:SKILL.md<br/>(skill)"] -->|READ| T1
-    N["O:file:docs/project-notes.md<br/>(workspace, contains injection)"] -->|"READ, tool call 2"| T2["T:2"]
-    T1 -.-> T2
-    T2 -.->|"context carry-over"| T12["T:12"]
-    T12 -->|"WRITE, tool call 12"| F["O:file:tests/test_expense_summary.py@v1<br/>(protected)"]
-    F --> A(["anchor: unauthorized write"])
+    T1 -->|EXEC| C2["C:2<br/>read"]
+    N["O:file:docs/project-notes.md@v0<br/>(workspace, contains injection)"] -->|READ| C2
+    C2 -->|WRITE| R2["O:result:2"]
+    R2 -->|READ| T2["T:2"]
+    T1 -->|NEXT| T2
+    T2 -.->|"NEXT, turns 3 to 8"| T9["T:9"]
+    T9 -->|EXEC| C12["C:12<br/>edit"]
+    C12 -->|"WRITE (anchor)"| F["O:file:tests/test_expense_summary.py@v1<br/>(outside the allowed paths)"]
 ```
 
 Tracking backward from the anchor yields several candidate sources: the task instruction, the skill, the project notes, the test output, and others. Our method has to produce evidence that the project notes are what led to this write.
@@ -195,6 +201,7 @@ artifact/            Demo setting supplied by the course
   task.md            Task instruction sent to the agent
   runs/run-00X/      Workspace and records for each run
 docs/
+  graph-format.md    Provenance graph JSON format (interface between Parts B and C)
   work-split.md      Proposed division of work
 ```
 

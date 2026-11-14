@@ -46,7 +46,7 @@ The estimates are rough and assume a few hours of work per day.
 **Tasks**
 
 1. **Parse the trajectory.** Read `events.jsonl` and `session.json` into one uniform event sequence: each turn, and for each tool call its tool name, arguments, returned text, and time.
-2. **Build nodes and edges.** Follow the conventions in README Section 3.2: turns `T`, commands `C`, objects `O`; edges `READ`, `WRITE`, `EXEC`. Every edge carries the event numbers that support it.
+2. **Build nodes and edges.** Follow [graph-format.md](graph-format.md): turns `T`, tool calls `C`, objects `O`; edges `EXEC`, `READ`, `WRITE`, `NEXT`. Every edge carries the tool calls that support it.
 3. **Version files.** Each write to a file creates a new version node, so that we can tell whether a read saw the content before or after a modification.
 4. **Assign trust labels.** Using `baseline.json` and paths, label objects as `user`, `skill`, `workspace`, or `derived`.
 5. **Handle the observation boundary.** The trajectory does not record which files a shell command reads or writes internally. Add these edges by parsing the command text and comparing hashes before and after, and mark them `inferred`. Two cases to cover: the `mv` on a test file in run-006, and `run_tests.py` printing `runner-notes.txt` in run-003.
@@ -82,7 +82,7 @@ The estimates are rough and assume a few hours of work per day.
 - `results/`: anchors, backward subgraphs, rankings, and scores for each run.
 - Report sections: the analysis method within the technical design, evaluation results, limitations.
 
-**Prerequisites:** depends on B's graph format. The format is already agreed in README Section 3.2, so C can develop against a small hand-written graph of run-006 without waiting for B.
+**Prerequisites:** depends on B's graph format. The format is fixed in [graph-format.md](graph-format.md), so C can develop against the run-006 excerpt given there without waiting for B.
 
 **Suits:** someone comfortable with algorithms and the course papers (BackTracker, BEEP, NoDoze). This is conceptually the hardest part and maps most directly onto the 10 marks for technical design.
 
@@ -91,21 +91,7 @@ The estimates are rough and assume a few hours of work per day.
 To work in parallel, we fix two interfaces up front:
 
 - **A → B:** the run directory format. It is already fixed by the artifact's scripts and needs no further discussion.
-- **B → C:** the JSON format of the graph. The proposal below is to be confirmed in discussion:
-
-```json
-{
-  "run": "run-006",
-  "nodes": [
-    {"id": "T:12", "kind": "turn"},
-    {"id": "O:file:docs/project-notes.md@v0", "kind": "object", "trust": "workspace"}
-  ],
-  "edges": [
-    {"src": "O:file:docs/project-notes.md@v0", "rel": "READ", "dst": "T:2",
-     "evidence": [2], "basis": "recorded"}
-  ]
-}
-```
+- **B → C:** the JSON format of the graph. It is specified in [graph-format.md](graph-format.md), which lists every node and edge field, shows how Part C is expected to use the graph, and includes a worked excerpt from run-006.
 
 ## Shared work
 
@@ -119,7 +105,7 @@ These belong to no single part and are done together:
 
 | Date | Target |
 | --- | --- |
-| Nov 15 (Sun) | Discuss this document, choose parts, confirm the graph JSON format |
+| Nov 15 (Sun) | Discuss this document, choose parts, raise any objections to the graph JSON format |
 | Nov 18 (Wed) | Full pipeline working on run-006: build the graph, detect the anchor, track back to the injected source |
 | Nov 22 (Sun) | A's additional experiments finished; C's evaluation numbers available |
 | Nov 24 (Tue) | Report draft and presentation material finished |
@@ -130,7 +116,7 @@ The Nov 18 target matters most: the sooner the pipeline works on one run, the so
 ## To decide in discussion
 
 1. Who takes which part, and who owns the final edit of the report.
-2. Whether the graph JSON format follows the proposal above.
+2. Whether anyone needs a change to the graph JSON format in [graph-format.md](graph-format.md).
 3. How many repetitions per condition. More repetitions give more reliable conclusions but take more time.
 4. The report deadline. The course slides do not state one; it needs to be confirmed with the instructor.
 5. If the group has four people: Part C can be split in two, with one person on the tracking queries (tasks 1 to 4) and one on anomaly scoring and evaluation (tasks 5 and 6).
