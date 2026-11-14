@@ -1,97 +1,97 @@
-# 分工方案(待讨论)
+# Proposed Division of Work (for discussion)
 
-这份文档把项目的工作量拆成三部分，供大家讨论后各选一部分。项目的方向和方法见 [README](../README.md)，建议先读它的第 1 到 3 节。
+This document splits the project into three parts so that each of us can pick one after discussion. The direction and method are described in the [README](../README.md); reading its Sections 1 to 3 first is recommended.
 
-三部分按流水线的先后划分：**A 产出数据，B 把数据建成图，C 在图上做分析和评估。** 每部分都包含代码和对应的报告章节，工作量大致相当。
+The parts follow the order of the pipeline: **A produces the data, B turns the data into graphs, and C analyzes and evaluates on the graphs.** Each part includes code and the matching report sections, and the workloads are roughly equal.
 
-| | Part A：实验与数据 | Part B：溯源图构建 | Part C：分析与评估 |
+| | Part A: Experiments and data | Part B: Provenance graph construction | Part C: Analysis and evaluation |
 | --- | --- | --- | --- |
-| 一句话 | 跑 agent，得到可靠的对照数据 | 把轨迹变成可查询的图 | 在图上找出注入来源并评估效果 |
-| 主要工作 | 设计并运行实验 | 写解析和建图代码 | 写查询、评分和评估代码 |
-| 对应课程内容 | Module 1：攻击与威胁模型 | Module 2：audit log 与 provenance graph | Module 2：backward/forward tracking、NoDoze |
-| 报告章节 | 问题陈述、威胁模型、实验设置 | 技术设计中的图模型 | 技术设计中的分析方法、评估、局限 |
-| 估计工作量 | 约 3 到 4 天 | 约 3 到 4 天 | 约 4 天 |
-| 最大的不确定性 | 攻击成功率不可控，需要反复试 | shell 命令内部的文件操作看不到 | 依赖爆炸，回溯结果可能过宽 |
+| In one sentence | Run the agent to get reliable, matched data | Turn trajectories into a queryable graph | Find the injected source on the graph and evaluate how well this works |
+| Main work | Design and run experiments | Write parsing and graph-building code | Write query, scoring, and evaluation code |
+| Course material | Module 1: attacks and threat models | Module 2: audit logs and provenance graphs | Module 2: backward and forward tracking, NoDoze |
+| Report sections | Problem statement, threat model, experimental setup | Graph model within the technical design | Analysis method within the technical design, evaluation, limitations |
+| Estimated effort | About 3 to 4 days | About 3 to 4 days | About 4 days |
+| Largest uncertainty | Attack success is not controllable and needs repeated attempts | File operations inside shell commands are not visible | Dependency explosion may make backward tracking too broad |
 
-工作量是粗略估计，按每天投入几小时算。
+The estimates are rough and assume a few hours of work per day.
 
-## Part A：实验与数据
+## Part A: Experiments and data
 
-**目标**：给 B 和 C 提供足够多、标注清楚、可对照的 run。
+**Goal:** give B and C enough runs that are clearly labeled and properly matched.
 
-**具体任务**
+**Tasks**
 
-1. **写清威胁模型。** 攻击者能控制什么(工作区里的文档内容)，不能控制什么(用户任务、skill、可执行的测试代码)，想达到什么目的(让 agent 改受保护的测试并谎报已修复)。
-2. **扩充 run。** 目前每个条件只有一次。对四个场景和两个模型，每个条件重复若干次(建议各 5 次)，这样才能说明结果不是偶然。
-3. **做反事实对照。** 针对出现越权的条件，去掉注入后从同一初始状态重跑，作为"该动作是否由注入引起"的证据。
-4. **试 payload 变体。** 改写注入的措辞或位置，记录每次改动。失败的尝试也保留。可选：去掉任务指令末尾的信任声明，看成功率是否变化。
-5. **维护 run 清单。** 一张表记录每个 run 的编号、场景、模型、payload 版本、结果分类。清单放在 `experiments/` 下，不放进 agent 的工作目录。
-6. **给每个 run 做结果分类。** 按课程指南的五类：payload 没到达模型、到达但继续合法任务、尝试越权被拦、越权发生、因无关原因失败。run-007 属于哪一类需要先查清。
+1. **Write down the threat model.** What the attacker controls (document content in the workspace), what the attacker does not control (the user's task, the skills, executable test code), and what the attacker wants (the agent edits protected tests and falsely reports the fix as complete).
+2. **Add runs.** Each condition currently has one run. For the four scenarios and two models, repeat each condition several times (5 each is suggested) so that results are not attributable to chance.
+3. **Run counterfactual controls.** For conditions where a violation occurred, remove the injection and rerun from the same starting state, as evidence on whether the injection caused the action.
+4. **Try payload variants.** Change the wording or placement of the injection and record every change. Keep unsuccessful attempts too. Optional: remove the trust statement at the end of the task instruction and see whether the success rate changes.
+5. **Maintain a run manifest.** One table listing each run's number, scenario, model, payload version, and outcome class. The manifest lives under `experiments/`, outside the agent's working directory.
+6. **Classify the outcome of every run.** Use the five classes from the project guide: the payload never reached the model; it reached the model and the agent continued the legitimate task; a violation was attempted but blocked; a violation occurred; the task failed for an unrelated reason. Which class run-007 belongs to needs to be established first.
 
-**交付物**
+**Deliverables**
 
-- `experiments/manifest.csv`：run 清单。
-- `experiments/payloads/`：payload 变体和改动说明。
-- 新增的 run 目录(`artifact/runs/run-009` 起)。
-- 报告章节：问题陈述(含 README 2.1 节的 Module 1 类比)、威胁模型、实验设置。
+- `experiments/manifest.csv`: the run manifest.
+- `experiments/payloads/`: payload variants with notes on what changed.
+- New run directories, starting at `artifact/runs/run-009`.
+- Report sections: problem statement (including the Module 1 analogy in README Section 2.1), threat model, experimental setup.
 
-**前置条件**：需要能调用 SoC 的 SoCLaaS 模型，并在本机装好 OpenCode。
+**Prerequisites:** access to SoC's SoCLaaS models and a local OpenCode installation.
 
-**适合**：愿意反复跑实验、做细致记录的人。写代码最少，但最花等待时间。
+**Suits:** someone willing to run experiments repeatedly and keep careful records. This part has the least code but the most waiting.
 
-## Part B：溯源图构建
+## Part B: Provenance graph construction
 
-**目标**：写一个程序，输入一个 run 目录，输出一张符合约定格式的溯源图。
+**Goal:** a program that takes a run directory and outputs a provenance graph in the agreed format.
 
-**具体任务**
+**Tasks**
 
-1. **解析轨迹。** 读 `events.jsonl` 和 `session.json`，整理成统一的事件序列：每个回合、每次工具调用的工具名、参数、返回文本、时间。
-2. **建节点和边。** 按 README 3.2 节的约定：回合 `T`、命令 `C`、对象 `O`；边 `READ`、`WRITE`、`EXEC`。每条边带上支持它的事件编号。
-3. **做文件版本。** 同一个文件每被写一次就产生一个新版本节点，这样能区分"读的是修改前还是修改后的内容"。
-4. **打信任标签。** 根据 `baseline.json` 和路径，把对象标为 `user`、`skill`、`workspace`、`derived`。
-5. **处理观测边界。** shell 命令内部读写了哪些文件，轨迹里没有直接记录。用命令文本解析和前后哈希比对来补边，并标为 `inferred`。run-006 里用 `mv` 改测试文件、run-003 里 `run_tests.py` 打印 `runner-notes.txt` 都是要覆盖的例子。
-6. **导出和可视化。** 输出 JSON，另外能画出图(Graphviz 或 Mermaid)，报告和展示要用。
+1. **Parse the trajectory.** Read `events.jsonl` and `session.json` into one uniform event sequence: each turn, and for each tool call its tool name, arguments, returned text, and time.
+2. **Build nodes and edges.** Follow the conventions in README Section 3.2: turns `T`, commands `C`, objects `O`; edges `READ`, `WRITE`, `EXEC`. Every edge carries the event numbers that support it.
+3. **Version files.** Each write to a file creates a new version node, so that we can tell whether a read saw the content before or after a modification.
+4. **Assign trust labels.** Using `baseline.json` and paths, label objects as `user`, `skill`, `workspace`, or `derived`.
+5. **Handle the observation boundary.** The trajectory does not record which files a shell command reads or writes internally. Add these edges by parsing the command text and comparing hashes before and after, and mark them `inferred`. Two cases to cover: the `mv` on a test file in run-006, and `run_tests.py` printing `runner-notes.txt` in run-003.
+6. **Export and visualize.** Output JSON, and also render the graph (Graphviz or Mermaid) for the report and the presentation.
 
-**交付物**
+**Deliverables**
 
-- `provenance/build_graph.py`：`python3 provenance/build_graph.py artifact/runs/run-006 graphs/run-006.json`。
-- `graphs/run-00X.json`：现有 8 个 run 的图。
-- 至少 run-001 和 run-006 的可视化图。
-- 报告章节：技术设计里的图模型，含 README 2.2 节的 Module 2 对应关系，以及和 Homework 2 的差异(信任标签、文件版本、`inferred` 边)。
+- `provenance/build_graph.py`, used as `python3 provenance/build_graph.py artifact/runs/run-006 graphs/run-006.json`.
+- `graphs/run-00X.json`: graphs for the 8 existing runs.
+- Rendered graphs for at least run-001 and run-006.
+- Report section: the graph model within the technical design, including the Module 2 mapping in README Section 2.2 and the differences from Homework 2 (trust labels, file versions, `inferred` edges).
 
-**前置条件**：无，现有 8 个 run 就可以开始。
+**Prerequisites:** none; the 8 existing runs are enough to start.
 
-**适合**：喜欢写数据处理代码的人。Homework 2 Part A 和 B2 的建图经验可以直接用。
+**Suits:** someone who likes writing data-processing code. Experience from building graphs in Homework 2 Part A and B2 carries over directly.
 
-## Part C：分析与评估
+## Part C: Analysis and evaluation
 
-**目标**：在 B 产出的图上回答"越权动作是哪段输入引起的、污染了什么"，并说明这个方法比简单办法好在哪。
+**Goal:** on the graphs produced by B, answer which input led to the unauthorized action and what it contaminated, and show what this method adds over simpler alternatives.
 
-**具体任务**
+**Tasks**
 
-1. **Detection point。** 实现一条规则：任何写到 `src/` 和 `outputs/` 之外的 `WRITE` 边都是告警。输出 anchor 列表。
-2. **Backward tracking。** 从 anchor 反向遍历，返回候选来源，重点列出信任标签为 `workspace` 的对象。
-3. **Forward tracking。** 从指定对象(如被注入的文档)正向遍历，返回之后被写出的文件版本和报告。
-4. **处理依赖爆炸。** 这是技术设计的核心，见 README 3.5 节。按回合划分 unit；用内容证据给候选来源排序(动作参数里的特征内容出现在哪个来源里)；结合 A 提供的反事实 run 做最终判断。
-5. **简化版 NoDoze。** 用 Homework 2 Part B3 的公式，以正常 run 的图作 reference，给待分析 run 的边和节点算异常分。
-6. **评估。** 三个指标：真正的注入来源是否在回溯结果里；回溯子图相对整张图缩小了多少；真正来源排第几。再和"在平铺日志里搜关键词"的基线比较，重点看 `benign-quotation` 上基线是否误报。
+1. **Detection point.** Implement one rule: any `WRITE` edge outside `src/` and `outputs/` is an alert. Output the list of anchors.
+2. **Backward tracking.** Traverse in reverse from an anchor and return the candidate sources, listing those labeled `workspace` first.
+3. **Forward tracking.** Traverse forward from a given object, such as the injected document, and return the file versions and reports written afterwards.
+4. **Handle dependency explosion.** This is the core of the technical design; see README Section 3.5. Partition by turn; rank candidate sources by content evidence (which source contains the distinctive content found in the action's arguments); combine with the counterfactual runs from A for the final judgment.
+5. **Simplified NoDoze.** Using the formula from Homework 2 Part B3, with graphs of normal runs as the reference, compute anomaly scores for the edges and nodes of the run under analysis.
+6. **Evaluation.** Three measures: whether the true injected source is in the backward-tracking result; how much smaller the returned subgraph is than the full graph; where the true source ranks. Then compare with the baseline of searching a flat log for keywords, with attention to whether the baseline raises a false alarm on `benign-quotation`.
 
-**交付物**
+**Deliverables**
 
-- `provenance/detect.py`、`provenance/query.py`、`provenance/score.py`。
-- `results/`：每个 run 的 anchor、回溯子图、排序和评分。
-- 报告章节：技术设计里的分析方法、评估结果、局限。
+- `provenance/detect.py`, `provenance/query.py`, `provenance/score.py`.
+- `results/`: anchors, backward subgraphs, rankings, and scores for each run.
+- Report sections: the analysis method within the technical design, evaluation results, limitations.
 
-**前置条件**：依赖 B 的图格式。格式在 README 3.2 节已经约定，C 可以先手写一张 run-006 的小图来开发，不必等 B 完成。
+**Prerequisites:** depends on B's graph format. The format is already agreed in README Section 3.2, so C can develop against a small hand-written graph of run-006 without waiting for B.
 
-**适合**：对算法和课程论文(BackTracker、BEEP、NoDoze)比较熟的人。概念上最难，也最直接对应"技术设计"的 10 分。
+**Suits:** someone comfortable with algorithms and the course papers (BackTracker, BEEP, NoDoze). This is conceptually the hardest part and maps most directly onto the 10 marks for technical design.
 
-## 三部分之间的接口
+## Interfaces between the parts
 
-为了能并行工作，先约定两个接口：
+To work in parallel, we fix two interfaces up front:
 
-- **A → B**：run 目录的格式。已经由 artifact 的脚本固定，不需要再商量。
-- **B → C**：图的 JSON 格式。建议如下，讨论时确认：
+- **A → B:** the run directory format. It is already fixed by the artifact's scripts and needs no further discussion.
+- **B → C:** the JSON format of the graph. The proposal below is to be confirmed in discussion:
 
 ```json
 {
@@ -107,30 +107,30 @@
 }
 ```
 
-## 共同的工作
+## Shared work
 
-这些不属于任何一部分，需要一起做：
+These belong to no single part and are done together:
 
-- **报告整合**：把三部分的章节合成一份，统一术语和图表。建议由一人负责统稿。
-- **展示**：2026-11-25(周三)19:00，不计分，也可以交视频。
-- **个人报告**：每人自己写，5 分，说明个人贡献。没被团队采纳的想法和分析也可以写进去。
+- **Report integration:** merge the sections from the three parts into one report with consistent terminology and figures. One person should own the final edit.
+- **Presentation:** 2026-11-25 (Wednesday) 19:00, not graded; a video may be submitted instead.
+- **Individual reports:** written by each person, 5 marks, describing individual contribution. Ideas and analysis not adopted by the team can be included.
 
-## 建议的时间安排
+## Suggested schedule
 
-| 日期 | 目标 |
+| Date | Target |
 | --- | --- |
-| 11-15(周日) | 讨论本文档，各自选定部分，确认图的 JSON 格式 |
-| 11-18(周三) | 在 run-006 上跑通全流程：建图、检出 anchor、回溯到注入来源 |
-| 11-22(周日) | A 的补充实验完成；C 的评估数字出来 |
-| 11-24(周二) | 报告初稿和展示材料完成 |
-| 11-25(周三) | 19:00 展示 |
+| Nov 15 (Sun) | Discuss this document, choose parts, confirm the graph JSON format |
+| Nov 18 (Wed) | Full pipeline working on run-006: build the graph, detect the anchor, track back to the injected source |
+| Nov 22 (Sun) | A's additional experiments finished; C's evaluation numbers available |
+| Nov 24 (Tue) | Report draft and presentation material finished |
+| Nov 25 (Wed) | Presentation at 19:00 |
 
-11-18 的目标最重要：越早在一个 run 上跑通，越早发现方法有没有问题。
+The Nov 18 target matters most: the sooner the pipeline works on one run, the sooner we find out whether the method has problems.
 
-## 讨论时需要定下来的事
+## To decide in discussion
 
-1. 每人选哪一部分，谁负责统稿。
-2. 图的 JSON 格式是否按上面的建议。
-3. 每个条件重复几次。次数越多结论越可靠，但更耗时间。
-4. 报告的截止日期。课程幻灯片里没有写明，需要向老师确认。
-5. 如果组里是四个人：Part C 可以拆成两半，一人做追踪查询(任务 1 到 4)，一人做异常评分和评估(任务 5、6)。
+1. Who takes which part, and who owns the final edit of the report.
+2. Whether the graph JSON format follows the proposal above.
+3. How many repetitions per condition. More repetitions give more reliable conclusions but take more time.
+4. The report deadline. The course slides do not state one; it needs to be confirmed with the instructor.
+5. If the group has four people: Part C can be split in two, with one person on the tracking queries (tasks 1 to 4) and one on anomaly scoring and evaluation (tasks 5 and 6).
