@@ -203,9 +203,19 @@ artifact/            Demo setting supplied by the course
 docs/
   graph-format.md    Provenance graph JSON format (interface between Parts B and C)
   work-split.md      Proposed division of work
+provenance/
+  trajectory.py      Parses a run into turns and tool calls
+  test_trajectory.py Checks of the parser against the recorded runs
 ```
 
-Planned additions: `provenance/` (graph construction and analysis code), `experiments/` (run manifest and payload variants), and `report/`.
+To inspect a run:
+
+```sh
+python3 provenance/trajectory.py artifact/runs/run-006 --calls
+python3 -m unittest discover -s provenance -v
+```
+
+Planned additions: graph construction and analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and `report/`.
 
 ## 6. Reproducing a run
 

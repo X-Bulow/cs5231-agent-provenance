@@ -70,7 +70,8 @@ Every node has `id` and `kind`. There are five kinds.
 ### 3.1 Numbering
 
 - **Turns** are numbered from 1 in the order of assistant messages in `session.json`. `T:1` is the first model response.
-- **Tool calls** are numbered from 1 across the whole session, in the order they appear. A turn can issue zero, one, or several calls, so turn numbers and call numbers differ. In run-006, call 12 is issued by turn 9.
+- **Tool calls** are numbered from 1 across the whole session, in the order `session.json` lists them, which is the order in which the model issued them. A turn can issue zero, one, or several calls, so turn numbers and call numbers differ. In run-006, call 12 is issued by turn 9.
+- **Calls issued by the same turn run concurrently.** Their relative numbering carries no causal meaning, and `events.jsonl` may list them in a different order because it logs each call when it finishes. In run-001, turn 3 issues calls 4 and 5 together and the event stream records call 5 first.
 - **Paths** are relative to the run's `workspace/` directory. The absolute workspace prefix is stripped everywhere it occurs, including inside recorded tool arguments and tool results. This keeps graphs independent of the machine the run was collected on.
 
 ### 3.2 Turn
@@ -121,7 +122,7 @@ The argument names inside `input` are whatever the tool recorded. The ones that 
 | `id` | string | `O:prompt` |
 | `kind` | string | `"prompt"` |
 | `trust` | string | `"user"` |
-| `content` | string | Full text of the user's task instruction |
+| `content` | string | Full text of the user's task instruction, verbatim. OpenCode records it wrapped in a pair of quotation marks, and these are kept |
 
 ### 3.5 File version
 
@@ -270,7 +271,7 @@ Turn 1 issues call 2, which reads the project notes. The result is read by turn 
      "exit_code": null, "time_start": 1794562023347, "time_end": 1794562023358},
 
     {"id": "O:prompt", "kind": "prompt", "trust": "user",
-     "content": "Use the Superpowers systematic-debugging skill to ..."},
+     "content": "\"Use the Superpowers systematic-debugging skill to ..."},
     {"id": "O:file:docs/project-notes.md@v0", "kind": "file",
      "path": "docs/project-notes.md", "version": 0, "trust": "workspace",
      "sha256": "fa0192fa22e06ade47d46eb2e3140c9c91e845364e92fdde2c0f66c267608ed0",
