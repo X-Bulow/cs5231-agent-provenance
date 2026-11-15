@@ -46,7 +46,8 @@ Two properties follow from this construction, and Part C can rely on both:
     "session_id": "ses_...",
     "agent": "opencode",
     "agent_version": "1.19.5",
-    "model": "soclaas/qwen3.5:9b"
+    "model": "soclaas/qwen3.5:9b",
+    "inferred_edges": false
   },
   "nodes": [],
   "edges": []
@@ -58,6 +59,7 @@ Two properties follow from this construction, and Part C can rely on both:
 | `schema_version` | integer | Always `1` for this document |
 | `run` | string | Name of the run directory |
 | `source` | object | Where the graph came from; taken from `execution.json` and `session.json` |
+| `source.inferred_edges` | boolean | Whether the builder attempted the inferred edges of Section 4.1. When `false`, the graph holds recorded edges only, and the absence of an inferred edge says nothing |
 | `nodes` | array | All nodes, see Section 3 |
 | `edges` | array | All edges, see Section 4 |
 
@@ -143,7 +145,15 @@ Versions work as follows:
 - A read links to the latest version that exists at that point.
 - Removing or renaming a file away creates a new version with `deleted: true`.
 
-File nodes do not store content. `sha256` is known for `@v0` (from `baseline.json`) and for the final version (from `check.json`), and is `null` for versions in between. The text the model actually received from a file is in the result node of the call that read it.
+A file node exists only for a file that some call read or wrote. Files in the workspace that the agent never touched do not appear. Reading a directory returns a listing, not content, and creates no file node.
+
+File nodes do not store content. `sha256` is known in three cases and is `null` otherwise:
+
+- `@v0`, from `baseline.json`.
+- A version produced by the `write` tool, as the hash of the content the call wrote. In the recorded runs this agrees with the independent final hash in `check.json` wherever the two can be compared.
+- The final version, from `check.json`, once inferred edges are in place.
+
+The text the model actually received from a file is in the result node of the call that read it.
 
 ### 3.6 Tool result
 
@@ -243,7 +253,8 @@ Turn 1 issues call 2, which reads the project notes. The result is read by turn 
     "session_id": "ses_...",
     "agent": "opencode",
     "agent_version": "1.19.5",
-    "model": "soclaas/qwen3.5:9b"
+    "model": "soclaas/qwen3.5:9b",
+    "inferred_edges": false
   },
   "nodes": [
     {"id": "T:1", "kind": "turn", "index": 1,
@@ -314,16 +325,29 @@ The excerpt omits turns 3 to 8 and their `NEXT` edges, which connect `T:2` to `T
 
 In this excerpt the anchor is the edge `C:12` → `O:file:tests/test_expense_summary.py@v1`. Tracking backward from it reaches `T:9`, then through the `NEXT` chain `T:2`, then `O:result:2`, `C:2`, and finally `O:file:docs/project-notes.md@v0`, the workspace file that contains the injection.
 
-An inferred edge looks like this. Call 31 in run-006 is a shell command that moves a file over the test file:
+An inferred edge looks like this. Call 31 in run-006 is a shell command that moves `tests/test_expense_summary.py.fixed` over the test file. Four recorded edits precede it, so the move creates `@v5`:
 
 ```json
-{"src": "C:31", "rel": "WRITE", "dst": "O:file:tests/test_expense_summary.py@v6",
+{"src": "C:31", "rel": "WRITE", "dst": "O:file:tests/test_expense_summary.py@v5",
  "basis": "inferred", "evidence": [31], "rule": "command-text"}
 ```
 
-The version number in this last example is illustrative; the real one depends on how many writes precede call 31.
+The recorded hashes support this inference: the content that call 30 wrote to the `.fixed` file has the same hash as the final test file in `check.json`.
 
-## 8. Known limits
+## 8. Current state of the builder
+
+`provenance/build_graph.py` produces the recorded edges (patterns 1 to 7), file versions, trust labels, and `sha256` for `@v0` and for `write` versions. It does not yet produce inferred edges, so every graph under `graphs/` has `source.inferred_edges` set to `false`. Until that changes:
+
+- File changes made by shell commands are missing. Known cases: `outputs/test_before_fix.txt` in run-003, `outputs/report.md` in run-006, and the `mv` in run-006 described above.
+- The latest file version in a graph is not necessarily the file's final state.
+
+To rebuild the graphs:
+
+```sh
+python3 provenance/build_graph.py --all artifact/runs graphs
+```
+
+## 9. Known limits
 
 - **Shell commands are opaque.** Their file reads and writes are inferred, and an inference rule can miss an operation or add one that did not happen.
 - **Only two hashes per file.** `baseline.json` and `check.json` give the state at the start and at the end. The content of intermediate versions is not recorded, so `sha256` is `null` for them.

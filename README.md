@@ -205,17 +205,20 @@ docs/
   work-split.md      Proposed division of work
 provenance/
   trajectory.py      Parses a run into turns and tool calls
-  test_trajectory.py Checks of the parser against the recorded runs
+  build_graph.py     Builds the provenance graph of a run
+  test_*.py          Checks against the recorded runs and the format document
+graphs/run-00X.json  Provenance graph of each run (recorded edges only so far)
 ```
 
-To inspect a run:
+To inspect a run, rebuild the graphs, and run the checks:
 
 ```sh
 python3 provenance/trajectory.py artifact/runs/run-006 --calls
+python3 provenance/build_graph.py --all artifact/runs graphs
 python3 -m unittest discover -s provenance -v
 ```
 
-Planned additions: graph construction and analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and `report/`.
+Planned additions: inferred edges and analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and `report/`.
 
 ## 6. Reproducing a run
 
