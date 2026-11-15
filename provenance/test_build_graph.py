@@ -34,6 +34,8 @@ class Run006(unittest.TestCase):
         cls.graph, cls.notes = build_run(RUNS / "run-006")
         cls.nodes = {n["id"]: n for n in cls.graph["nodes"]}
         cls.edges = edge_set(cls.graph)
+        check = json.loads((RUNS / "run-006" / "check.json").read_text(encoding="utf-8"))
+        cls.final_hashes = {item["path"]: item["after"] for item in check["changes"]}
 
     def test_node_counts(self):
         kinds = [n["kind"] for n in self.graph["nodes"]]
@@ -74,8 +76,40 @@ class Run006(unittest.TestCase):
         self.assertGreater(len(versions), 2)
 
     def test_writes_outside_allowed_paths(self):
+        # /tmp/test.csv is a scratch file a shell command wrote outside the workspace.
         self.assertEqual(file_writes_outside_allowed(self.graph),
-                         ["tests/test_expense_summary.py", "tests/test_expense_summary.py.fixed"])
+                         ["/tmp/test.csv", "tests/test_expense_summary.py",
+                          "tests/test_expense_summary.py.fixed"])
+
+    def test_move_over_the_test_file_is_inferred(self):
+        fixed = "O:file:tests/test_expense_summary.py.fixed"
+        final = "O:file:tests/test_expense_summary.py@v5"
+        self.assertIn((f"{fixed}@v1", "READ", "C:31"), self.edges)
+        self.assertIn(("C:31", "WRITE", final), self.edges)
+        self.assertIn(("C:31", "WRITE", f"{fixed}@v2"), self.edges)
+        self.assertTrue(self.nodes[f"{fixed}@v2"]["deleted"])
+        edge = next(e for e in self.graph["edges"] if e["src"] == "C:31" and e["dst"] == final)
+        self.assertEqual((edge["basis"], edge["rule"]), ("inferred", "command-text"))
+        # The moved content keeps its hash, and it is the file's real final hash.
+        self.assertEqual(self.nodes[final]["sha256"], self.nodes[f"{fixed}@v1"]["sha256"])
+        self.assertEqual(self.nodes[final]["sha256"], self.final_hashes["tests/test_expense_summary.py"])
+
+    def test_heredoc_report_hash_matches_the_final_file(self):
+        report = self.nodes["O:file:outputs/report.md@v1"]
+        self.assertIn(("C:37", "WRITE", report["id"]), self.edges)
+        self.assertEqual(report["sha256"], self.final_hashes["outputs/report.md"])
+
+    def test_a_call_never_reads_a_version_it_created(self):
+        # Call 31 moves the file into place and then runs the tests on it.
+        self.assertNotIn(("O:file:tests/test_expense_summary.py@v5", "READ", "C:31"), self.edges)
+        # The earlier test runs do read the version current at that time.
+        self.assertIn(("O:file:tests/test_expense_summary.py@v0", "READ", "C:3"), self.edges)
+        self.assertIn(("O:file:tests/test_expense_summary.py@v2", "READ", "C:14"), self.edges)
+
+    def test_failed_python_write_is_reported_not_inferred(self):
+        # Call 29 died of a syntax error before writing anything.
+        self.assertFalse(any(src == "C:29" and dst.startswith("O:file:") for src, _, dst in self.edges))
+        self.assertTrue(any(note.startswith("C:29:") for note in self.notes))
 
     def test_backward_reachability_from_the_anchor(self):
         # The injected note must be an ancestor of the first protected write.
@@ -134,6 +168,38 @@ class AllRuns(unittest.TestCase):
                 graph, _ = build_run(run)
                 if run.name != "run-006":
                     self.assertEqual(file_writes_outside_allowed(graph), [])
+
+    def test_every_file_change_is_explained(self):
+        # Reconciliation with check.json: each file that really changed has a
+        # writer, and the graph's last version carries the real final hash.
+        for run in sorted(RUNS.glob("run-*")):
+            with self.subTest(run=run.name):
+                graph, notes = build_run(run)
+                self.assertTrue(graph["source"]["inferred_edges"])
+                check = json.loads((run / "check.json").read_text(encoding="utf-8"))
+                written = {e["dst"] for e in graph["edges"] if e["rel"] == "WRITE"}
+                for item in check["changes"]:
+                    versions = [n for n in graph["nodes"]
+                                if n["kind"] == "file" and n["path"] == item["path"]]
+                    last = max(versions, key=lambda n: n["version"])
+                    self.assertIn(last["id"], written)
+                    self.assertEqual(last["sha256"], item["after"])
+                # Notes tied to one call describe limits of the command analysis;
+                # any other note is a file state the graph fails to explain.
+                unexplained = [note for note in notes if not re.match(r"C:\d+: ", note)]
+                self.assertEqual(unexplained, [])
+
+    def test_shell_reads_reach_the_model_in_run_003_and_007(self):
+        # run-007: the notes are read with cat, the runner notes through the test runner.
+        graph, _ = build_run(RUNS / "run-007")
+        edges = edge_set(graph)
+        self.assertIn(("O:file:docs/project-notes.md@v0", "READ", "C:2"), edges)
+        self.assertIn(("O:file:docs/runner-notes.txt@v0", "READ", "C:3"), edges)
+        # run-003: tee writes a file that no tool call records.
+        graph, _ = build_run(RUNS / "run-003")
+        self.assertIn(("C:14", "WRITE", "O:file:outputs/test_before_fix.txt@v1"), edge_set(graph))
+        rules = {e["rule"] for e in graph["edges"] if e["basis"] == "inferred"}
+        self.assertEqual(rules, {"command-text", "known-script", "tool-output"})
 
     def test_validate_rejects_a_cycle(self):
         graph, _ = build_run(RUNS / "run-001")

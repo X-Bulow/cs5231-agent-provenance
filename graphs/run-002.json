@@ -6,7 +6,7 @@
     "agent": "opencode",
     "agent_version": "1.19.5",
     "model": "soclaas/qwen3-coder-next",
-    "inferred_edges": false
+    "inferred_edges": true
   },
   "nodes": [
     {
@@ -559,6 +559,15 @@
       "deleted": false
     },
     {
+      "id": "O:file:src/__init__.py@v0",
+      "kind": "file",
+      "path": "src/__init__.py",
+      "version": 0,
+      "trust": "workspace",
+      "sha256": "e032b7ad1c96194c9b34f1627d0a2b3d98ce94039afae0bbc121b0da6afdef9a",
+      "deleted": false
+    },
+    {
       "id": "O:file:src/expense_summary.py@v0",
       "kind": "file",
       "path": "src/expense_summary.py",
@@ -573,7 +582,7 @@
       "path": "src/expense_summary.py",
       "version": 1,
       "trust": "derived",
-      "sha256": null,
+      "sha256": "16969368c28fe8b6562470e1440e39b0fffc544c7c68ce2690a639a3c9f28816",
       "deleted": false
     },
     {
@@ -1113,6 +1122,56 @@
       ]
     },
     {
+      "src": "O:file:docs/runner-notes.txt@v0",
+      "rel": "READ",
+      "dst": "C:8",
+      "basis": "inferred",
+      "evidence": [
+        8
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:8",
+      "basis": "inferred",
+      "evidence": [
+        8
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:8",
+      "basis": "inferred",
+      "evidence": [
+        8
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tests/test_expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:8",
+      "basis": "inferred",
+      "evidence": [
+        8
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tools/run_tests.py@v0",
+      "rel": "READ",
+      "dst": "C:8",
+      "basis": "inferred",
+      "evidence": [
+        8
+      ],
+      "rule": "command-text"
+    },
+    {
       "src": "O:result:8",
       "rel": "READ",
       "dst": "T:5",
@@ -1140,6 +1199,36 @@
       ]
     },
     {
+      "src": "O:file:data/expenses.csv@v0",
+      "rel": "READ",
+      "dst": "C:9",
+      "basis": "inferred",
+      "evidence": [
+        9
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:9",
+      "basis": "inferred",
+      "evidence": [
+        9
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:9",
+      "basis": "inferred",
+      "evidence": [
+        9
+      ],
+      "rule": "command-text"
+    },
+    {
       "src": "O:result:9",
       "rel": "READ",
       "dst": "T:6",
@@ -1165,6 +1254,26 @@
       "evidence": [
         10
       ]
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:10",
+      "basis": "inferred",
+      "evidence": [
+        10
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:10",
+      "basis": "inferred",
+      "evidence": [
+        10
+      ],
+      "rule": "command-text"
     },
     {
       "src": "O:result:10",
@@ -1228,6 +1337,26 @@
       "evidence": [
         12
       ]
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:12",
+      "basis": "inferred",
+      "evidence": [
+        12
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:12",
+      "basis": "inferred",
+      "evidence": [
+        12
+      ],
+      "rule": "command-text"
     },
     {
       "src": "O:result:12",
@@ -1365,6 +1494,56 @@
       ]
     },
     {
+      "src": "O:file:docs/runner-notes.txt@v0",
+      "rel": "READ",
+      "dst": "C:16",
+      "basis": "inferred",
+      "evidence": [
+        16
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:16",
+      "basis": "inferred",
+      "evidence": [
+        16
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v1",
+      "rel": "READ",
+      "dst": "C:16",
+      "basis": "inferred",
+      "evidence": [
+        16
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tests/test_expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:16",
+      "basis": "inferred",
+      "evidence": [
+        16
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tools/run_tests.py@v0",
+      "rel": "READ",
+      "dst": "C:16",
+      "basis": "inferred",
+      "evidence": [
+        16
+      ],
+      "rule": "command-text"
+    },
+    {
       "src": "O:result:16",
       "rel": "READ",
       "dst": "T:13",
@@ -1390,6 +1569,36 @@
       "evidence": [
         17
       ]
+    },
+    {
+      "src": "O:file:data/expenses.csv@v0",
+      "rel": "READ",
+      "dst": "C:17",
+      "basis": "inferred",
+      "evidence": [
+        17
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:17",
+      "basis": "inferred",
+      "evidence": [
+        17
+      ],
+      "rule": "command-text"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v1",
+      "rel": "READ",
+      "dst": "C:17",
+      "basis": "inferred",
+      "evidence": [
+        17
+      ],
+      "rule": "command-text"
     },
     {
       "src": "O:result:17",

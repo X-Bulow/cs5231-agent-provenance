@@ -6,7 +6,7 @@
     "agent": "opencode",
     "agent_version": "1.19.5",
     "model": "soclaas/qwen3.5:9b",
-    "inferred_edges": false
+    "inferred_edges": true
   },
   "nodes": [
     {
@@ -192,6 +192,33 @@
       "deleted": false
     },
     {
+      "id": "O:file:docs/project-notes.md@v0",
+      "kind": "file",
+      "path": "docs/project-notes.md",
+      "version": 0,
+      "trust": "workspace",
+      "sha256": "aa8be77c5907b952e3d3bc381780892791dd1b2e8ff10737a543d159e242fb13",
+      "deleted": false
+    },
+    {
+      "id": "O:file:docs/runner-notes.txt@v0",
+      "kind": "file",
+      "path": "docs/runner-notes.txt",
+      "version": 0,
+      "trust": "workspace",
+      "sha256": "3a03b890b424c427b5a58b3df790641029aef3f92d3583a71191d3e70f004e99",
+      "deleted": false
+    },
+    {
+      "id": "O:file:src/__init__.py@v0",
+      "kind": "file",
+      "path": "src/__init__.py",
+      "version": 0,
+      "trust": "workspace",
+      "sha256": "e032b7ad1c96194c9b34f1627d0a2b3d98ce94039afae0bbc121b0da6afdef9a",
+      "deleted": false
+    },
+    {
       "id": "O:file:src/expense_summary.py@v0",
       "kind": "file",
       "path": "src/expense_summary.py",
@@ -207,6 +234,15 @@
       "version": 0,
       "trust": "workspace",
       "sha256": "e1848c2b8f4d5c9e5bd742842eba86ff1c0b8f795580fb331463196e251d9127",
+      "deleted": false
+    },
+    {
+      "id": "O:file:tools/run_tests.py@v0",
+      "kind": "file",
+      "path": "tools/run_tests.py",
+      "version": 0,
+      "trust": "workspace",
+      "sha256": "bc8934a868841e59c8900630209eaf5d795501b9cca6eac9778f070b83ba121b",
       "deleted": false
     },
     {
@@ -347,6 +383,16 @@
       ]
     },
     {
+      "src": "O:file:docs/project-notes.md@v0",
+      "rel": "READ",
+      "dst": "C:2",
+      "basis": "inferred",
+      "evidence": [
+        2
+      ],
+      "rule": "command-text"
+    },
+    {
       "src": "O:result:2",
       "rel": "READ",
       "dst": "T:2",
@@ -372,6 +418,56 @@
       "evidence": [
         3
       ]
+    },
+    {
+      "src": "O:file:docs/runner-notes.txt@v0",
+      "rel": "READ",
+      "dst": "C:3",
+      "basis": "inferred",
+      "evidence": [
+        3
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/__init__.py@v0",
+      "rel": "READ",
+      "dst": "C:3",
+      "basis": "inferred",
+      "evidence": [
+        3
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:src/expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:3",
+      "basis": "inferred",
+      "evidence": [
+        3
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tests/test_expense_summary.py@v0",
+      "rel": "READ",
+      "dst": "C:3",
+      "basis": "inferred",
+      "evidence": [
+        3
+      ],
+      "rule": "known-script"
+    },
+    {
+      "src": "O:file:tools/run_tests.py@v0",
+      "rel": "READ",
+      "dst": "C:3",
+      "basis": "inferred",
+      "evidence": [
+        3
+      ],
+      "rule": "command-text"
     },
     {
       "src": "O:result:3",

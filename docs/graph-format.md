@@ -47,7 +47,7 @@ Two properties follow from this construction, and Part C can rely on both:
     "agent": "opencode",
     "agent_version": "1.19.5",
     "model": "soclaas/qwen3.5:9b",
-    "inferred_edges": false
+    "inferred_edges": true
   },
   "nodes": [],
   "edges": []
@@ -74,7 +74,7 @@ Every node has `id` and `kind`. There are five kinds.
 - **Turns** are numbered from 1 in the order of assistant messages in `session.json`. `T:1` is the first model response.
 - **Tool calls** are numbered from 1 across the whole session, in the order `session.json` lists them, which is the order in which the model issued them. A turn can issue zero, one, or several calls, so turn numbers and call numbers differ. In run-006, call 12 is issued by turn 9.
 - **Calls issued by the same turn run concurrently.** Their relative numbering carries no causal meaning, and `events.jsonl` may list them in a different order because it logs each call when it finishes. In run-001, turn 3 issues calls 4 and 5 together and the event stream records call 5 first.
-- **Paths** are relative to the run's `workspace/` directory. The absolute workspace prefix is stripped everywhere it occurs, including inside recorded tool arguments and tool results. This keeps graphs independent of the machine the run was collected on.
+- **Paths** are relative to the run's `workspace/` directory. The absolute workspace prefix is stripped everywhere it occurs, including inside recorded tool arguments and tool results. This keeps graphs independent of the machine the run was collected on. A path outside the workspace stays absolute, for example `/tmp/test.csv`.
 
 ### 3.2 Turn
 
@@ -147,11 +147,14 @@ Versions work as follows:
 
 A file node exists only for a file that some call read or wrote. Files in the workspace that the agent never touched do not appear. Reading a directory returns a listing, not content, and creates no file node.
 
-File nodes do not store content. `sha256` is known in three cases and is `null` otherwise:
+File nodes do not store content. `sha256` is known in the following cases and is `null` otherwise:
 
 - `@v0`, from `baseline.json`.
-- A version produced by the `write` tool, as the hash of the content the call wrote. In the recorded runs this agrees with the independent final hash in `check.json` wherever the two can be compared.
-- The final version, from `check.json`, once inferred edges are in place.
+- A version whose content is literal in the trajectory: one produced by the `write` tool, or by a shell here-document such as `cat > file << 'EOF'`. The hash is computed from that content.
+- A version produced by `mv` or `cp`, which takes the hash of its source when that is known.
+- The last version of a workspace file, from `check.json`, when no hash was known for it. This assumes the graph's last version is the file's final state.
+
+Where a computed hash and the independent final hash in `check.json` can be compared, the builder compares them and reports any disagreement. In the recorded runs they agree in every case. Files outside the workspace are not covered by `check.json`.
 
 The text the model actually received from a file is in the result node of the call that read it.
 
@@ -207,10 +210,17 @@ The trajectory records a shell command and its output, but not what the command 
 
 | `rule` | Meaning |
 | --- | --- |
-| `command-text` | The path appears in the command as something read or written, for example with `cat`, `mv`, `cp`, `tee`, or a redirection |
-| `known-script` | Documented behavior of a script in the workspace. `tools/run_tests.py` reads `docs/runner-notes.txt` and the files under `tests/` and `src/` |
-| `tool-output` | The path appears in the output of a `grep` call as a file with matching lines |
-| `hash-diff` | The file's final hash differs from the baseline and no recorded write explains it; attributed to the last `bash` call whose command mentions the path |
+| `command-text` | The path appears in the command as something read or written: an argument of a program that reads its files (`cat`, `head`, `grep`, a Python script, ...), a redirection, `tee`, `mv`, `cp`, `rm`, `sed -i`, a Python module or import, or a literal path that inline Python code opens |
+| `known-script` | Declared behavior of a script in the workspace. `tools/run_tests.py` reads `docs/runner-notes.txt`, `tests/test*.py`, and `src/*.py`. The table is `KNOWN_SCRIPTS` in `provenance/shell.py` |
+| `tool-output` | The path appears in the output of `grep` as a file with matching lines |
+| `hash-diff` | Fallback: `check.json` shows the file changed and nothing else in the graph writes it; attributed to the last `bash` call whose command mentions the path |
+
+How the rules behave in cases that matter for analysis:
+
+- **Reads are over-approximated.** A read edge is added whenever the command text indicates one, including for commands that failed. The file may not have been read, and its content may not appear in the result: `python3 tools/run_tests.py | tail -8` still gets its read edges.
+- **Writes are added only with support.** A redirection, `tee`, `mv`, `cp`, or `rm` is taken to happen. A write that appears only in inline Python code is inferred when the command exited with status 0, and is otherwise left out and reported in the builder's notes.
+- **A call never reads a version it created.** For `mv a b && python3 tools/run_tests.py`, the test run reads the new `b`, but both belong to one call, and data flow inside a call is below the granularity of the graph.
+- **Reads resolve to the version current at that call.** A test run after an edit depends on the edited version, not on `@v0`.
 
 Inferred edges are weaker evidence than recorded ones. Analyses should be able to run with and without them and report which was used.
 
@@ -254,7 +264,7 @@ Turn 1 issues call 2, which reads the project notes. The result is read by turn 
     "agent": "opencode",
     "agent_version": "1.19.5",
     "model": "soclaas/qwen3.5:9b",
-    "inferred_edges": false
+    "inferred_edges": true
   },
   "nodes": [
     {"id": "T:1", "kind": "turn", "index": 1,
@@ -336,20 +346,28 @@ The recorded hashes support this inference: the content that call 30 wrote to th
 
 ## 8. Current state of the builder
 
-`provenance/build_graph.py` produces the recorded edges (patterns 1 to 7), file versions, trust labels, and `sha256` for `@v0` and for `write` versions. It does not yet produce inferred edges, so every graph under `graphs/` has `source.inferred_edges` set to `false`. Until that changes:
+`provenance/build_graph.py` produces everything in this document: recorded and inferred edges, file versions, trust labels, and hashes. Every graph under `graphs/` has `source.inferred_edges` set to `true`.
 
-- File changes made by shell commands are missing. Known cases: `outputs/test_before_fix.txt` in run-003, `outputs/report.md` in run-006, and the `mv` in run-006 described above.
-- The latest file version in a graph is not necessarily the file's final state.
+After building a graph, the builder reconciles it with `check.json`, the independent comparison of every workspace file before and after the run. For the eight recorded runs:
 
-To rebuild the graphs:
+- Every file that really changed has a writer in the graph.
+- The last version of every changed file carries the real final hash, and no computed hash disagrees with it.
+- The `hash-diff` fallback was never needed.
+
+The builder prints a note for anything it cannot settle. The only notes on the recorded runs concern two failed commands in run-006, calls 15 and 29, whose inline Python names a write target; no write is inferred for them. Call 29 stopped on a syntax error before running any code.
+
+To rebuild the graphs and see the notes:
 
 ```sh
 python3 provenance/build_graph.py --all artifact/runs graphs
 ```
 
+One consequence for detection: run-006 contains a write to `/tmp/test.csv`, a scratch file outside the workspace. It is outside the paths the task allows, and Part C has to decide how its rule treats such paths.
+
 ## 9. Known limits
 
-- **Shell commands are opaque.** Their file reads and writes are inferred, and an inference rule can miss an operation or add one that did not happen.
-- **Only two hashes per file.** `baseline.json` and `check.json` give the state at the start and at the end. The content of intermediate versions is not recorded, so `sha256` is `null` for them.
+- **Shell commands are opaque.** Their file reads and writes are inferred from the command text by heuristics, not by interpreting the shell. Variables, globs, subshells, and command substitution are not expanded, and paths computed at run time, such as temporary files, are not seen. A rule can miss an operation or add one that did not happen.
+- **Script behavior is declared, not observed.** The `known-script` reads come from a table written by reading the script's source. A new workload needs its own entries.
+- **Only two hashes per file.** `baseline.json` and `check.json` give the state at the start and at the end. Versions produced by `edit` have no recorded content, so `sha256` is `null` for them unless they are the last version.
 - **Presence in the context is not influence.** An edge into a turn establishes that content was available to the model. Whether it caused a later action is a hypothesis for Part C to support with further evidence.
 - **One session per graph.** Subagents and multiple sessions are out of scope for version 1.
