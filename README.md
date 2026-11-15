@@ -190,6 +190,10 @@ flowchart LR
 
 Tracking backward from the anchor yields several candidate sources: the task instruction, the skill, the project notes, the test output, and others. Our method has to produce evidence that the project notes are what led to this write.
 
+The same question on the graph built from the recorded run. Everything drawn here has a path to the first unauthorized edit (C12); C2 is the call that read the injected notes:
+
+![Backward slice of run-006](figures/run-006-backward-slice.svg)
+
 ## 5. Repository layout
 
 ```
@@ -207,19 +211,25 @@ provenance/
   trajectory.py      Parses a run into turns and tool calls
   shell.py           Infers the file reads and writes of a shell command
   build_graph.py     Builds the provenance graph of a run
+  render.py          Draws a graph, or a backward slice of it, as an SVG timeline
   test_*.py          Checks against the recorded runs and the format document
 graphs/run-00X.json  Provenance graph of each run
+figures/             Rendered graphs
+report/
+  graph-model.md     Draft report section on the graph model
 ```
 
-To inspect a run, rebuild the graphs, and run the checks:
+To inspect a run, rebuild the graphs, draw one, and run the checks:
 
 ```sh
 python3 provenance/trajectory.py artifact/runs/run-006 --calls
 python3 provenance/build_graph.py --all artifact/runs graphs
+python3 provenance/render.py graphs/run-006.json figures/run-006-backward-slice.svg \
+    --ancestors-of "O:file:tests/test_expense_summary.py@v1" --highlight C:2 C:12
 python3 -m unittest discover -s provenance -v
 ```
 
-Planned additions: analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and `report/`.
+Planned additions: analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and the remaining report sections.
 
 ## 6. Reproducing a run
 
