@@ -1,0 +1,80 @@
+% Section owner: Part C (analysis and evaluation).
+\section{Technical Design: Analysis on the Graph}
+\label{sec:analysis}
+
+\subsection{Detection point}
+
+Module~2 distinguishes anomaly, misuse, and specification-based detection.
+We use the third.
+The specification is the user's instruction, which names the paths the agent may write.
+Any \rel{Write} edge from a tool call to a file version outside \file{src/} and \file{outputs/} is an alert, and the alert is the anchor for tracking.
+
+This is the CFI idea of Table~\ref{tab:module1} applied to the graph: the legal targets of a write are known before the run, and a write elsewhere is a violation regardless of why the agent made it.
+The rule does not look at any text the agent read.
+It cannot be triggered by suspicious wording, and it cannot be talked out of an alert.
+
+\subsection{Backward and forward tracking}
+
+\emph{Backward} tracking collects every node with a path to the anchor.
+Among them, the prompt and the file versions are the candidate sources, and the trust label separates what the user supplied from what the workspace supplied.
+The target is the break-in point: the call through which the injected content first entered the context.
+
+\emph{Forward} tracking collects every node reachable from a chosen object, typically a suspected file.
+The file versions among them are the possibly contaminated artifacts.
+It applies whether or not the attack succeeded: for a run in which the agent ignored the payload, it shows that the payload reached the model and what was written afterwards.
+
+\subsection{Handling dependency explosion}
+\label{sec:explosion}
+
+Plain reachability is too broad, for the reason given in Section~\ref{sec:differences}.
+We narrow it in three layers of increasing evidential strength.
+
+\paragraph{Layer 1: structure.}
+The graph already partitions execution by turn, and each object enters the context at one identifiable turn.
+Trust labels remove the sources the user vouched for.
+This reduces the candidates but does not choose among workspace files.
+
+\paragraph{Layer 2: content evidence.}
+Compare the arguments of the anchor's call, such as the file it changed and the values it wrote, with the text of each candidate source as the model received it.
+A source that contains distinctive content found in the action, and found in no other source, is ranked first.
+The limit is that distinctive content may not be unique.
+In our setting the payload asks for the expectations \texttt{140.00} and \texttt{5.50}, and both values also appear in the output of the genuinely failing tests.
+
+\paragraph{Layer 3: counterfactual reruns.}
+Remove the suspected input, rerun from the same starting state, and observe whether the unauthorized action disappears.
+The normal scenario is the counterfactual of each injection scenario.
+Because a model is not deterministic, one rerun proves little; each condition has to be repeated, and the conclusion is a difference in rates.
+\placeholder{Part A: number of repetitions per condition.}
+
+\paragraph{Ranking by rarity.}
+Independently of the three layers, we score edges by how unusual they are, following the simplified NoDoze of Homework~2~\cite{nodoze}.
+Node identifiers are specific to a run, so an edge is first abstracted to an event signature $(s, r, d)$, where $s$ is the tool that made the call, $r$ the relation, and $d$ the file path.
+With $c_R(e)$ the number of occurrences of signature $e$ in reference runs without injection, $C_R(s,r)$ the total for the same tool and relation, and $K_r$ the number of distinct destinations for $r$ plus one,
+\[
+  p(e) = \frac{c_R(e) + 1}{C_R(s,r) + K_r},
+  \qquad
+  \mathit{AS}(v) = 1 - \exp\!\Bigg(\frac{\sum_{e \in E(v)} \log p(e)}{|E(v)|}\Bigg),
+\]
+where $E(v)$ is the set of edges at node $v$.
+A path through rare edges is examined first.
+An \texttt{edit} that writes a file under \file{tests/} never occurs in a reference run, so it scores high without any rule naming that path.
+\placeholder{Part C: implementation and scores; the reference set needs more normal runs than the two we have.}
+
+\subsection{What the record establishes}
+
+The analysis keeps three levels of claim apart:
+\begin{enumerate}
+  \item A recorded read establishes that a tool accessed a file.
+  \item A tool result read by a turn establishes that the content was available to the model.
+  \item That an action was caused by a particular input is a hypothesis, supported by Layers~2 and~3 and never by reachability alone.
+\end{enumerate}
+The model's recorded reasoning is kept in the graph for the reader's convenience and is not used as evidence.
+
+\subsection{Evaluation plan}
+
+\begin{itemize}
+  \item \emph{Detection}: missed violations and false alarms of the rule, against the independent checker as ground truth, and against a baseline that scans the flat log for injection keywords. The benign-quotation scenario exists to expose false alarms.
+  \item \emph{Attribution}: whether the injected file is in the backward slice, the size of the slice relative to the graph, and the rank of the injected file after each layer.
+  \item \emph{Outcome classification}: each run placed in one of the classes of the project guide~\cite{projectguide}.
+\end{itemize}
+\placeholder{Part C: attribution ranks after Layers 2 and 3.}

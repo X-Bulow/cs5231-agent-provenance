@@ -216,7 +216,11 @@ provenance/
 graphs/run-00X.json  Provenance graph of each run
 figures/             Rendered graphs
 report/
-  graph-model.md     Draft report section on the graph model
+  src/               LaTeX source of the project report, one file per section
+  src/gen_tables.py  Computes the report's tables and numbers from the graphs
+  build/report.pdf   Compiled report (first draft)
+  Makefile           `make -C report` regenerates the tables and compiles the PDF
+  graph-model.md     Earlier standalone draft of the graph model section
 ```
 
 To inspect a run, rebuild the graphs, draw one, and run the checks:
@@ -229,7 +233,9 @@ python3 provenance/render.py graphs/run-006.json figures/run-006-backward-slice.
 python3 -m unittest discover -s provenance -v
 ```
 
-Planned additions: analysis code under `provenance/`, `experiments/` (run manifest and payload variants), and the remaining report sections.
+The report builds with `make -C report`, which needs a LaTeX distribution with `latexmk`. Text in red brackets in the PDF marks what is still to be written.
+
+Planned additions: analysis code under `provenance/` and `experiments/` (run manifest and payload variants).
 
 ## 6. Reproducing a run
 

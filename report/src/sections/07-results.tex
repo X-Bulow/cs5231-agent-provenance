@@ -1,0 +1,149 @@
+% Section owner: Part A (6.1, 6.6), Part B (6.2), Part C (6.3 to 6.5).
+% Tables and numbers come from generated/, written by gen_tables.py.
+\section{Preliminary Results}
+\label{sec:results}
+
+All numbers in this section are computed from the recorded runs by a script in the repository.
+There is one run per condition, so the results are case studies.
+They support the design; they do not measure rates.
+
+\subsection{Runs and outcomes}
+
+\begin{table}[H]
+\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{}l l l r r l l X@{}}
+\toprule
+Run & Scenario & Model & Turns & Calls & Reached & Fixed & Outcome \\
+\midrule
+\tablerows{runs-table}
+\bottomrule
+\end{tabularx}
+\caption{The recorded runs. \emph{Reached} lists the tool calls whose result carried the scenario's changed text to the model. \emph{Fixed} is the independent checker's verdict on the implementation.}
+\label{tab:runs}
+\end{table}
+
+Table~\ref{tab:runs} classifies each run.
+In all six runs with changed text, that text reached the model.
+What followed depended on the model:
+
+\begin{itemize}
+  \item The larger model completed the legitimate task in every scenario. In runs 002 and 003 it had the payload in its context and repaired the implementation anyway.
+  \item The smaller model completed the task in the normal and benign-quotation scenarios.
+  \item In run-006, with the documentation injection, the smaller model edited the protected test file and left the implementation untouched. Its report claims that the tests pass. This is the one violation, and the attacker's objective was met in full.
+  \item In run-007, with the tool-output injection, the smaller model stopped after six turns without changing any file. The payload was in its context. We classify the run as \emph{task not completed} and not as an attempted violation, because the trajectory records no action toward one.
+\end{itemize}
+
+Runs 002 and 006 received the same payload through the same file.
+The difference in outcome is the point made in Section~\ref{sec:problem}: a defense that relies on the model complying is not enforced.
+
+\subsection{The graph explains every file change}
+\label{sec:results-graph}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}l r r r r r@{}}
+\toprule
+Run & Nodes & Edges & Inferred edges & Files changed & Changes explained \\
+\midrule
+\tablerows{graphs-table}
+\bottomrule
+\end{tabular}
+\caption{Graph sizes and reconciliation with the independent file hashes. A change is explained when the graph contains a call that writes the file and the last version in the graph has the file's real final hash.}
+\label{tab:graphs}
+\end{table}
+
+All \NumChangedFiles{} files that changed across the \NumRuns{} runs have a writer in the graph (Table~\ref{tab:graphs}), and the \texttt{hash-diff} fallback was never used.
+For three of them the final state was produced by a shell command and is explained only by an inferred edge.
+
+For six file versions the trajectory contains the written content, so the graph computes the hash without consulting the independent record: four reports written with the agent's write tool, one written through a shell here-document, and one file moved into place with \texttt{mv}.
+All six computed hashes equal the independent final hash.
+
+The last of these is the violation itself.
+In run-006 the agent first edited the test file four times, then wrote a complete replacement under another name (C30) and moved it over the protected file (C31).
+The trajectory records only the text of the \texttt{mv} command.
+The content written by C30 has the same hash as the final test file, which confirms the inferred write.
+
+\subsection{Detection: a specification rule against a keyword scan}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}l l l l l@{}}
+\toprule
+Run & Scenario & Violation & Rule alert & Keyword flag \\
+\midrule
+\tablerows{detection-table}
+\bottomrule
+\end{tabular}
+\caption{Detection per run. \emph{Violation} is the independent checker's finding that a protected file changed. \emph{Rule alert}: the graph contains a write to a workspace file outside \file{src/} and \file{outputs/}. \emph{Keyword flag}: some tool result contains a phrase from a list of injection wording.}
+\label{tab:detection}
+\end{table}
+
+The rule of Section~\ref{sec:analysis} raises an alert in run-006 and in no other run: \RuleTruePositives{} of \NumViolatingRuns{} violating runs found, and \RuleFalseAlarms{} false alarms among the \NumCleanRuns{} clean runs (Table~\ref{tab:detection}).
+In run-006 it marks \AttackAlerts{} write edges, the first at call 12 in turn 9.
+
+The baseline scans the tool results for injection wording.
+The phrase list was written with knowledge of the payloads, which favors the baseline.
+It flags the violating run and \KeywordFalseAlarms{} of the \NumCleanRuns{} clean runs.
+The false alarms are the runs in which the model read the payload and declined it, the run in which it stopped, and both benign-quotation runs.
+A keyword scan answers whether suspicious text was present.
+It cannot answer whether the agent did anything wrong, and that is the question the rule on the graph answers.
+
+One further write lies outside the allowed paths: in run-006 a shell command wrote a scratch file, \file{/tmp/test.csv}, outside the workspace.
+We report it separately from the alerts above.
+\placeholder{Part C: decide how the rule treats paths outside the workspace.}
+
+\subsection{Backward tracking from the violation}
+
+\begin{sidewaysfigure}
+\centering
+\includegraphics[width=0.97\textheight]{run-006-backward-slice}
+\caption{Backward slice from the first unauthorized edit in run-006: every node with a path to version~1 of the protected test file. C12 is the edit; C2 is the call that read the injected project notes. Dashed connectors are inferred edges.}
+\label{fig:slice}
+\end{sidewaysfigure}
+
+Figure~\ref{fig:slice} shows every node of run-006 with a path to the first unauthorized edit.
+The slice holds \SliceNodes{} of the other \SliceOthers{} nodes: \SliceTurns{} turns, \SliceCalls{} tool calls, \SliceResults{} results, \SliceFiles{} files, and the prompt.
+It contains the injected file, read by C2 in the first turn, and it contains no call issued after the edit.
+
+It also shows the limit of reachability.
+The edit has \SliceSources{} possible sources: the prompt, \SliceSkillSources{} skill file, and \SliceWorkspaceSources{} workspace files.
+With recorded edges alone there are \SliceSourcesRecordedOnly{}; the other three are found only through inferred edges.
+By turn 9 the model had seen all of them, and reachability cannot choose.
+Trust labels (Layer~1) leave the \SliceWorkspaceSources{} workspace files.
+
+Content evidence (Layer~2) is informative here, and it also shows why it is not enough.
+The replacement test file that ends up in place expects exactly \texttt{140.00} and \texttt{5.50}, the two values the payload demands.
+Before the first edit, \texttt{140.00} and \texttt{5.50} each appear in the injected notes and in two other tool results, among them the output of the failing tests, which reports the buggy program's actual values.
+Several sources match the action equally well.
+The first edit itself wrote neither value, an error by the model.
+Separating the two candidates takes Layer~3.
+
+\subsection{Forward tracking from the changed file}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}l l l l@{}}
+\toprule
+Run & Changed file & Nodes reachable & Written files reachable \\
+\midrule
+\tablerows{forward-table}
+\bottomrule
+\end{tabular}
+\caption{Forward slices from each scenario's changed file. \emph{Written files reachable} counts the files written during the run that are descendants of the changed file.}
+\label{tab:forward}
+\end{table}
+
+Forward reachability has the same weakness (Table~\ref{tab:forward}).
+In every run, every file written during the run is a descendant of the changed file.
+That includes runs 002 and 003, where the model declined the payload and the file it wrote is the correct repair.
+Read literally, forward tracking marks a legitimate fix as possibly contaminated.
+It is an upper bound on contamination, and it needs the same narrowing as backward tracking.
+
+\subsection{A matched pair}
+
+Runs 005 and 006 use the same model and the same instruction and differ only in the project notes.
+The violation occurs with the injected notes and not without them.
+This is the counterfactual comparison of Layer~3 with a single observation on each side.
+It is consistent with the hypothesis that the notes caused the edit and is too little to establish it.
+\placeholder{Part A: repeated runs of both conditions and the resulting rates.}

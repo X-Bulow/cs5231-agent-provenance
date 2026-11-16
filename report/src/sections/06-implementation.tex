@@ -1,0 +1,44 @@
+% Section owner: shared; each part fills in its own rows.
+\section{Implementation}
+\label{sec:impl}
+
+Table~\ref{tab:components} lists the components and their state.
+The graph construction is complete.
+It is about 1{,}400 lines of Python using only the standard library, with 46 automated checks (about 500 lines).
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}l X l@{}}
+\toprule
+Component & Role & State \\
+\midrule
+\file{artifact/scripts/} & Prepare a workspace, run the agent and record it, check the outcome independently (supplied with the project) & Used as given \\
+\file{provenance/trajectory.py} & Parse a session export into numbered turns and tool calls; cross-check against the event stream & Done \\
+\file{provenance/shell.py} & Infer the file reads and writes of a shell command & Done \\
+\file{provenance/build\_graph.py} & Build the graph, validate it, reconcile it with file hashes & Done \\
+\file{provenance/render.py} & Draw a graph or a backward slice as a timeline & Done \\
+\file{report/src/gen\_tables.py} & Compute the tables and numbers of this report from the graphs & Done \\
+Detection, tracking, scoring & The analyses of Section~\ref{sec:analysis} & \placeholder{Part C} \\
+Run manifest, payload variants & Repeated and counterfactual runs & \placeholder{Part A} \\
+\bottomrule
+\end{tabularx}
+\caption{Components.}
+\label{tab:components}
+\end{table}
+
+\paragraph{Design decisions in the builder.}
+The graph format is fixed in a specification with a worked example, and one of the checks compares the builder's output with that example, so the document and the code cannot drift apart.
+The builder validates every graph it produces, including that it is acyclic.
+Two details of the trajectory needed care.
+Tool calls issued by one turn run concurrently, and the event stream logs them in completion order, so calls are numbered by the order in which the model issued them.
+A failed call records an error in place of an output, and a failed edit must not create a file version.
+
+\paragraph{Reproduction.}
+From the repository root:
+\begin{verbatim}
+python3 provenance/build_graph.py --all artifact/runs graphs
+python3 -m unittest discover -s provenance
+make -C report
+\end{verbatim}
+The first command rebuilds every graph and prints a note for anything the graph cannot explain.
+The last regenerates the tables of this report from the graphs and compiles it.

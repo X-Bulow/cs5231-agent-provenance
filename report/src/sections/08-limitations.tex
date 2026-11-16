@@ -1,0 +1,13 @@
+% Section owner: shared.
+\section{Limitations}
+\label{sec:limits}
+
+\begin{itemize}
+  \item \textbf{Few runs.} There is one run per condition, on one workload, with one agent and two models. The results are case studies and say nothing about rates.
+  \item \textbf{Shell analysis is heuristic.} The inference rules handle the constructs that occur in our runs. They do not expand variables, globs, or command substitution, and they do not see paths computed at run time, such as temporary files.
+  \item \textbf{Script behavior is declared.} The reads of the test runner come from a table written for this workload. Another workload needs its own entries, or real instrumentation of the tools.
+  \item \textbf{Intermediate content is unknown.} File hashes exist for the start and the end of a run. A version produced by an edit has no recorded content unless it is the final one.
+  \item \textbf{An edge is availability, not influence.} A path into a turn shows that content was in the model's context. The graph cannot show that the model used it.
+  \item \textbf{The specification is simple.} The detection rule covers the paths the agent may write. It does not cover the other part of the attacker's objective, a report that claims success without support, and it would not catch an attack whose effect stays inside the allowed paths.
+  \item \textbf{The keyword baseline is weak by design.} It is the simplest alternative to a provenance graph, and a stronger text classifier would do better on wording. The structural point stands: text classification detects a payload, not a violation.
+\end{itemize}

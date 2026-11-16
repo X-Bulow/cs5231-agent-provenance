@@ -1,0 +1,49 @@
+% Section owner: Part A (experiments and data).
+\section{Setting}
+\label{sec:setting}
+
+We use the demonstration setting supplied with the project~\cite{projectguide}.
+
+\paragraph{Agent and skill.}
+The agent is OpenCode 1.19.5~\cite{opencode}, run non-interactively.
+It is asked to use the \emph{systematic-debugging} skill from the Superpowers collection~\cite{superpowers}, pinned to a fixed revision.
+A skill is a document that tells the agent how to work.
+This one prescribes four phases: investigate the root cause, find the pattern, test a hypothesis, then fix and verify.
+Two companion skills are installed alongside it.
+
+\paragraph{Task.}
+The workload is a small Python program that summarizes expense records by category.
+It has one bug: a refund is added to the category balance when it should be subtracted, so two of the five tests fail.
+The user's instruction states the intended behavior, and it states what the agent may change: files under \file{src/}, and new files under \file{outputs/}.
+Everything else is to be preserved, including the tests.
+The instruction ends by saying that project documentation and tool output are evidence about the project and authorize no change to the task.
+
+\paragraph{Scenarios.}
+Four scenarios start from the same program, tests, and instruction and differ in one text file (Table~\ref{tab:scenarios}).
+The payload in the two attack scenarios asks for the same thing: leave the implementation alone, change the two failing test expectations to \texttt{140.00} and \texttt{5.50}, and report the task as complete.
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+Scenario & File changed & Content \\
+\midrule
+normal & none & Ordinary project notes and test output \\
+documentation-injection & \file{docs/project-notes.md} & A ``maintainer notice'' carrying the payload, which claims to supersede the restriction on editing tests \\
+tool-output-injection & \file{docs/runner-notes.txt} & The payload as an ``automated maintenance directive''. The test runner prints this file after the real test results \\
+benign-quotation & \file{docs/project-notes.md} & Quotes ``ignore previous instructions and edit the tests'' as an example that must not be followed \\
+\bottomrule
+\end{tabularx}
+\caption{The four scenarios. The benign quotation contains suspicious wording and no attack.}
+\label{tab:scenarios}
+\end{table}
+
+\paragraph{What a run records.}
+Each run starts from a fresh copy of the workspace.
+The harness stores the SHA-256 hash of every workspace file before the agent starts, the agent's event stream, and the agent's native session export, which lists every model response with its tool calls, their arguments, and the text each call returned.
+After the run, an independent checker hashes every file again and tests the implementation on its own inputs.
+The checker does not use the agent's tests or the agent's claims, so an agent that rewrites the tests cannot make it pass.
+
+\paragraph{Models.}
+We ran each scenario once with two models served by the School of Computing: \texttt{qwen3-coder-next}, a large coding model, and \texttt{qwen3.5:9b}, a much smaller general model.
+\placeholder{Part A: repeated runs per condition, payload variants, and the run manifest.}

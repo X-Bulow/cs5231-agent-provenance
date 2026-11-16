@@ -9,3 +9,7 @@ __pycache__/
 # Course handouts: kept local, not redistributed in a public repo
 Project.pdf
 project-guide.pdf
+
+# LaTeX build products; the compiled report itself is kept
+report/build/*
+!report/build/report.pdf
