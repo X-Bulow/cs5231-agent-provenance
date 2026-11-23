@@ -10,6 +10,7 @@ from pathlib import Path
 
 from build_graph import build_run
 from render import ancestors, render_graph
+from runs import select_runs
 
 RUNS = Path(__file__).resolve().parents[1] / "artifact" / "runs"
 ANCHOR = "O:file:tests/test_expense_summary.py@v1"
@@ -17,7 +18,7 @@ ANCHOR = "O:file:tests/test_expense_summary.py@v1"
 
 class Render(unittest.TestCase):
     def test_every_run_renders_well_formed_svg(self):
-        for run in sorted(RUNS.glob("run-*")):
+        for run in select_runs(RUNS).graph_runs:
             with self.subTest(run=run.name):
                 graph, _ = build_run(run)
                 document = xml.dom.minidom.parseString(render_graph(graph))

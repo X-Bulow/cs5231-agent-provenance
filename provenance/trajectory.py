@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from collections import Counter
 from dataclasses import dataclass, field
@@ -44,6 +45,7 @@ class Call:
     exit_code: int | None      # bash only
     time_start: int | None     # milliseconds since the epoch
     time_end: int | None
+    raw_input: dict[str, Any] | None = None  # source bytes for content hashing, not graph display
 
 
 @dataclass
@@ -70,12 +72,26 @@ class Trajectory:
     turns: list[Turn]
     calls: list[Call]
     warnings: list[str] = field(default_factory=list)
+    normalization_notes: list[str] = field(default_factory=list)
 
 
 def strip_prefix(value: Any, prefix: str) -> Any:
-    """Remove the absolute workspace prefix from every string inside value."""
+    """Normalize only known workspace-prefix spellings, never URL-decode text.
+
+    Spaces within this exact prefix may be literal, %20, or backslash-escaped;
+    a path component may be shell-quoted. This is an analysis representation,
+    not evidence that the original command was valid or executed successfully.
+    The original session is untouched; Call.raw_input preserves write content.
+    """
     if isinstance(value, str):
-        return value.replace(prefix + "/", "").replace(prefix, ".")
+        parts = []
+        for component in prefix.rstrip("/").split("/"):
+            escaped = re.escape(component).replace(r"\ ", r"(?: |%20|\\+ )")
+            parts.append(f"(?:{escaped}|'{escaped}'|\"{escaped}\")" if component else "")
+        pattern = "/".join(parts)
+        # Do not rewrite a sibling whose name merely starts with 'workspace'.
+        return re.sub(pattern + r"(/|(?=$|[\s'\"<>),;:]))",
+                      lambda match: "" if match.group(1) == "/" else ".", value)
     if isinstance(value, list):
         return [strip_prefix(item, prefix) for item in value]
     if isinstance(value, dict):
@@ -158,6 +174,7 @@ def load_run(run_dir: str | Path) -> Trajectory:
                     exit_code=metadata.get("exit") if part.get("tool") == "bash" else None,
                     time_start=times.get("start"),
                     time_end=times.get("end"),
+                    raw_input=state.get("input") or {},
                 )
                 calls.append(call)
                 issued.append(call.index)
@@ -195,6 +212,12 @@ def load_run(run_dir: str | Path) -> Trajectory:
     else:
         warnings.append("events.jsonl is missing; no cross-check performed")
 
+    normalization_notes = []
+    marker = run_dir.name + "/workspace"
+    for call in calls:
+        if marker in json.dumps(call.input) or marker in call.output:
+            normalization_notes.append(
+                f"C:{call.index}: unresolved workspace path expression retained; see raw session")
     return Trajectory(
         run=run_dir.name,
         session_id=info.get("id", ""),
@@ -205,6 +228,7 @@ def load_run(run_dir: str | Path) -> Trajectory:
         turns=turns,
         calls=calls,
         warnings=warnings,
+        normalization_notes=normalization_notes,
     )
 
 

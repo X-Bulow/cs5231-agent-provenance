@@ -5,10 +5,12 @@ Run from the repository root:
 """
 
 import unittest
+import json
 from collections import Counter
 from pathlib import Path
 
-from trajectory import load_run
+from trajectory import load_run, strip_prefix
+from runs import select_runs
 
 RUNS = Path(__file__).resolve().parents[1] / "artifact" / "runs"
 
@@ -78,15 +80,47 @@ class Run001(unittest.TestCase):
 
 class AllRuns(unittest.TestCase):
     def test_no_absolute_workspace_paths_remain(self):
-        for run in sorted(RUNS.glob("run-*")):
+        for run in select_runs(RUNS).graph_runs:
             with self.subTest(run=run.name):
                 t = load_run(run)
-                marker = f"{run.name}/workspace"
+                marker = json.loads((run / "session.json").read_text())["info"]["directory"]
                 texts = [t.prompt]
                 texts += [turn.text + turn.reasoning for turn in t.turns]
                 texts += [str(call.input) + call.output for call in t.calls]
                 self.assertFalse(any(marker in text for text in texts))
                 self.assertEqual(t.warnings, [])
+
+
+class PrefixNormalization(unittest.TestCase):
+    prefix = "/Users/example/NUS study/group project/run-012/workspace"
+
+    def test_known_mixed_encoded_and_shell_escaped_prefixes(self):
+        aliases = [self.prefix, self.prefix.replace(" ", "%20"),
+                   self.prefix.replace("study/group ", "study/group%20"),
+                   self.prefix.replace(" ", "\\ "),
+                   self.prefix.replace(" ", "\\\\ "),
+                   self.prefix.replace("NUS study", "'NUS\\ study'").replace("group project", "group\\ project")]
+        for alias in aliases:
+            with self.subTest(alias=alias):
+                self.assertEqual(strip_prefix(alias + "/src/a.py", self.prefix), "src/a.py")
+                self.assertEqual(strip_prefix('cd "' + alias + '"', self.prefix), 'cd "."')
+
+    def test_other_text_sibling_paths_and_variables_are_preserved(self):
+        for text in ["https://example.com/a%20b", "keep tests/a%20b.py and 140.00",
+                     self.prefix + "-other/file", "$HOME/NUS study/group project/run-012/workspace",
+                     "project/run-012/workspace/data/a.csv: No such file"]:
+            self.assertEqual(strip_prefix(text, self.prefix), text)
+
+    def test_failed_encoded_path_stays_failed_and_raw_input_is_retained(self):
+        t = load_run(RUNS / "run-012")
+        self.assertEqual(t.calls[0].status, "error")
+        self.assertIn("NUS%20study", t.calls[0].raw_input["command"])
+        self.assertNotIn("NUS%20study", t.calls[0].input["command"])
+
+    def test_malformed_path_is_reported_not_repaired(self):
+        t = load_run(RUNS / "run-015")
+        self.assertIn("NUS%20study", t.calls[7].input["command"])
+        self.assertTrue(any(note.startswith("C:8:") for note in t.normalization_notes))
 
 
 if __name__ == "__main__":

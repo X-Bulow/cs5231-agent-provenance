@@ -26,6 +26,7 @@ from typing import Any
 
 from shell import analyze_command, grep_output_paths
 from trajectory import Call, Trajectory, load_run
+from runs import select_runs
 
 SCHEMA_VERSION = 1
 RELATIONS = ("EXEC", "READ", "WRITE", "NEXT")
@@ -186,7 +187,7 @@ class GraphBuilder:
             self._add_edge(self.current_version(path, call), "READ", call_id, evidence)
             self._add_edge(call_id, "WRITE", self.next_version(path), evidence)
         else:
-            content = call.input.get("content")
+            content = (call.raw_input if call.raw_input is not None else call.input).get("content")
             sha256 = (hashlib.sha256(content.encode("utf-8")).hexdigest()
                       if isinstance(content, str) else None)
             self._add_edge(call_id, "WRITE", self.next_version(path, sha256), evidence)
@@ -203,7 +204,9 @@ class GraphBuilder:
         if call.tool != "bash" or not isinstance(call.input.get("command"), str):
             return
 
-        analysis = analyze_command(call.input["command"], self.existing_files(), call.exit_code)
+        analysis = analyze_command(call.input["command"], self.existing_files(), call.exit_code,
+                                   output=call.output,
+                                   raw_command=(call.raw_input or call.input).get("command"))
         self.notes.extend(f"C:{call.index}: {note}" for note in analysis.notes)
         written: dict[str, str] = {}      # path -> version node this call created
 
@@ -385,7 +388,7 @@ def build_run(run_dir: str | Path) -> tuple[dict[str, Any], list[str]]:
     problems = validate(graph)
     if problems:
         raise ValueError(f"{run_dir.name}: invalid graph: " + "; ".join(problems))
-    return graph, list(trajectory.warnings) + builder.notes
+    return graph, list(trajectory.warnings) + trajectory.normalization_notes + builder.notes
 
 
 def write_graph(graph: dict[str, Any], output: Path) -> None:
@@ -411,13 +414,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build the provenance graph of a recorded run.")
     parser.add_argument("--all", action="store_true",
                         help="treat the arguments as a directory of runs and an output directory")
+    parser.add_argument("--manifest", type=Path, help="reviewed run inventory for --all")
     parser.add_argument("run", type=Path, help="run directory (or runs directory with --all)")
     parser.add_argument("output", type=Path, help="output JSON file (or directory with --all)")
     args = parser.parse_args()
 
     if args.all:
-        jobs = [(run, args.output / f"{run.name}.json")
-                for run in sorted(args.run.glob("run-*")) if (run / "session.json").is_file()]
+        selection = select_runs(args.run, args.manifest)
+        jobs = [(run, args.output / f"{run.name}.json") for run in selection.graph_runs]
+        for name, reason in selection.excluded.items():
+            print(f"excluded: {name}: {reason}")
+        for name, reason in selection.ungraphable.items():
+            print(f"ungraphable: {name}: {reason}")
     else:
         jobs = [(args.run, args.output)]
     if not jobs:

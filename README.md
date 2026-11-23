@@ -2,6 +2,8 @@
 
 Course project for NUS CS5231 Systems Security.
 
+> 2026-11-23 当前状态：A3 固定新批次已完成；统一清单共 18 次尝试，其中 16 次可构图、2 次启动失败。B1、B2 已通过 64 项测试并核对全部有效运行，详见 [构图验收记录](docs/b1-b2-validation.md)。下文原 8 次运行表保留为历史案例；内容排序、稀有度评分和正式评估仍未实现，A4 的完整结果审阅也尚未执行。
+
 Our question: when a coding agent does something the user did not authorize, such as editing a file it was told to preserve, can we use only its recorded execution history to find which input caused the action and which outputs were contaminated as a result?
 
 Our approach applies the system provenance techniques from Module 2 to agents. We turn the agent's trajectory into a provenance graph, track backward from the unauthorized action to find the injected source, and track forward to find the affected artifacts.
@@ -235,7 +237,7 @@ python3 -m unittest discover -s provenance -v
 
 The report builds with `make -C report`, which needs a LaTeX distribution with `latexmk`. Text in red brackets in the PDF marks what is still to be written.
 
-Planned additions: analysis code under `provenance/` and `experiments/` (run manifest and payload variants).
+实验清单与固定批次协议现已位于 `experiments/`；Part C 的查询、排序和评估入口仍待完成，载荷变体尚未执行。
 
 ## 6. Reproducing a run
 

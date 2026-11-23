@@ -10,6 +10,7 @@ import unittest
 from pathlib import Path
 
 from build_graph import build_run, validate
+from runs import select_runs
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNS = ROOT / "artifact" / "runs"
@@ -141,14 +142,44 @@ class Run006(unittest.TestCase):
 
 
 class AllRuns(unittest.TestCase):
+    def test_failed_encoded_calls_do_not_gain_file_edges(self):
+        graph, _ = build_run(RUNS / "run-012")
+        nodes = {n["id"]: n for n in graph["nodes"]}
+        for edge in graph["edges"]:
+            self.assertFalse((edge["src"] == "C:1" and nodes[edge["dst"]]["kind"] == "file")
+                             or (edge["dst"] == "C:1" and nodes[edge["src"]]["kind"] == "file"))
+
+    def test_run_016_distinguishes_failed_and_successful_redirections(self):
+        graph, notes = build_run(RUNS / "run-016")
+        paths = {n["path"] for n in graph["nodes"] if n["kind"] == "file"}
+        self.assertNotIn("output/test.csv", paths)
+        self.assertIn("tests/test.csv", paths)
+        self.assertTrue(any(note.startswith("C:13:") and "failure" in note for note in notes))
+
+    def test_run_018_report_hash_is_independently_computed_from_raw_write(self):
+        graph, _ = build_run(RUNS / "run-018")
+        session = json.loads((RUNS / "run-018/session.json").read_text())
+        writes = [p for m in session["messages"] for p in m.get("parts", [])
+                  if p.get("type") == "tool" and p.get("tool") == "write"
+                  and p["state"].get("input", {}).get("filePath", "").endswith("outputs/report.md")]
+        self.assertEqual(len(writes), 1)
+        import hashlib
+        literal_hash = hashlib.sha256(writes[0]["state"]["input"]["content"].encode()).hexdigest()
+        report = next(n for n in graph["nodes"] if n["id"] == "O:file:outputs/report.md@v1")
+        check = json.loads((RUNS / "run-018/check.json").read_text())
+        final = next(c["after"] for c in check["changes"] if c["path"] == "outputs/report.md")
+        self.assertEqual(report["sha256"], literal_hash)
+        self.assertEqual(literal_hash, final)
+
     def test_every_run_builds_a_valid_graph(self):
         scenario_names = ("documentation-injection", "tool-output-injection", "benign-quotation")
-        for run in sorted(RUNS.glob("run-*")):
+        for run in select_runs(RUNS).graph_runs:
             with self.subTest(run=run.name):
                 graph, _ = build_run(run)
                 self.assertEqual(validate(graph), [])
                 dumped = json.dumps(graph)
-                self.assertNotIn(f"{run.name}/workspace", dumped)
+                prefix = json.loads((run / "session.json").read_text())["info"]["directory"]
+                self.assertNotIn(prefix, dumped)
                 self.assertFalse(any(name in dumped for name in scenario_names))
                 for node in graph["nodes"]:
                     if node["kind"] != "file":
@@ -162,17 +193,18 @@ class AllRuns(unittest.TestCase):
                     if node["version"] == 0:
                         self.assertIsNotNone(node["sha256"])
 
-    def test_only_run_006_writes_outside_allowed_paths(self):
-        for run in sorted(RUNS.glob("run-*")):
+    def test_final_protected_changes_have_write_evidence(self):
+        for run in select_runs(RUNS).graph_runs:
             with self.subTest(run=run.name):
                 graph, _ = build_run(run)
-                if run.name != "run-006":
-                    self.assertEqual(file_writes_outside_allowed(graph), [])
+                check = json.loads((run / "check.json").read_text())
+                self.assertLessEqual(set(check["protected_paths_changed"]),
+                                     set(file_writes_outside_allowed(graph)))
 
     def test_every_file_change_is_explained(self):
         # Reconciliation with check.json: each file that really changed has a
         # writer, and the graph's last version carries the real final hash.
-        for run in sorted(RUNS.glob("run-*")):
+        for run in select_runs(RUNS).graph_runs:
             with self.subTest(run=run.name):
                 graph, notes = build_run(run)
                 self.assertTrue(graph["source"]["inferred_edges"])

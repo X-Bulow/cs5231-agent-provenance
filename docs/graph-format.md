@@ -74,7 +74,7 @@ Every node has `id` and `kind`. There are five kinds.
 - **Turns** are numbered from 1 in the order of assistant messages in `session.json`. `T:1` is the first model response.
 - **Tool calls** are numbered from 1 across the whole session, in the order `session.json` lists them, which is the order in which the model issued them. A turn can issue zero, one, or several calls, so turn numbers and call numbers differ. In run-006, call 12 is issued by turn 9.
 - **Calls issued by the same turn run concurrently.** Their relative numbering carries no causal meaning, and `events.jsonl` may list them in a different order because it logs each call when it finishes. In run-001, turn 3 issues calls 4 and 5 together and the event stream records call 5 first.
-- **Paths** are relative to the run's `workspace/` directory. The absolute workspace prefix is stripped everywhere it occurs, including inside recorded tool arguments and tool results. This keeps graphs independent of the machine the run was collected on. A path outside the workspace stays absolute, for example `/tmp/test.csv`.
+- **路径表示：**图使用工作区相对路径。已知工作区前缀的原样、空格写成 `%20`、反斜线空格和完整分段引号形式可清理；其他正文不作 URL 解码。变量、错误引号和失败命令返回的路径碎片保留，并给出调用级诊断。清理是分析表示，不证明原始命令合法或已执行。原始 session.json 保持不变，目录外的明确绝对路径仍保留，例如 `/tmp/test.csv`。
 
 ### 3.2 Turn
 
@@ -141,7 +141,7 @@ The argument names inside `input` are whatever the tool recorded. The ones that 
 Versions work as follows:
 
 - `@v0` is the file as it was when the run started. It exists only for files listed in `baseline.json`.
-- Each write to a path creates the next version. A file the agent creates starts at `@v1`.
+- 不同调用写同一路径时递增版本；新建文件从 @v1 开始。同一调用内对同一路径的多次写入或删除合并为该调用结束时的一个版本，不能由此图恢复调用内部的每次中间内容。
 - A read links to the latest version that exists at that point.
 - Removing or renaming a file away creates a new version with `deleted: true`.
 
@@ -150,7 +150,7 @@ A file node exists only for a file that some call read or wrote. Files in the wo
 File nodes do not store content. `sha256` is known in the following cases and is `null` otherwise:
 
 - `@v0`, from `baseline.json`.
-- A version whose content is literal in the trajectory: one produced by the `write` tool, or by a shell here-document such as `cat > file << 'EOF'`. The hash is computed from that content.
+- 写入内容完整出现在轨迹中的版本：包括 write 工具及内容可确定的 here-document。哈希使用原始写入字节计算，不能使用清理绝对路径后的图中文字；未引用的 here-document 若含展开字符，仍不直接计算内容哈希。
 - A version produced by `mv` or `cp`, which takes the hash of its source when that is known.
 - The last version of a workspace file, from `check.json`, when no hash was known for it. This assumes the graph's last version is the file's final state.
 
@@ -200,7 +200,7 @@ The complete list of edge patterns:
 
 Rules that apply to all edges:
 
-- A call with status `error` gets patterns 3, 4, and 5 only. It reads and writes no files.
+- 状态为 error 的调用只添加第 3、4、5 类关系，不据参数推断文件读写。这是构图的保守处理，不证明所有错误工具都不可能有部分副作用；最终状态不一致时须另作诊断。
 - Tools that touch no file (`glob`, `todowrite`, `invalid`) get patterns 3, 4, and 5 only.
 - There is at most one edge for a given `(src, rel, dst)`.
 
@@ -218,7 +218,7 @@ The trajectory records a shell command and its output, but not what the command 
 How the rules behave in cases that matter for analysis:
 
 - **Reads are over-approximated.** A read edge is added whenever the command text indicates one, including for commands that failed. The file may not have been read, and its content may not appear in the result: `python3 tools/run_tests.py | tail -8` still gets its read edges.
-- **Writes are added only with support.** A redirection, `tee`, `mv`, `cp`, or `rm` is taken to happen. A write that appears only in inline Python code is inferred when the command exited with status 0, and is otherwise left out and reported in the builder's notes.
+- **写入推断：**仍根据重定向、tee、mv、cp、rm 和部分 Python 文本判断。新增对已记录的 zsh 重定向失败和 here-document 临时文件失败的识别，明确失败时不推断成功写入。后续程序失败不等于此前重定向失败。仅出现在 Python 代码中的写入仍要求整体退出 0，否则保留诊断；这些规则没有执行完整的 Shell 语义。
 - **A call never reads a version it created.** For `mv a b && python3 tools/run_tests.py`, the test run reads the new `b`, but both belong to one call, and data flow inside a call is below the granularity of the graph.
 - **Reads resolve to the version current at that call.** A test run after an edit depends on the edited version, not on `@v0`.
 
@@ -348,7 +348,7 @@ The recorded hashes support this inference: the content that call 30 wrote to th
 
 `provenance/build_graph.py` produces everything in this document: recorded and inferred edges, file versions, trust labels, and hashes. Every graph under `graphs/` has `source.inferred_edges` set to `true`.
 
-After building a graph, the builder reconciles it with `check.json`, the independent comparison of every workspace file before and after the run. For the eight recorded runs:
+After building a graph, the builder reconciles it with `check.json`, the independent comparison of every workspace file before and after the run. 下面三项是原 8 次运行的历史核对结果；当前 16 次运行的验收见本文最后一节。
 
 - Every file that really changed has a writer in the graph.
 - The last version of every changed file carries the real final hash, and no computed hash disagrees with it.
@@ -371,3 +371,17 @@ One consequence for detection: run-006 contains a write to `/tmp/test.csv`, a sc
 - **Only two hashes per file.** `baseline.json` and `check.json` give the state at the start and at the end. Versions produced by `edit` have no recorded content, so `sha256` is `null` for them unless they are the last version.
 - **Presence in the context is not influence.** An edge into a turn establishes that content was available to the model. Whether it caused a later action is a hypothesis for Part C to support with further evidence.
 - **One session per graph.** Subagents and multiple sessions are out of scope for version 1.
+
+## 10. 2026-11-23：B1、B2 当前实现与验收
+
+批量入口与 AllRuns 测试现在通过 `provenance/runs.py` 读取 A 的统一清单。它只使用编号、有效性、导出可用性及证据校验值，不把场景标签或结果答案传入构图。当前选择 16 次可构图运行，明确排除 009/010 启动失败。新增未审阅目录、应有会话缺失、未知有效性或证据变化均报错；已确认有模型响应但无导出的记录单列为不可构图，不混同启动失败。
+
+图格式仍为 schema_version 1，节点与关系字段不变。Call 在解析内存中另留 raw_input，只用于准确计算原始写入内容的哈希；该副本不写入图。图中的 call_id、message_id 与原始会话对应，原始文件的 SHA-256 保存在实验清单和 B2 验收记录。
+
+`graphs/` 已有 16 份有效运行图，包含新批次 013—018。旧 001—008 和 011 图逐字节不变；012 仅三个失败调用的参数显示清理了已知编码前缀，节点和边未变。原有十份图已归档到 `experiments/audit/b1-b2-original-graphs/`。
+
+当前 27 个最终变化文件都有图中写入与匹配的最终状态。其中 10 个最终哈希在禁用最终检查回填时已经已知，来源可能是原始写入内容，也可能是已有哈希经复制／移动传播；另 17 个从 check.json 回填，不能称独立预测验证。逐文件来源、调用及诊断见 `experiments/audit/b2-verification.json`。这里按每次运行内的变化路径计数，同一路径在两次运行中算两项。
+
+例如，run-018 的 outputs/report.md 使用原始 write 内容计算哈希，并与最终检查独立核对；不能先清理其正文中的绝对路径再计算。run-016 的 output/test.csv 重定向明确失败，图中没有虚假的成功写入；其 tests/test.csv 的成功重定向仍保留。
+
+完整测试目前为 64 项，通过记录见 `experiments/audit/b1-tests-after.log`。604 个原始运行文件和 32 个老师源文件保持不变。剩余调用级诊断明确保留变量、错误命令、未支持的括号结构及失败写入；它们不表示图已完整观察文件系统。图可达仍只表示候选依赖，不证明因果。

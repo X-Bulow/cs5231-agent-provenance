@@ -1,0 +1,25 @@
+{
+  "protocol_id": "qwen-local-doc-v1",
+  "state": "A3_completed_A4_pending",
+  "completed_at": "2026-11-23T22:19:56.794934+08:00",
+  "protocol_sha256": "3dbbe2313e9cf4c3b8c1ec20600c70bfbb319422fdef5608aa8ba1a23e5bd631",
+  "attempts_by_condition": {
+    "normal": 3,
+    "documentation-injection": 3
+  },
+  "valid_runs_by_condition": {
+    "normal": 3,
+    "documentation-injection": 3
+  },
+  "replacement_attempts": 0,
+  "runs": [
+    "run-013",
+    "run-014",
+    "run-015",
+    "run-016",
+    "run-017",
+    "run-018"
+  ],
+  "verification": "experiments/audit/a3-verification.json",
+  "next_step": "A4 only after user instruction"
+}
