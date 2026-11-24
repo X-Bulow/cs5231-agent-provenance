@@ -56,7 +56,10 @@ def run_dir(name):
 
 
 def write_table(name, columns, header, rows):
-    lines = [r'\begin{tabular}{' + columns + '}', r'\toprule', header + r' \\', r'\midrule']
+    """Write a tabular. header is one row, or a list of rows for a header of several lines."""
+    header_rows = [header] if isinstance(header, str) else header
+    lines = [r'\begin{tabular}{' + columns + '}', r'\toprule']
+    lines += [row + r' \\' for row in header_rows] + [r'\midrule']
     lines += [row + r' \\' for row in rows]
     lines += [r'\bottomrule', r'\end{tabular}']
     (GENERATED / name).write_text('\n'.join(lines) + '\n', encoding='utf-8')
@@ -184,7 +187,8 @@ def prepare_tables():
                     f"{row['graph_candidate_count']} & {rank(row['graph_rank_min'], row['graph_rank_max'])} & "
                     f"{row['graph_prior_native_calls']} / {row['log_prior_native_calls']}")
     write_table('tracking-table.tex', '@{}llrrrr@{}',
-                'Edit & Value written & Ancestors & Candidate sources & Rank of the note & Earlier calls, graph / log', rows)
+                ['Edit & Value & Ancestor & Candidate & Rank of & Earlier calls,',
+                 ' & written & nodes & sources & the note & graph / log'], rows)
 
     # Table: rarity of the unauthorized edits and of two calls that are not edits.
     rarity = load(D7 / 'c3/summary.json')

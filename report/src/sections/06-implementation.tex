@@ -12,8 +12,8 @@ Another \ArtifactTestCount{} checks cover the scripts supplied with the project.
 Component & Role \\
 \midrule
 \file{artifact/scripts/} & Prepare a workspace, run the agent and record it, check the outcome independently (supplied with the project) \\
-\file{experiments/v2\_batch.py} & Collect one run under the fixed configuration; refuse to overwrite an existing run \\
-\file{provenance/trajectory.py} & Parse a session export into numbered turns and tool calls; cross-check against the event stream; load a sub-session \\
+\file{experiments/v2\_batch.py} & Collect one run under the fixed configuration, never overwriting an existing run \\
+\file{provenance/trajectory.py} & Parse a session export into numbered turns and tool calls, cross-check it against the event stream, and load a sub-session \\
 \file{provenance/shell.py} & Infer the file reads and writes of a shell command \\
 \file{provenance/build\_graph.py} & Build the graph, validate it, reconcile it with file hashes \\
 \file{provenance/render.py} & Draw a graph or a backward slice as a timeline \\
@@ -22,7 +22,7 @@ Component & Role \\
 \file{provenance/source\_rank.py} & Rank earlier tool results by content shared with an edit \\
 \file{provenance/rarity.py} & Score operations by rarity against reference runs \\
 \file{provenance/log\_baseline.py} & The flat-log baseline \\
-\file{experiments/v2\_verify.py} & Rebuild every graph and figure; replay the recorded edits against the final workspace \\
+\file{experiments/v2\_verify.py} & Rebuild every graph and figure, and replay the recorded edits against the final workspace \\
 \file{report/build\_report.py} & Compute the tables and numbers of this report and compile it \\
 \bottomrule
 \end{tabularx}
@@ -35,12 +35,13 @@ The graph format is fixed in a specification with a worked example, and the buil
 Three details of the trajectory needed care.
 Tool calls issued by one turn run concurrently, and the event stream logs them in completion order, so calls are numbered by the order in which the model issued them.
 A failed call records an error in place of an output, and a failed edit must not create a file version.
-And the agent sometimes writes the workspace path with a space encoded as \texttt{\%20} or quoted for the shell; the parser recognizes these spellings of the one known prefix and rewrites nothing else, so that a payload is never altered by normalization.
+And the agent sometimes writes the workspace path with a space encoded as \texttt{\%20} or quoted for the shell.
+The parser recognizes these spellings of the one known prefix and rewrites nothing else, so that a payload is never altered by normalization.
 
 \paragraph{Keeping the evidence fixed.}
 The analyses accept only the runs listed in a reviewed manifest, and stop when the run directory holds anything else.
 Each analysis records the hash of every input file and of its own code next to its output, and a check mode recomputes the output and compares it byte for byte.
-The scoring rules of Section~\ref{sec:analysis} and the choice of reference runs were written down before the results were computed and were not adjusted afterwards.
+The scoring rules of Section~\ref{sec:analysis} and the choice of reference runs were fixed before the results were computed.
 
 \paragraph{Reproduction.}
 From the repository root, without calling a model:
@@ -51,5 +52,3 @@ python3 experiments/c3_results.py --check
 python3 experiments/c4_results.py --check
 python3 report/build_report.py
 \end{verbatim}
-The second command rebuilds every graph and figure and replays the recorded edits.
-The last regenerates the tables of this report and compiles it.

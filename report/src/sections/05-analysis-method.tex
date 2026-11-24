@@ -13,7 +13,6 @@ This is the CFI idea of Table~\ref{tab:module1} applied to the graph: the legal 
 The rule does not look at any text the agent read.
 It cannot be triggered by suspicious wording, and it cannot be talked out of an alert.
 
-Detection is separate from the reconciliation of Section~\ref{sec:graph}.
 The detector uses a graph built without the final hashes, so a file that changed with no recorded writer is reported as unexplained and is never given an invented writer.
 A failed call, and a call to a tool that does not exist, are kept as diagnostics and do not count as writes.
 
@@ -25,7 +24,7 @@ The target is the break-in point: the call through which the injected content fi
 
 \emph{Forward} tracking collects every node reachable from a chosen object, typically a suspected file.
 The file versions among them are the possibly contaminated artifacts.
-It applies whether or not the attack succeeded: for a run in which the agent ignored the payload, it shows that the payload reached the model and what was written afterwards.
+It applies whether or not the attack succeeded.
 
 \subsection{Handling dependency explosion}
 \label{sec:explosion}
@@ -44,19 +43,19 @@ A source that contains distinctive content found in the action, and found in no 
 The limit is that distinctive content may not be unique.
 In our setting the payload asks for the expectations \texttt{140.00} and \texttt{5.50}, and both values also appear in the output of the genuinely failing tests.
 
-We fixed the scoring rule before computing any result.
-The candidates are the tool results of earlier turns in the same session; results of the same turn and later ones are excluded.
+The scoring rule is as follows.
+The candidates are the tool results of earlier turns in the same session.
 A result that returns one file stands for that file, and a file read several times counts once, with its best score.
 For an edit, the rule compares the replaced text with the new text and extracts what is new: the tokens that the new text has more of, where a token is a number, an identifier, or a path, and the full lines that were added.
 A candidate gets one point if it contains the path of the edited file, one point for each new token it contains, and one for each new line.
-Candidates with equal scores share a rank interval; nothing breaks a tie.
+Candidates with equal scores share a rank interval, and nothing breaks a tie.
 The ranking is not given the scenario or the name of the injected file.
 
 \paragraph{Layer 3: counterfactual reruns.}
 Remove the suspected input, rerun from the same starting state, and observe whether the unauthorized action disappears.
 The normal scenario is the counterfactual of each injection scenario.
-Because a model is not deterministic, one rerun proves little; each condition has to be repeated, and the conclusion is a difference in rates.
-The matched dataset has five runs of each condition.
+Because a model is not deterministic, one rerun proves little.
+Each condition has to be repeated, and the conclusion is a difference in rates.
 
 \paragraph{Ranking by rarity.}
 Independently of the three layers, we score operations by how unusual they are, in the spirit of NoDoze~\cite{nodoze}.
@@ -72,7 +71,6 @@ With $k_s$ the number of reference runs that contain signature $s$ at least once
 A signature counts once per run however often it repeats, so one long run cannot dominate the reference.
 The smoothing keeps the score of an unseen signature finite: with five reference runs it is 2.807 bits, and a signature present in all five scores 0.222 bits.
 A call takes the highest score among its signatures, and calls are ranked within their run, ties included.
-An \texttt{edit} that writes a file under \file{tests/} never occurs in a reference run, so it scores high without any rule naming that path.
 We set no threshold: the score orders what an investigator looks at first and decides nothing.
 
 \subsection{Two baselines}
@@ -99,11 +97,3 @@ The analysis keeps three levels of claim apart:
   \item That an action was caused by a particular input is a hypothesis, supported by Layers~2 and~3 and never by reachability alone.
 \end{enumerate}
 The model's recorded reasoning is kept in the graph for the reader's convenience and is not used as evidence.
-
-\subsection{Evaluation}
-
-\begin{itemize}
-  \item \emph{Detection}: missed violations and false alarms of the rule, against the independent checker and a manual review of every edit as ground truth, and against the keyword scan. The benign-quotation scenario exists to expose false alarms.
-  \item \emph{Attribution}: whether the injected file is in the backward slice, the size of the slice relative to the graph, and the rank of the injected file after Layer~2. The same measures for the flat-log baseline.
-  \item \emph{Outcome classification}: each run placed in one of the classes of the project guide~\cite{projectguide}.
-\end{itemize}

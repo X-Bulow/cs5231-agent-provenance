@@ -1,22 +1,21 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We set out to treat a new problem as two old ones.
-The transfer works further than we expected.
-The three requirements of code injection describe prompt injection without strain, and the comparison explains why the instruction-level defense fails where the externally enforced checks hold: with the same note in its context the same model edited the protected tests in four runs and declined in a fifth, while the rule on written paths was right in all \AllRuns{} runs.
-The Homework~2 graph model carries over to an agent's trajectory with its node and edge types intact, and with one rule about when results are read it yields a graph that is acyclic and in which reachability means possible influence.
+We set out to treat a new problem as two old ones, and the transfer works further than we expected.
+The three requirements of code injection describe prompt injection without strain.
+The comparison also explains why the instruction-level defense fails where the externally enforced check holds: with the same note in its context the same model edited the protected tests in four runs and declined in a fifth, while the rule on written paths was right in all \AllRuns{} runs.
+The Homework~2 graph model carries over to an agent's trajectory with its node and edge types intact, and with one rule about when results are read it yields an acyclic graph in which reachability means possible influence.
 
 The transfer stops at two places, and both became the technical content of the project.
-The trajectory does not see inside shell commands or sub-sessions, so the graph needs inferred edges; we added them and checked them against independent file hashes and an independent replay, with no disagreement on the runs we have.
-And the model's context never forgets, so reachability names every earlier input as a possible cause.
+The trajectory does not see inside shell commands or sub-sessions, so the graph needs inferred edges.
+We added them and checked them against independent file hashes and an independent replay, with no disagreement on the runs we have.
+And the model's context never forgets, so partitioning by turn, the step that tames dependency explosion for system processes, isolates nothing.
 Here the outcome is negative, and we think it is the more useful half of the result.
-Content evidence leaves the injected note tied with legitimate observations, rarity ranks harmless operations alongside the violations, and a time-ordered log reaches the same candidates as the graph.
-Partitioning by turn, the step that tames dependency explosion for system processes, isolates nothing when every unit inherits the whole context.
 
-What did separate cause from coincidence was the experiment, not the graph: the same task with and without the note.
+What separated cause from coincidence was the experiment and not the graph: the same task with and without the note.
 For an investigator this suggests where to spend effort.
 A specification-based check outside the model detects the violation reliably and cheaply.
-Attribution needs evidence that a single recorded run does not contain, either reruns that remove one input at a time or instrumentation of what the model attends to.
+Attribution needs evidence that a single recorded run does not contain.
 
 \paragraph{Remaining work.}
 \begin{itemize}

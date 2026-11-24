@@ -7,7 +7,8 @@ A coding agent given the task ``fix this bug'' will read the project's documenta
 This makes the agent's inputs part of its attack surface.
 If an attacker can place text where the agent will read it, the text may be followed as if the user had written it.
 This is indirect prompt injection~\cite{greshake2023}.
-The attacker never talks to the model; they poison a document or the output of a tool.
+The attacker never talks to the model.
+They poison a document or the output of a tool.
 
 Most work on this problem asks how to prevent the injection or how often it succeeds~\cite{agentdojo}.
 We ask what happens afterwards.
@@ -19,13 +20,13 @@ Our position is that the new problem is two old ones.
 The attack is code injection: data supplied by the attacker is executed as instructions (Module~1).
 The investigation is provenance analysis: start from a detection point, track dependencies backward to the break-in point and forward to the contamination (Module~2).
 The interesting part is where the transfer fails.
-An agent's log does not see inside shell commands, and a model's context never forgets, so that every later action formally depends on every earlier input.
+An agent's log does not see inside shell commands, and a model's context never forgets.
 
 \paragraph{Contributions.}
 \begin{itemize}
   \item An analysis of prompt injection as code injection and of agent forensics as system provenance, including where each analogy breaks (Section~\ref{sec:problem}).
-  \item A provenance graph model for agent trajectories that is acyclic by construction. It extends the course's model with file versions, trust labels, and inferred edges for shell commands, and with two additions that longer sessions required: user messages that arrive later, and sub-sessions (Section~\ref{sec:graph}).
-  \item An implementation that builds the graph from native session exports and reconciles it with independent file hashes. On the ten runs of our matched experiment, all \ChangedFiles{} file changes are explained by the graph, and replaying the recorded edits reproduces every final workspace (Section~\ref{sec:impl}).
-  \item A matched experiment: the same model, task, and configuration, with and without an injected project note, five runs each. The protected tests are changed in four injected runs and in no other run (Section~\ref{sec:results}).
-  \item An evaluation of what the graph buys the investigator. A specification-based rule on the graph separates a violation from the mere presence of a payload, which a keyword scan cannot do. Beyond detection the result is negative: reachability is too broad, content evidence does not single out the injected input, a rarity score also ranks harmless operations first, and an analysis of the flat call log reaches the same answers as the graph (Section~\ref{sec:results}).
+  \item A provenance graph model for agent trajectories that is acyclic by construction, with five extensions over the course's model (Section~\ref{sec:graph}).
+  \item An implementation that builds the graph from native session exports and reconciles it with independent file hashes (Section~\ref{sec:impl}).
+  \item A matched experiment with the same model, task, and configuration, with and without an injected project note (Section~\ref{sec:results-runs}).
+  \item An evaluation of what the graph gives the investigator: reliable detection, and a negative result for attribution (Sections~\ref{sec:results-detection} to~\ref{sec:results-baseline}).
 \end{itemize}
