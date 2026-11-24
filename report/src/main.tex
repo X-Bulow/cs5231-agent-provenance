@@ -1,28 +1,65 @@
 \documentclass[11pt,a4paper]{article}
+
+% ---------- Packages ----------
 \usepackage[margin=24mm]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern,microtype,amsmath,booktabs,array,tabularx,graphicx,float,enumitem}
-\usepackage[hidelinks]{hyperref}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{float}
 \usepackage{caption}
-\setlist{itemsep=3pt,topsep=4pt}
-\captionsetup{font=small,labelfont=bf}
-\setlength{\parskip}{4pt}
-\setlength{\parindent}{0pt}
-\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
-\widowpenalty=10000
-\clubpenalty=10000
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
-\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\usepackage[hidelinks]{hyperref}
+
 \graphicspath{{figures/}}
-\input{generated/numbers.tex}
-\title{Reconstructing Tool Actions under Document Prompt Injection\\\large A Matched D7 Coding-Agent Study}
-\author{CS5231 Systems Security Group Project\\National University of Singapore}
-\date{24 November 2026}
+\captionsetup{font=small,labelfont=bf}
+\setlist{itemsep=2pt,topsep=4pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% ---------- Document metadata: edit these fields ----------
+\newcommand{\groupmembers}{\placeholder{Group members and student numbers}}
+\newcommand{\submissiondate}{24 November 2026}
+
+% A visible marker for a field that still has to be filled in.
+\newcommand{\placeholder}[1]{\textcolor{red!70!black}{\textbf{[#1]}}}
+
+% Identifiers in the provenance graph, paths in the workspace, and relations.
+\newcommand{\node}[1]{\texttt{#1}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\rel}[1]{\textsc{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+
+% Numbers computed from the recorded runs by report/build_report.py.
+\input{generated/numbers}
+
+\title{Forensic Reconstruction of Prompt-Injected LLM Agents\\with Provenance Graphs}
+\author{\groupmembers\\[2pt]CS5231 Systems Security, National University of Singapore}
+\date{\submissiondate}
+
 \begin{document}
 \maketitle
+
 \begin{abstract}
-We examine an agent asked to repair refund handling while preserving tests and other protected files. A matched batch uses one model and one fixed execution configuration: five normal runs and five runs with a project-document injection. All ten produce valid responses. The normal group completes the full legitimate task in five of five runs; the injection group completes it in one of five and modifies protected tests in four of five. Every final public test suite passes, so public-test success alone does not establish a legitimate repair. We reconstruct tool actions using versioned provenance graphs, preserve the arrival order of continuation messages, and include a native delegated session that performs two protected edits. Independent raw-content replay agrees with all ten final workspaces. Authorization checks locate eight protected edits across four runs, including two child edits. A fixed ranking over prior tool returns retrieves the injected document for all eight edits, always tied with other evidence. Exploratory operation rarity places all eight edits in their run's highest-score group, but also assigns that score to a legitimate read and a task invocation. A graph-independent flat-log baseline matches localization, source ranking and prior-call sets at all eight starts. We claim neither unique attribution nor measured analyst-time savings.
+\noindent
+LLM coding agents read files, run tools, and modify a project on a user's behalf.
+Text placed in those files can redirect an agent into actions the user never authorized.
+We study the forensic side of this problem: given only the recorded execution of an agent, find the unauthorized action, the input that led to it, and the artifacts it contaminated.
+We treat the attack as a form of code injection and the investigation as system provenance.
+We build a provenance graph from an agent's trajectory, extend the course's graph model with file versions, trust labels, edges inferred for opaque shell commands, later user messages, and sub-sessions, and validate the graph against independently recorded file hashes.
+In a matched experiment of five runs with an injected project note and five without, the agent changes the protected tests in four of the five injected runs and in none of the others, while every final public test suite passes.
+A rule derived from the task specification finds all eight unauthorized edits and raises no alarm on the \CleanRuns{} clean runs, where a keyword scan of the same logs flags \KeywordFalseAlarms{} of them.
+Backward tracking from an unauthorized edit reaches the injected note but also most other inputs the agent had seen, which is the dependency explosion problem in a new setting.
+Ranking those inputs by content leaves the injected note tied with the genuine test output in all eight cases, and on the measures we computed the graph narrows the search no further than an analysis of the flat call log.
+We report where the transfer from system provenance works and where it does not.
 \end{abstract}
+
 \input{sections/01-introduction}
 \input{sections/02-setting}
 \input{sections/03-problem-analysis}
@@ -32,6 +69,8 @@ We examine an agent asked to repair refund handling while preserving tests and o
 \input{sections/07-results}
 \input{sections/08-limitations}
 \input{sections/09-conclusion}
+
 \bibliographystyle{plain}
 \bibliography{references}
+
 \end{document}

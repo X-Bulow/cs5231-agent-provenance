@@ -1,10 +1,55 @@
-\section{Implementation and Independent Validation}
-The launcher rejects used identifiers, preserves all segments and exports, and checks the workspace only after collection. Current settings are separated from immutable collection metadata. The maintained CLI requires an explicit model and creates access rules for the current checkout and home. A no-model probe verifies allowed workspace writes, denied outside writes and denied reads of other project files.
+\section{Implementation}
+\label{sec:impl}
 
-The parser keeps raw arguments and returns. The selector rejects missing, stale or unreviewed evidence. Shell-derived relations remain labeled inferences, and unsupported syntax remains diagnostic evidence.
+Table~\ref{tab:components} lists the components.
+Everything is Python using only the standard library: about 1{,}600 lines for the graph construction, about 600 for the analyses, and about 800 lines of tests with \TestCount{} checks.
+Another \ArtifactTestCount{} checks cover the scripts supplied with the project.
 
-An independent audit reconstructs initial bytes and replays raw writes and edit substitutions for all ten runs, inserting 039's child operations at the parent task. Only afterwards does it compare the replay with final workspace hashes. All ten match; this is independent of accepting a final-check hash as a prediction.
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+Component & Role \\
+\midrule
+\file{artifact/scripts/} & Prepare a workspace, run the agent and record it, check the outcome independently (supplied with the project) \\
+\file{experiments/v2\_batch.py} & Collect one run under the fixed configuration; refuse to overwrite an existing run \\
+\file{provenance/trajectory.py} & Parse a session export into numbered turns and tool calls; cross-check against the event stream; load a sub-session \\
+\file{provenance/shell.py} & Infer the file reads and writes of a shell command \\
+\file{provenance/build\_graph.py} & Build the graph, validate it, reconcile it with file hashes \\
+\file{provenance/render.py} & Draw a graph or a backward slice as a timeline \\
+\file{provenance/detect.py} & Find writes outside the allowed paths \\
+\file{provenance/query.py} & Track backward or forward from a call \\
+\file{provenance/source\_rank.py} & Rank earlier tool results by content shared with an edit \\
+\file{provenance/rarity.py} & Score operations by rarity against reference runs \\
+\file{provenance/log\_baseline.py} & The flat-log baseline \\
+\file{experiments/v2\_verify.py} & Rebuild every graph and figure; replay the recorded edits against the final workspace \\
+\file{report/build\_report.py} & Compute the tables and numbers of this report and compile it \\
+\bottomrule
+\end{tabularx}
+\caption{Components.}
+\label{tab:components}
+\end{table}
 
-Of 20 final changed files, eight final-version hashes are known before graph reconciliation; 12 are explicitly filled from the final checker. Separate raw-content replay also checks those 12. Child final hashes come from child-content replay, not the parent's final checker.
+\paragraph{Design decisions in the builder.}
+The graph format is fixed in a specification with a worked example, and the builder validates every graph it produces against it, including that the graph is acyclic.
+Three details of the trajectory needed care.
+Tool calls issued by one turn run concurrently, and the event stream logs them in completion order, so calls are numbered by the order in which the model issued them.
+A failed call records an error in place of an output, and a failed edit must not create a file version.
+And the agent sometimes writes the workspace path with a space encoded as \texttt{\%20} or quoted for the shell; the parser recognizes these spellings of the one known prefix and rewrites nothing else, so that a payload is never altered by normalization.
 
-The \TestCount{} passing provenance tests cover current sessions, message timing, delegation, file operations, invalid returns, inventory integrity, shell inference, cycles, rendering, authorization, restoration, query direction, time filtering, repeated sources, ambiguous ranking and per-run rarity. Twelve new rarity tests include repetition, unseen tools/paths, relation separation, inferred deletion, null file neighborhoods, reference identity, delegation, ties and held-out scoring. Eight baseline tests include a fresh process that prohibits graph imports and graph-file reads while still analyzing all 32 calls and both child edits in 039. The shared-rule refactor leaves earlier C1--C3 substantive outputs byte-identical. Another 18 passing tests cover the supplied workload and helper tools without model calls. The output comprises ten parent graphs, one child graph and 15 SVGs. The child has no independent event stream, so its cross-check is weaker than the parent session/event comparison.
+\paragraph{Keeping the evidence fixed.}
+The analyses accept only the runs listed in a reviewed manifest, and stop when the run directory holds anything else.
+Each analysis records the hash of every input file and of its own code next to its output, and a check mode recomputes the output and compares it byte for byte.
+The scoring rules of Section~\ref{sec:analysis} and the choice of reference runs were written down before the results were computed and were not adjusted afterwards.
+
+\paragraph{Reproduction.}
+From the repository root, without calling a model:
+\begin{verbatim}
+python3 -m unittest discover -s provenance
+python3 experiments/v2_verify.py
+python3 experiments/c3_results.py --check
+python3 experiments/c4_results.py --check
+python3 report/build_report.py
+\end{verbatim}
+The second command rebuilds every graph and figure and replays the recorded edits.
+The last regenerates the tables of this report and compiles it.

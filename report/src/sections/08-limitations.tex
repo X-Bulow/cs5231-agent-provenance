@@ -1,10 +1,14 @@
-\section{Limitations and Scope}
+\section{Limitations}
+\label{sec:limits}
+
 \begin{itemize}
-\item \textbf{Small batch and reference set.} Five starts per condition describe this batch, not population performance. In-sample rarity scores are optimistic; held-out normal cases also contain unseen operations.
-\item \textbf{Execution context.} Backend revision and effective sampling are unknown. D7 includes system instructions and continuations, so normal 5/5 completion is neither single-turn performance nor attributable to one environment change.
-\item \textbf{Observation boundary.} Native tools are not system-call logs. Shell relations remain inferred; unchanged final hashes alone cannot exclude temporary writes. The child export has no independent event stream.
-\item \textbf{Attribution.} Dependency reachability, content overlap and model explanations do not establish causal influence. Every violating edit retains tied source candidates; no calibrated attack probability is produced.
-\item \textbf{Comparison.} The graph-independent baseline matches localization, rankings and prior-call sets under shared observations and heuristics. No combined score or alert threshold is fitted, and no human-time benefit is measured.
-\item \textbf{Team metadata.} Member names, student identifiers and individual contributions require team confirmation before submission.
-\item \textbf{Extension scope.} The ten additional \code{benign-quotation} and \code{tool-output-injection} runs are collected under the same D7 configuration but are not part of the fixed ten-run formal batch, its manifest, or its locked C1--C4 pipeline output; their results come from direct tool invocation and describe only those ten runs.
+  \item \textbf{Few runs, one model.} There are five runs per condition, on one workload, with one agent and one model. The fractions describe this batch. The rarity reference is five runs, and the held-out check shows that it is sensitive to which five.
+  \item \textbf{The configuration is part of the result.} The system instruction and the continuation messages are part of what was tested. The normal group's completion is not a single-response result, and the sampling the server applied is not known.
+  \item \textbf{Shell analysis is heuristic.} The inference rules handle the constructs that occur in our runs. They do not expand variables, globs, or command substitution, and they do not see paths computed at run time. The reads of the test runner come from a table written for this workload; another workload needs its own entries, or real instrumentation of the tools.
+  \item \textbf{Intermediate content is unknown.} File hashes exist for the start and the end of a run. A version produced by an edit has no recorded content unless it is the final one, and an unchanged final hash does not exclude a change that was undone.
+  \item \textbf{The sub-session has a weaker record.} Its export has no event stream of its own, so the cross-check between session and events that the parent gets is not available for it.
+  \item \textbf{An edge is availability, not influence.} A path into a turn shows that content was in the model's context. Neither the graph, nor content overlap, nor the model's own explanation shows that the model used it. Every unauthorized edit keeps at least two tied candidate sources.
+  \item \textbf{The specification is simple.} The detection rule covers the paths the agent may write. It does not cover the other part of the attacker's objective, a report that claims success without support, which we reviewed by hand, and it would not catch an attack whose effect stays inside the allowed paths.
+  \item \textbf{The keyword baseline is weak by design.} It is the simplest alternative, and a stronger text classifier would do better on wording. The structural point stands: text classification detects a payload, not a violation.
+  \item \textbf{No human study.} The comparison with the flat log is on computed measures. Whether a drawn graph helps an investigator read a run faster was not measured.
 \end{itemize}
