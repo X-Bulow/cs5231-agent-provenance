@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "/private/tmp/cs5231-env-validation/execution-policy-d7.txt"
+  ],
+  "agent": {
+    "build": {
+      "temperature": 0.2
+    }
+  }
+}

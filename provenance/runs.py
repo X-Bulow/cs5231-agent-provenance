@@ -34,6 +34,10 @@ def select_runs(runs: str | Path, manifest: str | Path | None = None) -> RunSele
     result = RunSelection([], {}, {})
     for row in sorted(rows, key=lambda r: r["run"]):
         run = runs / row["run"]
+        for name, expected in row.get('supporting_evidence',{}).items():
+            path=(root/name).resolve()
+            if not path.is_relative_to(root) or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=expected or row['evidence_sha256'].get(name)!=expected:
+                raise ValueError(f'{run.name}: missing or stale supplemental evidence: {name}')
         for name in ("execution.json", "baseline.json", "check.json", "prompt.txt", "events.jsonl"):
             path = run / name
             expected = row["evidence_sha256"].get(path.relative_to(root).as_posix())

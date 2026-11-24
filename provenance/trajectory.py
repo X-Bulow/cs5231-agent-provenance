@@ -14,13 +14,14 @@ Everything else is kept as recorded. In particular the prompt is verbatim,
 including the quotation marks the OpenCode CLI stores around it.
 
 Usage:
-    python3 provenance/trajectory.py artifact/runs/run-006
-    python3 provenance/trajectory.py artifact/runs/run-006 --calls
+    python3 provenance/trajectory.py artifact/runs/run-030
+    python3 provenance/trajectory.py artifact/runs/run-030 --calls
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -46,6 +47,7 @@ class Call:
     time_start: int | None     # milliseconds since the epoch
     time_end: int | None
     raw_input: dict[str, Any] | None = None  # source bytes for content hashing, not graph display
+    raw_output: str | None = None
 
 
 @dataclass
@@ -62,6 +64,16 @@ class Turn:
 
 
 @dataclass
+class UserMessage:
+    index: int
+    message_id: str
+    before_turn: int           # first assistant turn after arrival; may be len(turns)+1
+    text: str
+    raw_text: str
+    time_start: int | None
+
+
+@dataclass
 class Trajectory:
     run: str
     session_id: str
@@ -73,6 +85,8 @@ class Trajectory:
     calls: list[Call]
     warnings: list[str] = field(default_factory=list)
     normalization_notes: list[str] = field(default_factory=list)
+    user_messages: list[UserMessage] = field(default_factory=list)
+    delegated: dict[int, Trajectory] = field(default_factory=dict)
 
 
 def strip_prefix(value: Any, prefix: str) -> Any:
@@ -115,10 +129,10 @@ def _event_call_ids(path: Path) -> list[str]:
     return ids
 
 
-def load_run(run_dir: str | Path) -> Trajectory:
+def load_run(run_dir: str | Path, *, session_path: Path | None = None) -> Trajectory:
     """Read one run directory and return its turns and tool calls."""
     run_dir = Path(run_dir).resolve()
-    session = _load_json(run_dir / "session.json")
+    session = _load_json(session_path or run_dir / "session.json")
     info = session["info"]
     prefix = info["directory"].rstrip("/")
     warnings: list[str] = []
@@ -132,6 +146,7 @@ def load_run(run_dir: str | Path) -> Trajectory:
         part for part in (recorded_model.get("providerID"), recorded_model.get("id")) if part)
 
     prompt_parts: list[str] = []
+    user_messages: list[UserMessage] = []
     turns: list[Turn] = []
     calls: list[Call] = []
 
@@ -139,7 +154,13 @@ def load_run(run_dir: str | Path) -> Trajectory:
         role = message["info"].get("role")
         parts = message.get("parts", [])
         if role == "user":
-            prompt_parts.extend(part.get("text", "") for part in parts if part.get("type") == "text")
+            text = "\n".join(part.get("text", "") for part in parts if part.get("type") == "text")
+            user_messages.append(UserMessage(len(user_messages)+1, message['info'].get('id',''),
+                len(turns)+1, strip_prefix(text,prefix), text,
+                (message['info'].get('time') or {}).get('created')))
+            # Backward-compatible initial prompt, never future continuation text.
+            if len(user_messages) == 1:
+                prompt_parts.append(text)
             continue
         if role != "assistant":
             warnings.append(f"ignored message with role {role!r}")
@@ -175,6 +196,7 @@ def load_run(run_dir: str | Path) -> Trajectory:
                     time_start=times.get("start"),
                     time_end=times.get("end"),
                     raw_input=state.get("input") or {},
+                    raw_output=raw_output or "",
                 )
                 calls.append(call)
                 issued.append(call.index)
@@ -200,7 +222,9 @@ def load_run(run_dir: str | Path) -> Trajectory:
     # issued by one turn run concurrently and are logged as they finish, so the
     # two records may order them differently within a turn, never across turns.
     events_path = run_dir / "events.jsonl"
-    if events_path.is_file():
+    if session_path is not None:
+        warnings.append('delegated session has no independent events.jsonl stream')
+    elif events_path.is_file():
         turn_of = {call.call_id: call.turn for call in calls}
         event_ids = _event_call_ids(events_path)
         if sorted(event_ids, key=str) != sorted(turn_of, key=str):
@@ -218,7 +242,7 @@ def load_run(run_dir: str | Path) -> Trajectory:
         if marker in json.dumps(call.input) or marker in call.output:
             normalization_notes.append(
                 f"C:{call.index}: unresolved workspace path expression retained; see raw session")
-    return Trajectory(
+    trajectory = Trajectory(
         run=run_dir.name,
         session_id=info.get("id", ""),
         agent=execution.get("agent", "opencode"),
@@ -229,7 +253,43 @@ def load_run(run_dir: str | Path) -> Trajectory:
         calls=calls,
         warnings=warnings,
         normalization_notes=normalization_notes,
+        user_messages=user_messages,
     )
+    if session_path is None:
+        index_path=run_dir.parents[2] / 'experiments/delegated-sessions.json'
+        refs=_load_json(index_path).get('runs',{}).get(run_dir.name,[]) if index_path.exists() else []
+        by_call={ref['parent_call_id']:ref for ref in refs}
+        if len(by_call)!=len(refs):
+            raise ValueError('Duplicate delegated-session references')
+        used=set()
+        for call in calls:
+            if call.tool!='task' or call.status!='completed':
+                continue
+            part=next(p for m in session['messages'] for p in m.get('parts',[]) if p.get('type')=='tool' and p.get('callID')==call.call_id)
+            child_id=(part['state'].get('metadata') or {}).get('sessionId')
+            if not child_id:
+                continue
+            if call.call_id not in by_call:
+                raise ValueError('Completed delegated session needs reviewed native export: '+child_id)
+            ref=by_call[call.call_id];path=(run_dir.parents[2]/ref['path']).resolve()
+            if not path.is_relative_to(run_dir.parents[2]) or hashlib.sha256(path.read_bytes()).hexdigest()!=ref['sha256']:
+                raise ValueError('Missing or stale delegated session evidence')
+            child=_load_json(path)
+            if child['info']['id']!=child_id or child['info'].get('parentID')!=info['id'] or ref['session_id']!=child_id:
+                raise ValueError('Delegated session identity mismatch')
+            parsed=load_run(run_dir,session_path=path)
+            if child['info']['directory']!=info['directory']:
+                raise ValueError('Delegated workspace differs')
+            for child_call in parsed.calls:
+                if child_call.time_start is not None and call.time_start is not None and child_call.time_start<call.time_start:
+                    raise ValueError('Delegated operation predates parent task')
+                if child_call.time_end is not None and call.time_end is not None and child_call.time_end>call.time_end:
+                    raise ValueError('Delegated operation outlives parent task')
+            trajectory.delegated[call.index]=parsed
+            used.add(call.call_id)
+        if used!=set(by_call):
+            raise ValueError('Unused delegated session reference')
+    return trajectory
 
 
 def call_target(call: Call) -> str:
@@ -262,7 +322,7 @@ def summarize(trajectory: Trajectory) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Parse a recorded agent run into turns and tool calls.")
-    parser.add_argument("run", type=Path, help="run directory, e.g. artifact/runs/run-006")
+    parser.add_argument("run", type=Path, help="run directory, e.g. artifact/runs/run-030")
     parser.add_argument("--calls", action="store_true", help="also list every tool call")
     args = parser.parse_args()
     if not (args.run / "session.json").is_file():

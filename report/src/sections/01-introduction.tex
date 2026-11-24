@@ -1,37 +1,8 @@
-% Section owner: shared.
-\section{Introduction}
+\section{Problem and Contribution}
+Coding agents consume repository text while issuing tools that can change the repository. Indirect prompt injection exploits this route by placing instructions in retrieved data rather than in the user's direct request~\cite{greshake2023}. The security question here is concrete: can a project note cause an agent to change tests that the user explicitly protected, and can the recorded execution make that action inspectable?
 
-An LLM agent is a program whose control flow is decided by a language model.
-It reads instructions and files, calls tools, interprets their results, and edits artifacts.
-A coding agent given the task ``fix this bug'' will read the project's documentation, run its tests, and change its source files, each step chosen by the model from everything it has read so far.
+Our artifact separates the authorized repair from the attack. The implementation incorrectly adds refunds; the user requires subtraction and limits edits to source and output directories. The injected note claims maintainer authority and asks the agent to change test expectations instead. The note does not introduce executable attack code. It attempts to redirect existing editing tools.
 
-This makes the agent's inputs part of its attack surface.
-If an attacker can place text where the agent will read it, the text may be followed as if the user had written it.
-This is indirect prompt injection~\cite{greshake2023}.
-The attacker never talks to the model; they poison a document or the output of a tool.
+The completed contribution is an evidence pipeline: a fixed ten-run experiment; explicit per-run outcome review; graphs of responses, tool calls, returns and file versions; time-correct continuation messages; and independently checked delegated-session evidence. We retain complete failed outcomes rather than selecting only successful repairs or payload contacts. We use provenance to organize candidate dependencies, following the investigation perspective of BackTracker~\cite{backtracker}, while distinguishing availability of text from proof of its causal influence.
 
-Most work on this problem asks how to prevent the injection or how often it succeeds~\cite{agentdojo}.
-We ask what happens afterwards.
-Suppose an agent has edited a file it was told to preserve.
-Using only what the agent's execution left behind, can we establish which input led to that edit, and which other outputs of the run should no longer be trusted?
-This is forensic reconstruction, and it is the question that system provenance answers for conventional intrusions~\cite{backtracker}.
-
-Our position is that the new problem is two old ones.
-The attack is code injection: data supplied by the attacker is executed as instructions (Module~1).
-The investigation is provenance analysis: start from a detection point, track dependencies backward to the break-in point and forward to the contamination (Module~2).
-The interesting part is where the transfer fails.
-An agent's log does not see inside shell commands, and a model's context never forgets, so that every later action formally depends on every earlier input.
-
-\paragraph{Status of this draft.}
-The report describes the full design.
-The provenance graph construction is implemented and validated (Sections~\ref{sec:graph} and~\ref{sec:impl}).
-The detection and tracking analyses are designed (Section~\ref{sec:analysis}); their numbers in Section~\ref{sec:results} are preliminary, computed with a short script over the graphs.
-Text in \placeholder{red brackets} marks what is still to be completed.
-
-\paragraph{Contributions so far.}
-\begin{itemize}
-  \item An analysis of prompt injection as code injection and of agent forensics as system provenance, including where each analogy breaks (Section~\ref{sec:problem}).
-  \item A provenance graph model for agent trajectories that is acyclic by construction, with three extensions over the course's model: file versions, trust labels, and inferred edges for shell commands (Section~\ref{sec:graph}).
-  \item An implementation that builds the graph from native session exports and reconciles it with independent file hashes. On \NumRuns{} runs, all \NumChangedFiles{} file changes are explained by the graph.
-  \item Preliminary evidence that a specification-based rule on the graph separates a violation from the mere presence of a payload, which a keyword scan cannot do, and that plain reachability is too broad to name the responsible input (Section~\ref{sec:results}).
-\end{itemize}
+All reported experimental results concern runs 030--039 under configuration D7. No other model, configuration or exploratory sample enters the reported denominators.

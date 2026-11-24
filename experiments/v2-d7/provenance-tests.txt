@@ -1,0 +1,54 @@
+test_all_graphs_validate_and_reconcile_actual_changes (test_build_graph.D7Graphs.test_all_graphs_validate_and_reconcile_actual_changes) ... ok
+test_cycle_is_rejected (test_build_graph.D7Graphs.test_cycle_is_rejected) ... ok
+test_invalid_calls_create_no_file_operations (test_build_graph.D7Graphs.test_invalid_calls_create_no_file_operations) ... ok
+test_literal_report_hash_uses_raw_content (test_build_graph.D7Graphs.test_literal_report_hash_uses_raw_content) ... ok
+test_protected_writes_match_actual_D7_outcomes (test_build_graph.D7Graphs.test_protected_writes_match_actual_D7_outcomes) ... ok
+test_delegated_protected_write_is_backed_by_child_call_ids (test_continuations.Continuations.test_delegated_protected_write_is_backed_by_child_call_ids) ... ok
+test_future_user_text_does_not_enter_initial_prompt_or_earlier_ancestry (test_continuations.Continuations.test_future_user_text_does_not_enter_initial_prompt_or_earlier_ancestry) ... ok
+test_raw_short_paths_and_invalid_tool_returns_are_preserved (test_continuations.Continuations.test_raw_short_paths_and_invalid_tool_returns_are_preserved) ... ok
+test_two_continuations_and_trailing_message_keep_separate_arrivals (test_continuations.Continuations.test_two_continuations_and_trailing_message_keep_separate_arrivals) ... ok
+test_unreviewed_delegated_export_cannot_be_silently_skipped (test_continuations.Continuations.test_unreviewed_delegated_export_cannot_be_silently_skipped) ... ok
+test_validator_rejects_early_user_edge (test_continuations.Continuations.test_validator_rejects_early_user_edge) ... ok
+test_all_D7_timelines_are_valid_and_include_calls_and_turns (test_render.D7Render.test_all_D7_timelines_are_valid_and_include_calls_and_turns) ... ok
+test_slice_excludes_future_calls (test_render.D7Render.test_slice_excludes_future_calls) ... ok
+test_unknown_nodes_are_rejected (test_render.D7Render.test_unknown_nodes_are_rejected) ... ok
+test_D7_launcher_refuses_existing_formal_run_before_launch (test_runs.Selection.test_D7_launcher_refuses_existing_formal_run_before_launch) ... ok
+test_D7_profile_uses_current_home_and_checkout (test_runs.Selection.test_D7_profile_uses_current_home_and_checkout) ... ok
+test_current_inventory_selects_only_ten_D7_runs (test_runs.Selection.test_current_inventory_selects_only_ten_D7_runs) ... ok
+test_missing_expected_session_is_an_error (test_runs.Selection.test_missing_expected_session_is_an_error) ... ok
+test_stale_event_file_is_an_error (test_runs.Selection.test_stale_event_file_is_an_error) ... ok
+test_stale_supplemental_native_session_is_rejected (test_runs.Selection.test_stale_supplemental_native_session_is_rejected) ... ok
+test_unknown_validity_needs_review (test_runs.Selection.test_unknown_validity_needs_review) ... ok
+test_unreviewed_run_is_not_silently_included_or_skipped (test_runs.Selection.test_unreviewed_run_is_not_silently_included_or_skipped) ... ok
+test_valid_response_without_export_is_reported_separately (test_runs.Selection.test_valid_response_without_export_is_reported_separately) ... ok
+test_grep_output_paths (test_shell.Other.test_grep_output_paths) ... ok
+test_text_that_is_not_shell_is_skipped (test_shell.Other.test_text_that_is_not_shell_is_skipped) ... ok
+test_unbalanced_quotes_do_not_raise (test_shell.Other.test_unbalanced_quotes_do_not_raise) ... ok
+test_cat_reads_and_ignores_dev_null (test_shell.Reads.test_cat_reads_and_ignores_dev_null) ... ok
+test_cd_changes_how_paths_resolve (test_shell.Reads.test_cd_changes_how_paths_resolve) ... ok
+test_listing_a_file_is_not_a_read (test_shell.Reads.test_listing_a_file_is_not_a_read) ... ok
+test_pipeline_reads_the_first_file_only (test_shell.Reads.test_pipeline_reads_the_first_file_only) ... ok
+test_python_inline_imports (test_shell.Reads.test_python_inline_imports) ... ok
+test_python_module_and_script (test_shell.Reads.test_python_module_and_script) ... ok
+test_test_runner_uses_declared_reads (test_shell.Reads.test_test_runner_uses_declared_reads) ... ok
+test_unknown_files_are_not_reported (test_shell.Reads.test_unknown_files_are_not_reported) ... ok
+test_append_is_marked (test_shell.Writes.test_append_is_marked) ... ok
+test_copy_and_remove (test_shell.Writes.test_copy_and_remove) ... ok
+test_explicit_failed_redirection_does_not_create_a_file (test_shell.Writes.test_explicit_failed_redirection_does_not_create_a_file) ... ok
+test_explicit_heredoc_failure_does_not_create_a_version (test_shell.Writes.test_explicit_heredoc_failure_does_not_create_a_version) ... ok
+test_heredoc_hash_uses_original_content_not_path_display (test_shell.Writes.test_heredoc_hash_uses_original_content_not_path_display) ... ok
+test_heredoc_write_has_a_content_hash (test_shell.Writes.test_heredoc_write_has_a_content_hash) ... ok
+test_later_program_failure_keeps_successful_redirection (test_shell.Writes.test_later_program_failure_keeps_successful_redirection) ... ok
+test_move_reads_writes_and_deletes (test_shell.Writes.test_move_reads_writes_and_deletes) ... ok
+test_python_heredoc_write (test_shell.Writes.test_python_heredoc_write) ... ok
+test_python_literal_write_needs_a_clean_exit (test_shell.Writes.test_python_literal_write_needs_a_clean_exit) ... ok
+test_tee_and_redirection (test_shell.Writes.test_tee_and_redirection) ... ok
+test_unquoted_raw_expansion_is_not_hidden_by_normalization (test_shell.Writes.test_unquoted_raw_expansion_is_not_hidden_by_normalization) ... ok
+test_actual_short_workspace_paths_are_normalized (test_trajectory.D7Trajectory.test_actual_short_workspace_paths_are_normalized) ... ok
+test_native_call_order_status_and_original_content (test_trajectory.D7Trajectory.test_native_call_order_status_and_original_content) ... ok
+test_normalization_preserves_siblings_and_unrelated_text (test_trajectory.D7Trajectory.test_normalization_preserves_siblings_and_unrelated_text) ... ok
+
+----------------------------------------------------------------------
+Ran 49 tests in 0.176s
+
+OK

@@ -1,0 +1,15 @@
+{
+  "reviewed_at": "2026-11-24T03:14:36.027349+08:00",
+  "status": "passed",
+  "figures": [
+    "run-030.svg",
+    "run-039-protected.svg",
+    "run-039-child.svg"
+  ],
+  "checks": [
+    "Continuation user2 appears only before T14 in 030.",
+    "039 parent task boundary uses dashed inference; child graph retains two test edits.",
+    "Full viewport screenshots show complete title, lanes and legend; no overlapping continuation label."
+  ],
+  "initial_thumbnail_limitation": "Quick Look square thumbnails cropped right side; full Chrome screenshots used for acceptance."
+}

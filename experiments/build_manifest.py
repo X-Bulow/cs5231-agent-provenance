@@ -1,4 +1,4 @@
-"""Build A1 evidence inventory without running agents, workspaces or check.py.
+"""Build the D7 evidence inventory without running agents, workspaces or check.py.
 
 Only derived manifest.json/csv are written. --check compares them in memory.
 Call numbers follow assistant tool parts in session.json, as in graph-format.md;
@@ -84,6 +84,12 @@ def inventory_run(run, review, normal_baseline):
     source("export.stderr.log")
     environment_path = ROOT / review["environment_evidence"]
     evidence[review["environment_evidence"]] = sha(environment_path.read_bytes())
+    supporting=review.get('supporting_evidence',{})
+    for name,expected in supporting.items():
+        path=(ROOT/name).resolve()
+        if not path.is_relative_to(ROOT) or not path.is_file() or sha(path.read_bytes())!=expected:
+            raise ValueError(f'{run.name}: missing or stale supplemental evidence: {name}')
+        evidence[name]=expected
     turns = [m for m in session["messages"] if m["info"].get("role") == "assistant"] if session else []
     calls = []
     models = set()
@@ -99,11 +105,6 @@ def inventory_run(run, review, normal_baseline):
                               "state": part.get("state", {})})
     if turns:
         validity, valid = "model_response_recorded", True
-    elif run.name in ("run-009", "run-010"):
-        stderr = (run / "stderr.log").read_text()
-        if events or "process.cwd" not in stderr or "EPERM" not in stderr:
-            raise ValueError(f"{run.name}: startup-failure evidence changed")
-        validity, valid = "infrastructure_failure_before_model_response", False
     else:
         validity, valid = "unknown_requires_review", None
 
@@ -192,7 +193,7 @@ def inventory_run(run, review, normal_baseline):
         "requested_model": execution["model"], "actual_models": actual,
         "agent": execution["agent"], "agent_version": execution["agent_version"],
         "python_version": review["python_version"], "additional_os_sandbox": review["additional_os_sandbox"],
-        "generation_parameters": "unknown_not_archived_per_request", "backend_revision": "unknown",
+        "generation_parameters": review.get('generation_parameters', "unknown_not_archived_per_request"), "backend_revision": "unknown",
         "started_at": execution["started_at"], "ended_at": execution["ended_at"],
         "collection_status": execution["status"], "collector_exit_code": execution["collector_exit_code"],
         "session_present": session is not None, "assistant_turns": len(turns), "tool_calls": len(calls),
@@ -211,12 +212,14 @@ def inventory_run(run, review, normal_baseline):
         "protected_paths_changed": protected,
         "violation_attempt_review": "not_exhaustively_assessed",
         "outside_workspace_write_review": "not_exhaustively_assessed",
-        "report_present": report is not None, "report_truthfulness": "not_fully_assessed" if report else "not_applicable",
+        "report_present": report is not None, "report_truthfulness": review.get('report_truthfulness', "not_fully_assessed" if report else "not_applicable"),
         "final_assistant_text_present": has_final_text,
-        "full_task_completion": complete, "observed_outcome": outcome,
+        "full_task_completion": review.get('full_task_completion',complete), "observed_outcome": outcome,
         "command_and_edit_evidence": simple_calls, "manual_notes": review["notes"],
         "environment_evidence": review["environment_evidence"], "evidence_sha256": evidence,
     }
+    if supporting:
+        row['supporting_evidence']=supporting
     return row
 
 
@@ -225,12 +228,12 @@ def build():
     directories = sorted((ROOT / "artifact/runs").glob("run-*"))
     if set(reviews) != {p.name for p in directories}:
         raise ValueError("Run set changed: review each new/missing run before rebuilding")
-    normal = read_json(ROOT / "artifact/runs/run-001/baseline.json")
+    normal = read_json(OUT / "d7/protocol.json")["baseline_by_condition"]["normal"]
     rows = [inventory_run(p, reviews[p.name], normal) for p in directories]
     if len({r["prompt_sha256"] for r in rows}) != 1:
         raise ValueError("User task differs across runs")
     result = {"schema_version": 1,
-        "scope": "A1 inventory; saved oracle outcomes, not rerun; whole-workspace hash comparison recomputed",
+        "scope": "D7 formal inventory; saved oracle outcomes, not rerun; whole-workspace hash comparison recomputed",
         "review_notes_sha256": sha((OUT / "review-notes.json").read_bytes()),
         "hashes": "SHA-256; canonical JSON uses sorted keys, UTF-8, no whitespace, ensure_ascii=False",
         "exposure_limit": "Saved complete overridden text in a tool return with a later assistant turn; not per-request context or causal proof",

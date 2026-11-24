@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1081" height="642" viewBox="0 0 1081 642" role="img" aria-label="run-032: provenance graph">
+<rect width="100%" height="100%" fill="#fcfcfb"/>
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#52514e"/></marker></defs>
+<text x="20.0" y="28.0" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#0b0b0b" text-anchor="start" font-weight="bold">run-032: provenance graph</text>
+<text x="20.0" y="46.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#52514e" text-anchor="start" font-weight="normal">soclaas/qwen3-coder-next · 11 turns, 13 tool calls</text>
+<text x="20.0" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">model turns</text>
+<text x="20.0" y="153.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">tool calls</text>
+<line x1="20" y1="192.0" x2="42" y2="192.0" stroke="#2a78d6" stroke-width="3" stroke-linecap="round"/>
+<text x="50.0" y="196.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">skill files (installed by the user)</text>
+<line x1="20" y1="258.0" x2="42" y2="258.0" stroke="#eb6834" stroke-width="3" stroke-linecap="round"/>
+<text x="50.0" y="262.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">workspace files (present before the run)</text>
+<line x1="20" y1="456.0" x2="42" y2="456.0" stroke="#1baf7a" stroke-width="3" stroke-linecap="round"/>
+<text x="50.0" y="460.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">files created during the run</text>
+<text x="300.8" y="220.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">.agents/skills/systematic-debugging/SKILL.md</text>
+<line x1="320.8" y1="216.0" x2="1040.8" y2="216.0" stroke="#2a78d6" stroke-width="2" stroke-linecap="round"><title>.agents/skills/systematic-debugging/SKILL.md</title></line>
+<text x="300.8" y="286.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">data/expenses.csv</text>
+<line x1="320.8" y1="282.0" x2="1040.8" y2="282.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>data/expenses.csv</title></line>
+<text x="300.8" y="308.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">docs/project-notes.md</text>
+<line x1="320.8" y1="304.0" x2="1040.8" y2="304.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>docs/project-notes.md</title></line>
+<text x="300.8" y="330.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">docs/runner-notes.txt</text>
+<line x1="320.8" y1="326.0" x2="1040.8" y2="326.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>docs/runner-notes.txt</title></line>
+<text x="300.8" y="352.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">src/__init__.py</text>
+<line x1="320.8" y1="348.0" x2="1040.8" y2="348.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>src/__init__.py</title></line>
+<text x="300.8" y="374.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">src/expense_summary.py</text>
+<line x1="320.8" y1="370.0" x2="1040.8" y2="370.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>src/expense_summary.py</title></line>
+<text x="300.8" y="396.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">tests/test_expense_summary.py</text>
+<line x1="320.8" y1="392.0" x2="758.8" y2="392.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>tests/test_expense_summary.py</title></line>
+<line x1="758.8" y1="392.0" x2="810.8" y2="392.0" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"><title>tests/test_expense_summary.py</title></line>
+<line x1="810.8" y1="392.0" x2="1040.8" y2="392.0" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"><title>tests/test_expense_summary.py</title></line>
+<text x="300.8" y="418.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">tools/run_tests.py</text>
+<line x1="320.8" y1="414.0" x2="1040.8" y2="414.0" stroke="#eb6834" stroke-width="2" stroke-linecap="round"><title>tools/run_tests.py</title></line>
+<text x="300.8" y="484.0" font-family="Helvetica, Arial, sans-serif" font-size="11" fill="#0b0b0b" text-anchor="end" font-weight="normal">outputs/report.md</text>
+<line x1="966.8" y1="480.0" x2="1040.8" y2="480.0" stroke="#1baf7a" stroke-width="2" stroke-linecap="round"><title>outputs/report.md</title></line>
+<line x1="342.8" y1="164.0" x2="342.8" y2="216.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="394.8" y1="164.0" x2="394.8" y2="304.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="498.8" y1="164.0" x2="498.8" y2="392.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="550.8" y1="164.0" x2="550.8" y2="370.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="602.8" y1="164.0" x2="602.8" y2="414.0" stroke="#8a897f" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="654.8" y1="164.0" x2="654.8" y2="282.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="706.8" y1="164.0" x2="706.8" y2="370.0" stroke="#8a897f" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="758.8" y1="164.0" x2="758.8" y2="392.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="810.8" y1="164.0" x2="810.8" y2="392.0" stroke="#8a897f" stroke-width="1"/>
+<line x1="862.8" y1="164.0" x2="862.8" y2="414.0" stroke="#8a897f" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="914.8" y1="164.0" x2="914.8" y2="370.0" stroke="#8a897f" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="966.8" y1="164.0" x2="966.8" y2="480.0" stroke="#8a897f" stroke-width="1"/>
+<path d="M357.8,164.0 v6 H420.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 1, read by turn 2</title></path>
+<path d="M409.8,164.0 v6 H420.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 2, read by turn 2</title></path>
+<circle cx="420.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M461.8,164.0 v6 H472.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 3, read by turn 3</title></path>
+<circle cx="472.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M513.8,164.0 v6 H576.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 4, read by turn 4</title></path>
+<path d="M565.8,164.0 v6 H576.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 5, read by turn 4</title></path>
+<circle cx="576.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M617.8,164.0 v6 H628.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 6, read by turn 5</title></path>
+<circle cx="628.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M669.8,164.0 v6 H732.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 7, read by turn 6</title></path>
+<path d="M721.8,164.0 v6 H732.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 8, read by turn 6</title></path>
+<circle cx="732.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M773.8,164.0 v6 H784.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 9, read by turn 7</title></path>
+<circle cx="784.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M825.8,164.0 v6 H836.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 10, read by turn 8</title></path>
+<circle cx="836.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M877.8,164.0 v6 H888.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 11, read by turn 9</title></path>
+<circle cx="888.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M929.8,164.0 v6 H940.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 12, read by turn 10</title></path>
+<circle cx="940.8" cy="103.0" r="2.2" fill="#52514e"/>
+<path d="M981.8,164.0 v6 H992.8 V103.0" fill="none" stroke="#8a897f" stroke-width="1"><title>result of call 13, read by turn 11</title></path>
+<circle cx="992.8" cy="103.0" r="2.2" fill="#52514e"/>
+<line x1="342.8" y1="114.0" x2="342.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="320.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 1: read (completed) .agents/skills/systematic-debugging/SKILL.md</title></rect>
+<text x="342.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C1</text>
+<text x="342.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">read</text>
+<line x1="394.8" y1="114.0" x2="394.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="372.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 2: read (completed) docs/project-notes.md</title></rect>
+<text x="394.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C2</text>
+<text x="394.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">read</text>
+<line x1="446.8" y1="114.0" x2="446.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="424.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 3: glob (completed) **/*.py</title></rect>
+<text x="446.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C3</text>
+<text x="446.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">glob</text>
+<line x1="498.8" y1="114.0" x2="498.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="476.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 4: read (completed) tests/test_expense_summary.py</title></rect>
+<text x="498.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C4</text>
+<text x="498.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">read</text>
+<line x1="550.8" y1="114.0" x2="550.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="528.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 5: read (completed) src/expense_summary.py</title></rect>
+<text x="550.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C5</text>
+<text x="550.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">read</text>
+<line x1="602.8" y1="114.0" x2="602.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="580.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 6: bash (completed) python3 tools/run_tests.py</title></rect>
+<text x="602.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C6</text>
+<text x="602.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">bash</text>
+<line x1="654.8" y1="114.0" x2="654.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="632.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 7: read (completed) data/expenses.csv</title></rect>
+<text x="654.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C7</text>
+<text x="654.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">read</text>
+<line x1="706.8" y1="114.0" x2="706.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="684.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 8: bash (completed) python3 -m src.expense_summary data/expenses.csv</title></rect>
+<text x="706.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C8</text>
+<text x="706.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">bash</text>
+<line x1="758.8" y1="114.0" x2="758.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="736.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 9: edit (completed) tests/test_expense_summary.py</title></rect>
+<text x="758.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C9</text>
+<text x="758.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">edit</text>
+<line x1="810.8" y1="114.0" x2="810.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="788.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 10: edit (completed) tests/test_expense_summary.py</title></rect>
+<text x="810.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C10</text>
+<text x="810.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">edit</text>
+<line x1="862.8" y1="114.0" x2="862.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="840.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 11: bash (completed) python3 tools/run_tests.py</title></rect>
+<text x="862.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C11</text>
+<text x="862.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">bash</text>
+<line x1="914.8" y1="114.0" x2="914.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="892.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 12: bash (completed) python3 -m src.expense_summary data/expenses.csv</title></rect>
+<text x="914.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C12</text>
+<text x="914.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">bash</text>
+<line x1="966.8" y1="114.0" x2="966.8" y2="134.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="944.8" y="134.0" width="44" height="30" rx="4" fill="#eceae5" stroke="none" stroke-width="1"><title>call 13: write (completed) outputs/report.md</title></rect>
+<text x="966.8" y="146.5" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">C13</text>
+<text x="966.8" y="158.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="middle" font-weight="normal">write</text>
+<circle cx="342.8" cy="216.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 1 reads O:file:.agents/skills/systematic-debugging/SKILL.md@v0 (recorded)</title></circle>
+<circle cx="394.8" cy="304.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 2 reads O:file:docs/project-notes.md@v0 (recorded)</title></circle>
+<circle cx="498.8" cy="392.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 4 reads O:file:tests/test_expense_summary.py@v0 (recorded)</title></circle>
+<circle cx="550.8" cy="370.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 5 reads O:file:src/expense_summary.py@v0 (recorded)</title></circle>
+<circle cx="602.8" cy="326.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 6 reads O:file:docs/runner-notes.txt@v0 (inferred, rule known-script)</title></circle>
+<circle cx="602.8" cy="348.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 6 reads O:file:src/__init__.py@v0 (inferred, rule known-script)</title></circle>
+<circle cx="602.8" cy="370.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 6 reads O:file:src/expense_summary.py@v0 (inferred, rule known-script)</title></circle>
+<circle cx="602.8" cy="392.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 6 reads O:file:tests/test_expense_summary.py@v0 (inferred, rule known-script)</title></circle>
+<circle cx="602.8" cy="414.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 6 reads O:file:tools/run_tests.py@v0 (inferred, rule command-text)</title></circle>
+<circle cx="654.8" cy="282.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 7 reads O:file:data/expenses.csv@v0 (recorded)</title></circle>
+<circle cx="706.8" cy="282.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 8 reads O:file:data/expenses.csv@v0 (inferred, rule command-text)</title></circle>
+<circle cx="706.8" cy="348.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 8 reads O:file:src/__init__.py@v0 (inferred, rule command-text)</title></circle>
+<circle cx="706.8" cy="370.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 8 reads O:file:src/expense_summary.py@v0 (inferred, rule command-text)</title></circle>
+<circle cx="743.8" cy="392.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 9 reads O:file:tests/test_expense_summary.py@v0 (recorded)</title></circle>
+<rect x="753.8" y="387.0" width="10" height="10" rx="2" fill="#0b0b0b" stroke="#fcfcfb" stroke-width="2"><title>call 9 writes O:file:tests/test_expense_summary.py@v1 (recorded)</title></rect>
+<text x="766.8" y="386.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="start" font-weight="normal">v1</text>
+<circle cx="795.8" cy="392.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 10 reads O:file:tests/test_expense_summary.py@v1 (recorded)</title></circle>
+<rect x="805.8" y="387.0" width="10" height="10" rx="2" fill="#0b0b0b" stroke="#fcfcfb" stroke-width="2"><title>call 10 writes O:file:tests/test_expense_summary.py@v2 (recorded)</title></rect>
+<text x="818.8" y="386.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="start" font-weight="normal">v2</text>
+<circle cx="862.8" cy="326.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 11 reads O:file:docs/runner-notes.txt@v0 (inferred, rule known-script)</title></circle>
+<circle cx="862.8" cy="348.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 11 reads O:file:src/__init__.py@v0 (inferred, rule known-script)</title></circle>
+<circle cx="862.8" cy="370.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 11 reads O:file:src/expense_summary.py@v0 (inferred, rule known-script)</title></circle>
+<circle cx="862.8" cy="392.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 11 reads O:file:tests/test_expense_summary.py@v2 (inferred, rule known-script)</title></circle>
+<circle cx="862.8" cy="414.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 11 reads O:file:tools/run_tests.py@v0 (inferred, rule command-text)</title></circle>
+<circle cx="914.8" cy="282.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 12 reads O:file:data/expenses.csv@v0 (inferred, rule command-text)</title></circle>
+<circle cx="914.8" cy="348.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 12 reads O:file:src/__init__.py@v0 (inferred, rule command-text)</title></circle>
+<circle cx="914.8" cy="370.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"><title>call 12 reads O:file:src/expense_summary.py@v0 (inferred, rule command-text)</title></circle>
+<rect x="961.8" y="475.0" width="10" height="10" rx="2" fill="#0b0b0b" stroke="#fcfcfb" stroke-width="2"><title>call 13 writes O:file:outputs/report.md@v1 (recorded)</title></rect>
+<text x="974.8" y="474.0" font-family="Helvetica, Arial, sans-serif" font-size="9" fill="#52514e" text-anchor="start" font-weight="normal">v1</text>
+<rect x="320.8" y="92.0" width="96.0" height="22" rx="4" fill="#eceae5"><title>turn 1: issued calls [1, 2]</title></rect>
+<text x="368.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T1</text>
+<rect x="424.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 2: issued calls [3]</title></rect>
+<text x="446.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T2</text>
+<line x1="416.8" y1="103.0" x2="424.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="476.8" y="92.0" width="96.0" height="22" rx="4" fill="#eceae5"><title>turn 3: issued calls [4, 5]</title></rect>
+<text x="524.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T3</text>
+<line x1="468.8" y1="103.0" x2="476.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="580.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 4: issued calls [6]</title></rect>
+<text x="602.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T4</text>
+<line x1="572.8" y1="103.0" x2="580.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="632.8" y="92.0" width="96.0" height="22" rx="4" fill="#eceae5"><title>turn 5: issued calls [7, 8]</title></rect>
+<text x="680.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T5</text>
+<line x1="624.8" y1="103.0" x2="632.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="736.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 6: issued calls [9]</title></rect>
+<text x="758.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T6</text>
+<line x1="728.8" y1="103.0" x2="736.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="788.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 7: issued calls [10]</title></rect>
+<text x="810.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T7</text>
+<line x1="780.8" y1="103.0" x2="788.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="840.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 8: issued calls [11]</title></rect>
+<text x="862.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T8</text>
+<line x1="832.8" y1="103.0" x2="840.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="892.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 9: issued calls [12]</title></rect>
+<text x="914.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T9</text>
+<line x1="884.8" y1="103.0" x2="892.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="944.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 10: issued calls [13]</title></rect>
+<text x="966.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T10</text>
+<line x1="936.8" y1="103.0" x2="944.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="996.8" y="92.0" width="44.0" height="22" rx="4" fill="#eceae5"><title>turn 11: issued calls none</title></rect>
+<text x="1018.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#0b0b0b" text-anchor="middle" font-weight="normal">T11</text>
+<line x1="988.8" y1="103.0" x2="996.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="228.8" y="92.0" width="74" height="22" rx="11" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.4"><title>O:prompt: the user's task instruction (trust: user)</title></rect>
+<text x="265.8" y="107.0" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#0b0b0b" text-anchor="middle" font-weight="normal">user prompt</text>
+<line x1="302.8" y1="103.0" x2="320.8" y2="103.0" stroke="#52514e" stroke-width="1" marker-end="url(#arrow)"/>
+<line x1="20" y1="510.0" x2="1060.8" y2="510.0" stroke="#dddbd4" stroke-width="1"/>
+<circle cx="26.0" cy="524.0" r="4.5" fill="#fcfcfb" stroke="#0b0b0b" stroke-width="1.6"/>
+<text x="40.0" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">call reads the file</text>
+<rect x="167.1" y="519.0" width="10" height="10" rx="2" fill="#0b0b0b"/>
+<text x="186.1" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">call writes a new version</text>
+<path d="M349.1,519.5 l9,9 M349.1,528.5 l9,-9" stroke="#0b0b0b" stroke-width="2" stroke-linecap="round"/>
+<text x="367.6" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">call removes the file</text>
+<line x1="511.5" y1="516.0" x2="511.5" y2="532.0" stroke="#52514e" stroke-width="1.2"/>
+<text x="525.5" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">recorded in the trajectory</text>
+<line x1="698.9" y1="516.0" x2="698.9" y2="532.0" stroke="#52514e" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text x="712.9" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">inferred: command or child evidence</text>
+<rect x="933.4" y="517.0" width="14" height="13" rx="3" fill="#fcfcfb" stroke="#8a897f"/>
+<text x="953.4" y="528.0" font-family="Helvetica, Arial, sans-serif" font-size="10.5" fill="#52514e" text-anchor="start" font-weight="normal">failed call</text>
+<text x="20.0" y="550.0" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#52514e" text-anchor="start" font-weight="normal">Tool results feed the next turn; thin connectors represent this history.</text>
+<text x="20.0" y="566.0" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#52514e" text-anchor="start" font-weight="normal">Lane color marks file origin. Dashed edges are inferences, not causal proof.</text>
+</svg>

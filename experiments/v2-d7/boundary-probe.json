@@ -1,0 +1,8 @@
+{
+  "checked_at": "2026-11-24T09:24:38.070181+08:00",
+  "model_calls": 0,
+  "scope": "Maintained portable D7 template, instantiated for this checkout and home directory",
+  "workspace_write": true,
+  "outside_write_denied": true,
+  "other_project_read_denied": true
+}

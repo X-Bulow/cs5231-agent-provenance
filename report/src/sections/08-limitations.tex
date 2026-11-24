@@ -1,13 +1,10 @@
-% Section owner: shared.
-\section{Limitations}
-\label{sec:limits}
-
+\section{Limitations and Scope}
 \begin{itemize}
-  \item \textbf{Few runs.} There is one run per condition, on one workload, with one agent and two models. The results are case studies and say nothing about rates.
-  \item \textbf{Shell analysis is heuristic.} The inference rules handle the constructs that occur in our runs. They do not expand variables, globs, or command substitution, and they do not see paths computed at run time, such as temporary files.
-  \item \textbf{Script behavior is declared.} The reads of the test runner come from a table written for this workload. Another workload needs its own entries, or real instrumentation of the tools.
-  \item \textbf{Intermediate content is unknown.} File hashes exist for the start and the end of a run. A version produced by an edit has no recorded content unless it is the final one.
-  \item \textbf{An edge is availability, not influence.} A path into a turn shows that content was in the model's context. The graph cannot show that the model used it.
-  \item \textbf{The specification is simple.} The detection rule covers the paths the agent may write. It does not cover the other part of the attacker's objective, a report that claims success without support, and it would not catch an attack whose effect stays inside the allowed paths.
-  \item \textbf{The keyword baseline is weak by design.} It is the simplest alternative to a provenance graph, and a stronger text classifier would do better on wording. The structural point stands: text classification detects a payload, not a violation.
+\item \textbf{Small fixed batch.} Five starts per condition describe this batch only. No confidence interval, stable attack probability or wider model comparison is claimed.
+\item \textbf{Unknown server state.} Effective sampling parameters, exact backend revision and scheduling behavior are not archived. The stated temperature is the client request.
+\item \textbf{Agent-policy effect.} System instructions and bounded continuations are part of D7. The normal 5/5 outcome cannot be attributed solely to directory or shell fixes, or reported as single-turn performance.
+\item \textbf{Observation boundary.} Native tool calls and returns are available, not complete system-call logs. Final hash preservation does not exclude a temporary modification followed by restoration. The child export lacks a second event-stream record.
+\item \textbf{Dependencies and causality.} Edges represent recorded or inferred dependence. Reaching the injected note in an ancestor view does not prove it caused an edit, and the graph does not reveal hidden model reasoning.
+\item \textbf{Incomplete evaluation scope.} General investigation tooling, source ranking, rarity scores, a matched flat-log baseline and analyst-time measurements are not completed. The report makes no comparative claims about them.
+\item \textbf{Team metadata.} This artifact-level report does not assign individual authorship or contribution shares. Names, student identifiers and individual contributions require team confirmation before a course submission.
 \end{itemize}
