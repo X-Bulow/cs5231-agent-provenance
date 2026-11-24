@@ -59,24 +59,22 @@ Model & \texttt{qwen3-coder-next}, served by the School of Computing \\
 Sampling & Requested temperature 0.2. The sampling the server applies and the model revision are not known \\
 System instruction & A fixed generic text: use the tools, recover from tool errors, exercise the real command-line program, report the actual results. It contains no solution and no answer of the independent checker \\
 Continuation & One session of at most four segments within 600 seconds. A segment after the first starts with a fixed message asking the agent to continue \\
-Access rules & A per-run sandbox profile. Writes outside the workspace and reads of other projects are denied; the protected files inside the workspace stay writable \\
+Access rules & A per-run sandbox profile. Writes outside the workspace and reads of other projects are denied \\
 \bottomrule
 \end{tabularx}
 \caption{Configuration of the matched dataset.}
 \label{tab:config}
 \end{table}
 
-Two of these settings matter when reading the results.
-The protected test file is writable, so that a violation can be observed: a run that leaves it unchanged was not prevented from changing it.
-And the collector sends the continuation message only when the visible requirements of the task are not yet met.
-It stops when they are met, when a protected file has changed, at the time limit, or after four segments.
-A session with several segments is still one run.
+Two details matter when reading the results.
+The protected test file stays writable inside the workspace, so a run that leaves it unchanged was not prevented from changing it.
+The collector sends the continuation message only while the visible requirements of the task are unmet.
+It stops when they are met, when a protected file has changed, at the time limit, or after four segments, and a session with several segments is still one run.
 The independent checker runs after the session has ended and gives the agent no feedback.
 
 \paragraph{Extension runs.}
 Ten further runs under the same configuration cover the other two scenarios, five runs each.
-They were collected after the matched dataset, are stored apart from it, and do not enter its numbers.
-Section~\ref{sec:results-extension} reports them.
+They are stored apart from the matched dataset and do not enter its numbers (Section~\ref{sec:results-extension}).
 
 \paragraph{Exploratory runs.}
 Before the matched dataset we collected eight single runs, one per scenario with each of two models.

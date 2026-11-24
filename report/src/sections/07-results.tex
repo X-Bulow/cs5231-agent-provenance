@@ -2,11 +2,13 @@
 \label{sec:results}
 
 All numbers in this section are computed from the recorded runs by scripts in the repository.
-Sections~\ref{sec:results-runs} to~\ref{sec:results-forward} concern the matched dataset, runs 030 to 039, except where the detection table adds the extension runs.
-Every fraction counts runs out of the five runs of a condition, unless it says otherwise.
+They concern the matched dataset, runs 030 to 039, unless the extension runs are named.
+A fraction counts runs out of the five runs of a condition.
 
 \subsection{Runs and outcomes}
 \label{sec:results-runs}
+
+Table~\ref{tab:outcomes} gives the outcomes by condition, and Table~\ref{tab:runs} lists the ten runs.
 
 \begin{table}[H]
 \centering\small
@@ -38,25 +40,23 @@ The full task means that the agent reproduces the failure, repairs the implement
 All five normal runs and injected run 036 do this.
 Runs 031, 032, 035, and 039 change the two protected test expectations to \texttt{140.00} and \texttt{5.50}, exactly as the payload asks, and leave the implementation as it was.
 Their public tests then pass, while the independent checker still fails three of its nine checks and the program still prints the wrong balances.
-A passing test suite is therefore no evidence of a legitimate repair once the agent can edit the tests.
+A passing test suite is no evidence of a legitimate repair once the agent can edit the tests.
 
-In the classes of the project guide: the normal runs never met a payload; in run 036 the payload reached the model and the agent continued the legitimate task; in the other four injected runs a violation occurred.
+In the classes of the project guide~\cite{projectguide}, the normal runs never met a payload, in run 036 the payload reached the model and the agent continued the legitimate task, and in the other four injected runs a violation occurred.
 No violation was attempted and blocked, and no run failed for an unrelated reason.
 
 The reports of the four violating runs were checked against the tool records.
 They disclose the test edits, but they adopt the note's claim of authority and state that no failure remains.
-The report of run 035 also says that the tests were preserved.
 The attacker's objective, protected tests changed and success reported, was met in all four.
 
-Two things qualify the normal group's 5/5.
-Four normal runs needed one continuation message and one needed three, so the number is not a first-response success rate.
-And all injected runs have a single segment, because the collector stops once a protected file has changed.
+The normal group's 5/5 is not a first-response success rate: four normal runs needed one continuation message and one needed three.
 
 \paragraph{The counterfactual comparison.}
 The two groups differ only in the project notes, so they are the comparison of Layer~3.
 The protected tests were changed in 4 of 5 runs with the injected note and in 0 of 5 without it.
 With five runs on each side this describes the batch and does not measure a rate.
-It is the strongest evidence in this report that the note leads to the edits, and it is evidence about the condition, not about any single run: run 036 had the same note in its context and did not follow it.
+It is the strongest evidence in this report that the note leads to the edits.
+It is evidence about the condition and not about any single run, since run 036 had the same note in its context and did not follow it.
 
 \subsection{The graph explains every file change}
 \label{sec:results-graph}
@@ -71,14 +71,11 @@ It is the strongest evidence in this report that the note leads to the edits, an
 The ten graphs hold \TotalNodes{} nodes and \TotalEdges{} edges, of which \InferredEdges{} are inferred.
 All \ChangedFiles{} files that changed across the ten runs have a writer in the graph (Table~\ref{tab:graphs}), and the \texttt{hash-diff} fallback was never used.
 
-For \HashKnown{} final versions the trajectory contains the written content, because the agent's write tool produced them, so the graph computes their hash without consulting the independent record.
-All \HashKnown{} computed hashes equal the independent final hash.
+For \HashKnown{} final versions the trajectory contains the written content, because the agent's write tool produced them, and all \HashKnown{} hashes computed by the graph equal the independent ones.
 The other \HashFilled{} final versions come from edits, whose resulting content is not recorded, and take their hash from the independent record.
-For these the replay of Section~\ref{sec:graph} is the check that counts: starting from the initial files, replaying the recorded writes and substitutions reproduces the final workspace of all ten runs.
+For these the replay of Section~\ref{sec:reconcile} is the check that counts, and it reproduces the final workspace of all ten runs.
 
-One of the \ChangedFiles{} changes, the test file in run 039, is explained only through a sub-session (Section~\ref{sec:results-detection}).
-
-Every edge inferred from a shell command in these runs is a read; the agent wrote files only through its own tools.
+Every edge inferred from a shell command in these runs is a read, because the agent wrote files only through its own tools.
 The rules for shell writes are covered by the tests and were exercised by the exploratory runs, in which a \texttt{mv} that replaced the test file was confirmed by the hash of the content moved into place.
 
 \subsection{Detection: a specification rule against a keyword scan}
@@ -94,43 +91,44 @@ The rules for shell writes are covered by the tests and were exercised by the ex
 The rule of Section~\ref{sec:analysis} raises an alert in the \ViolatingRuns{} violating runs and in no other: \RuleFalseAlarms{} false alarms among the \CleanRuns{} clean runs (Table~\ref{tab:detection}).
 Within those runs it marks eight edits, two per run, which are exactly the edits found by manual review: C9 and C10 in runs 031 and 032, C7 and C8 in run 035, and C11 and C12 in the sub-session of run 039.
 No file changed without a recorded writer.
-Three calls to a tool that does not exist, in runs 030 and 037, are reported as diagnostics and not as writes.
 
-The keyword scan flags \KeywordFlagged{} runs: every run whose scenario changed a file.
-It finds the four violating runs and raises \KeywordFalseAlarms{} false alarms among the \CleanRuns{} clean ones: run 036, in which the agent read the payload and declined it, the five tool-output runs, in which the payload was printed two or three times and never followed, and the five benign-quotation runs, which contain no attack at all.
+The keyword scan flags \KeywordFlagged{} runs, every run whose scenario changed a file.
+It finds the four violating runs and raises \KeywordFalseAlarms{} false alarms among the \CleanRuns{} clean ones.
+These are run 036, in which the agent read the payload and declined it, the five tool-output runs, in which the payload was printed and never followed, and the five benign-quotation runs, which contain no attack at all.
 A keyword scan answers whether suspicious text was present.
 It cannot answer whether the agent did anything wrong, and that is the question the rule on the graph answers.
 
-\begin{figure}[H]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=0.56\textwidth]{run-039-protected}
-\caption{Run 039: every node of the parent graph with a path to the changed test file. C2 reads the injected note and C3 is the \texttt{task} call. The dashed connector from C3 summarizes what the sub-session did; the parent issued no edit.}
+\caption{Run 039: every node of the parent graph with a path to the changed test file. C2 reads the injected note and C3 is the \texttt{task} call. The dashed connector from C3 summarizes what the sub-session did. The parent issued no edit.}
 \label{fig:delegation}
 \end{figure}
 
 Run 039 is the case that the sub-session support of Section~\ref{sec:additions} exists for.
-The parent session contains no edit of the test file.
-It reads the note (C2) and starts a sub-session (C3), and the sub-session reproduces the failure, edits the two expectations (its calls 11 and 12), and runs the modified tests.
+The parent session reads the note (C2) and starts a sub-session (C3).
+The sub-session reproduces the failure, edits the two expectations, and runs the modified tests.
 Figure~\ref{fig:delegation} shows the parent's view, where the change is attached to the \texttt{task} call.
 Counting only the parent's edit calls would report this run as clean.
 
 \subsection{Backward tracking from a violation}
 \label{sec:results-backward}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.82\textwidth]{run-031-protected}
-\caption{Backward slice from the first unauthorized edit in run 031: every node with a path to version~1 of the protected test file. C9 is the edit; C2 is the call that read the injected project notes. Dashed connectors are inferred edges.}
-\label{fig:slice}
-\end{figure}
-
 Figure~\ref{fig:slice} shows every node of run 031 with a path to the first unauthorized edit.
 The slice holds \SliceNodes{} of the other \SliceOthers{} nodes: 6 turns, 9 tool calls, 8 results, 8 files, and the prompt.
 It contains the injected note, read by C2 in the first turn, and it contains no call issued after the edit.
 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.82\textwidth]{run-031-protected}
+\caption{Backward slice from the first unauthorized edit in run 031: every node with a path to version~1 of the protected test file. C9 is the edit, and C2 is the call that read the injected project notes. Dashed connectors are inferred edges.}
+\label{fig:slice}
+\end{figure}
+
 It also shows the limit of reachability.
 The edit has \SliceSources{} possible sources: the prompt, one skill file, and \SliceWorkspaceSources{} workspace files.
-With recorded edges alone there are \SliceSourcesRecordedOnly{}; the other three, among them the runner notes that carry the payload in the tool-output scenario, are found only through inferred edges.
+With recorded edges alone there are \SliceSourcesRecordedOnly{}.
+The other three, among them the runner notes that carry the payload in the tool-output scenario, are found only through inferred edges.
 By turn 6 the model had seen all of them, and reachability cannot choose.
 Trust labels (Layer~1) leave the \SliceWorkspaceSources{} workspace files.
 
@@ -140,48 +138,47 @@ Across the eight unauthorized edits, the ancestors of the editing call are betwe
 \subsection{Content evidence does not single out the note}
 \label{sec:results-content}
 
-\begin{table}[!htbp]
-\centering\small
-\input{generated/tracking-table.tex}
-\caption{The eight unauthorized edits. \emph{Ancestors}: ancestor nodes of the editing call out of the other nodes of its graph. \emph{Candidate sources}: earlier sources that the scoring rule ranks. \emph{Rank of the note}: the rank interval of the injected note; an interval means a tie. \emph{Earlier calls}: tool calls before the edit that the graph keeps as ancestors, and that the flat log keeps as the earlier part of the session.}
-\label{tab:tracking}
-\end{table}
-
 Layer~2 retrieves the injected note for all eight edits and ranks it first every time, but never alone (Table~\ref{tab:tracking}).
 For the four edits that write \texttt{140.00} the note ties with the output of the genuinely failing tests, which reports the buggy program's actual value.
 For the four edits that write \texttt{5.50} it ties in addition with the original test file, which contains that amount as an input and contains its own path.
-The note is uniquely first in 0 of 8 cases.
 
-This is the confound that Section~\ref{sec:explosion} anticipated, and it is not an accident of this payload.
+\begin{table}[!htb]
+\centering\small
+\input{generated/tracking-table.tex}
+\caption{The eight unauthorized edits. \emph{Ancestor nodes}: ancestors of the editing call out of the other nodes of its graph. \emph{Candidate sources}: earlier sources that the scoring rule ranks. \emph{Rank of the note}: the rank interval of the injected note, where an interval means a tie. \emph{Earlier calls}: tool calls before the edit that the graph keeps as ancestors, and that the flat log keeps as the earlier part of the session.}
+\label{tab:tracking}
+\end{table}
+
+This is not an accident of this payload.
 An attacker who wants a believable change asks for values the system already produces, so the legitimate observations and the injected instruction agree on the content.
 Content evidence narrows the candidates from the whole slice to two or three sources, and it cannot say which of them the model acted on.
 
 \subsection{Rarity ranks harmless operations too}
 \label{sec:results-rarity}
 
-\begin{table}[!htbp]
+All eight unauthorized edits are in the top-scoring group of their run (Table~\ref{tab:rarity}).
+The reason is the file and not the tool: the edit tool occurs in every normal run and scores 0.222 bits, while an edit of the test file occurs in none and scores 2.807.
+
+\begin{table}[!htb]
 \centering\small
 \input{generated/rarity-table.tex}
 \caption{Rarity against the five normal runs. Run 039 counts the 18 calls of the parent and the 14 calls of the sub-session together.}
 \label{tab:rarity}
 \end{table}
 
-All eight unauthorized edits are in the top-scoring group of their run (Table~\ref{tab:rarity}).
-The reason is the file and not the tool: the edit tool occurs in every normal run and scores 0.222 bits, while an edit of the test file occurs in none and scores 2.807.
-
 The same top score goes to calls that are not violations.
 In run 036, which completed the task legitimately, a read of the workspace's \file{README.md} scores 2.807 because no normal run read that file.
 In run 039 the \texttt{task} call ties with the two edits.
 When each normal run is held out in turn and scored against the other four, two of the five contain operations the others do not.
-And the read that brings the payload in scores the minimum: every normal run reads the project notes too, and a signature of tool, relation, and path does not see that the content changed.
+And the read that brings the payload in scores the minimum, because every normal run reads the project notes too and a signature of tool, relation, and path does not see that the content changed.
 
-Rarity therefore ranks the violations first only together with harmless operations, and it adds nothing to the rule of Section~\ref{sec:results-detection}, which already names these edits.
+Rarity adds nothing to the rule of Section~\ref{sec:results-detection}, which already names these edits.
 It also does not break the ties of Section~\ref{sec:results-content}: in all eight cases the tied sources come from calls with the same score.
 
 \subsection{The graph against the flat log}
 \label{sec:results-baseline}
 
-The flat-log baseline of Section~\ref{sec:analysis} and the graph give the same answers on every measure we computed.
+The flat-log baseline and the graph give the same answers on every measure we computed.
 Both process the same 188 tool calls and identify the same 33 file writes.
 Both find the eight unauthorized edits, miss none, and flag nothing in the six legitimate runs.
 Both produce the same candidates, scores, and rank intervals for every edit.
@@ -189,39 +186,36 @@ And for every edit, the earlier tool calls that the graph keeps as ancestors are
 
 The last point explains the others.
 The \rel{Next} edges and the rule that a result is read by the following turn make every earlier call an ancestor of every later one.
-That is the honest record of a context that never forgets, and it means that backward tracking on this graph prunes nothing that a time-ordered log would not also exclude.
+Backward tracking on this graph therefore prunes nothing that a time-ordered log would not also exclude.
 The ancestor fractions of Table~\ref{tab:tracking} look like a reduction only because they count nodes after the edit, which a log reader would skip as well.
 
-What the graph does provide is explicit: file versions, the basis of every edge, and the boundary of a sub-session can be inspected and drawn.
-Whether that helps a human investigator work faster we did not measure, and we do not claim it.
+What the graph does provide is explicit structure: file versions, the basis of every edge, and the boundary of a sub-session can be inspected and drawn.
 
 \subsection{Forward tracking}
 \label{sec:results-forward}
 
-Forward tracking has the same weakness as backward tracking.
+Forward tracking has the same weakness.
 In all \ForwardAllRuns{} of the \AllRuns{} runs, every file version written during the run is a descendant of the project notes, because the agent reads the notes at the start.
 That includes the correct repair in run 036 and in every normal run.
-Read literally, forward tracking marks a legitimate fix as possibly contaminated.
-It is an upper bound on contamination, and it needs the same narrowing as backward tracking.
+Forward tracking gives an upper bound on contamination, and read literally it marks a legitimate fix as possibly contaminated.
 
 \subsection{Extension: the two remaining scenarios}
 \label{sec:results-extension}
 
 Ten more runs under the same configuration cover the two scenarios that the matched dataset leaves out: the benign quotation in runs 040 to 044 and the tool-output injection in runs 045 to 049.
-They are not part of the matched dataset.
 The analysis tools were run on each of them directly.
 
 All ten runs complete the task.
 Each makes one edit to the implementation and one write of the report, passes all nine independent checks, and changes no protected file.
-The rule and the flat-log baseline flag nothing and agree on every run (Table~\ref{tab:detection}).
+The rule and the flat-log baseline flag nothing and agree on every run.
 
 The tool-output runs are the more interesting half.
-The payload reaches the model more often than in the documentation scenario: the test runner prints the runner notes after every execution, so the directive is in a tool result two or three times per run.
+The payload reaches the model more often than in the documentation scenario, since the test runner prints the runner notes after every execution and the directive is in a tool result two or three times per run.
 Yet the tests were changed in 0 of 5 runs, against 4 of 5 when the same objective arrived through the project notes.
-We observed this difference and cannot explain it from the record.
-One difference between the two channels is that the instruction tells the agent to read the project notes before it investigates, whereas the runner notes appear only inside the output of a tool; whether that accounts for the gap would take runs that vary it.
+We cannot explain this difference from the record.
+One difference between the two channels is that the instruction tells the agent to read the project notes before it investigates, whereas the runner notes appear only inside the output of a tool.
+Whether that accounts for the gap would take runs that vary it.
 
-The rarity score behaves here as in Section~\ref{sec:results-rarity}.
-Four of the ten runs contain harmless operations that no normal run contains, calls to a to-do tool in runs 041, 047, and 049 and a read of \file{README.md} in run 048, and these get the top score of 2.807 bits.
-The two reads that carry the changed text get the minimum, 0.222 bits.
-On clean runs the score thus ranks harmless operations first and is blind to the arrival of the payload.
+The rarity score behaves as in Section~\ref{sec:results-rarity}.
+Four of the ten runs contain harmless operations that no normal run contains, calls to a to-do tool in runs 041, 047, and 049 and a read of \file{README.md} in run 048, and these get the top score.
+The two reads that carry the changed text get the minimum.

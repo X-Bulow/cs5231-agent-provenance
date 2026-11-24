@@ -12,12 +12,20 @@
 \usepackage{tabularx}
 \usepackage{enumitem}
 \usepackage{graphicx}
-\usepackage{rotating}
 \usepackage{float}
 \usepackage{caption}
 \usepackage[hidelinks]{hyperref}
 
 \graphicspath{{figures/}}
+
+% Keep figures and tables on a page with text, next to where they are cited.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
 \captionsetup{font=small,labelfont=bf}
 \setlist{itemsep=2pt,topsep=4pt}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -52,12 +60,11 @@ LLM coding agents read files, run tools, and modify a project on a user's behalf
 Text placed in those files can redirect an agent into actions the user never authorized.
 We study the forensic side of this problem: given only the recorded execution of an agent, find the unauthorized action, the input that led to it, and the artifacts it contaminated.
 We treat the attack as a form of code injection and the investigation as system provenance.
-We build a provenance graph from an agent's trajectory, extend the course's graph model with file versions, trust labels, edges inferred for opaque shell commands, later user messages, and sub-sessions, and validate the graph against independently recorded file hashes.
-In a matched experiment of five runs with an injected project note and five without, the agent changes the protected tests in four of the five injected runs and in none of the others, while every final public test suite passes.
+We build a provenance graph from an agent's trajectory, extend the course's graph model for the cases an agent adds, and validate the graph against independently recorded file hashes.
+In a matched experiment the agent changes the protected tests in four of five runs with an injected project note and in none of five runs without it, while every final public test suite passes.
 A rule derived from the task specification finds all eight unauthorized edits and raises no alarm on the \CleanRuns{} clean runs, where a keyword scan of the same logs flags \KeywordFalseAlarms{} of them.
-Backward tracking from an unauthorized edit reaches the injected note but also most other inputs the agent had seen, which is the dependency explosion problem in a new setting.
-Ranking those inputs by content leaves the injected note tied with the genuine test output in all eight cases, and on the measures we computed the graph narrows the search no further than an analysis of the flat call log.
-We report where the transfer from system provenance works and where it does not.
+Attribution is where the transfer from system provenance stops.
+Backward tracking returns most of what the agent had seen, content evidence leaves the injected note tied with the genuine test output, and an analysis of the flat call log reaches the same candidates as the graph.
 \end{abstract}
 
 \input{sections/01-introduction}

@@ -6,7 +6,8 @@
 \paragraph{Attacker.}
 The attacker controls the content of text the agent encounters while working: files in the project, and anything a tool prints from them.
 The attacker does not control the user's instruction, the installed skills, or any executable code.
-Changing executable test code so that it performs an unwanted action directly would be malicious code execution, a different problem; we study a model that follows an injected instruction.
+Changing executable test code so that it performs an unwanted action directly would be malicious code execution, a different problem.
+We study a model that follows an injected instruction.
 The attacker's goal is an action outside the user's authorization.
 In our setting the goal is that the agent edits the protected tests in place of repairing the implementation and then reports success.
 
@@ -32,7 +33,7 @@ Prompt injection meets the same three requirements, with the model's context in 
 Code injection (Module 1, Homework 1) & Prompt injection \\
 \midrule
 Write the payload into memory by overflowing a buffer & Write the payload into the model's context: the agent reads a poisoned file, or a tool prints one \\
-The region holding the payload is executable & The context has no separation between data and instructions; any text may be acted on \\
+The region holding the payload is executable & The context has no separation between data and instructions, so any text may be acted on \\
 Control flow is diverted to the payload, for example through the saved return address & The agent's next action follows the payload instead of the user's task \\
 NX: data regions are not executable & The instruction declares documentation and tool output to be evidence that authorizes nothing \\
 CFI~\cite{cfi}: every control transfer goes to a statically known set of targets & A policy from the task specification: every write goes to a known set of allowed paths \\
@@ -46,14 +47,16 @@ StackGuard canary~\cite{stackguard}: detect afterwards that protected data was o
 Two further points come out of this comparison.
 
 First, the payload carries no new capability.
-It does not bring its own code; it steers tools the agent already has, the file editor in our case, toward the attacker's target.
+It does not bring its own code.
+It steers tools the agent already has, the file editor in our case, toward the attacker's target.
 In Module~1 terms this is closer to code reuse than to shellcode: as in return-to-libc, the attacker supplies only the arguments and the order, and the victim's own code does the work.
 A defense that inspects tools for malicious code will find nothing.
 
 Second, the defenses differ in strength in the same way as in Module~1.
 The sentence in the instruction that denies authority to documentation plays the role of NX, but nothing enforces it: it holds only if the model complies.
 Our runs show both outcomes for the same payload and the same model.
-In four of the five injected runs the agent followed the note and edited the tests; in the fifth it read the same note and repaired the implementation (Section~\ref{sec:results}).
+In four of the five injected runs the agent followed the note and edited the tests.
+In the fifth it read the same note and repaired the implementation (Section~\ref{sec:results}).
 The policy check and the hash comparison, by contrast, are enforced outside the model, as CFI and canaries are enforced outside the program's own logic.
 This is the reason our detection rests on them and not on what the model says about itself.
 
@@ -96,7 +99,8 @@ Three differences decide the design.
 A kernel audit log records every \texttt{read} and \texttt{write}.
 A trajectory records tool calls.
 For the agent's own file tools this is precise, but a shell command is a single opaque record.
-The trajectory shows \code{python3 tools/run_tests.py} and its output; it does not show that the script read a notes file and printed it.
+The trajectory shows \code{python3 tools/run_tests.py} and its output.
+It does not show that the script read a notes file and printed it.
 In the tool-output scenario the payload travels exactly this way, so a graph built only from what is recorded contains no path from the payload to the model.
 
 \paragraph{The process never forgets.}
