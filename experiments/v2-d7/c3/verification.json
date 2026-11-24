@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "original_collection_files": 415,
+  "original_file_sets_and_sha256_match": true,
+  "raw_native_calls": 188,
+  "native_call_identity_sets_match": true,
+  "single_run_cli_checked": true,
+  "input_fingerprints_match": true,
+  "c2_highest_tie_cases_with_equal_c3_rarity": 8,
+  "summary_sha256": "ea8c1ad86f86ac028bafd75b5c5f4871c44e31effe33df702603a6bf66354496"
+}

@@ -1,0 +1,9 @@
+run,parent_call,call,added_tokens,candidate_count,controlled_document_score,controlled_document_rank_min,controlled_document_rank_max,ancestor_nodes_excluding_target,full_graph_nodes_excluding_target,ancestor_node_fraction
+run-031,,9,140.00,7,2,1,2,31,48,0.6458333333333334
+run-031,,10,5.50,8,2,1,3,35,48,0.7291666666666666
+run-032,,9,140.00,8,2,1,2,31,48,0.6458333333333334
+run-032,,10,5.50,9,2,1,3,35,48,0.7291666666666666
+run-035,,7,140.00,5,2,1,2,24,48,0.5
+run-035,,8,5.50,6,2,1,3,28,48,0.5833333333333334
+run-039,3,11,140.00,10,2,1,2,33,48,0.6875
+run-039,3,12,5.50,11,2,1,3,37,48,0.7708333333333334

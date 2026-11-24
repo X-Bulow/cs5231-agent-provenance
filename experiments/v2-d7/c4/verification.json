@@ -1,0 +1,28 @@
+{
+  "status": "passed",
+  "original_collection_files": 415,
+  "original_file_sets_and_sha256_match": true,
+  "input_fingerprints": {
+    "c1-c2": "matched",
+    "c3": "matched",
+    "c4": "matched"
+  },
+  "prior_substantive_outputs_byte_identical": {
+    "experiments/v2-d7/c1-c2/detections.json": "0edf72ed50893bab17b4313e5faf82daf5d6a858c148c9a23c68c70a18e60cc2",
+    "experiments/v2-d7/c1-c2/queries.json": "e891bc4f3b15671a2d283e95b11dd6283ced483007a366e6f0490470fc761a5d",
+    "experiments/v2-d7/c1-c2/ranking.csv": "c8ea81652f9d33f83416afee9ed951c9be3b87064683618a451c44c96e24d442",
+    "experiments/v2-d7/c3/reference.json": "babfcc34313ea3f6a349e115696c2fd6842a67a797455f2de73968f0382cedd6",
+    "experiments/v2-d7/c3/events.json": "62b410994c9d076ba34dcf36f4bce90ec1b70e30ebcb93db90bf6ba16462e3b9",
+    "experiments/v2-d7/c3/heldout-events.json": "01788259a0adf96f9e2da36f8367909215e1c11feb5d56f79bcea227e451f8f4",
+    "experiments/v2-d7/c3/runs.csv": "558b329ca33687433e9f91eeb76d5bed7d5fdf143c3dcbbae7b4273554e24574",
+    "experiments/v2-d7/c3/unauthorized-edits.csv": "f55b29dad891054c1f36ed0e80379c8206e6286eb853a794841b0aa68d689f53",
+    "experiments/v2-d7/c3/c2-side-by-side.json": "bc7161f98c1ddb41065483c07bc92f8c6663ad2e92bc832b3dfe9258d6534584"
+  },
+  "native_calls": 188,
+  "actual_native_writes": 33,
+  "single_run_baseline_cli_checked": true,
+  "fresh_process_graph_import_and_file_read_guard_test_passed": true,
+  "analysis_tests_passed": 79,
+  "artifact_tests_passed": 18,
+  "summary_sha256": "6278b064be75d36c806d21c77de7556b684257aa8e3125cd0b6fcc861e42e40a"
+}

@@ -1,0 +1,22 @@
+{
+  "version": "c4-v1",
+  "scope": "Fixed D7 030-039; no new model runs, no measured analyst time",
+  "inputs": "Both methods use identical native parent/child sessions, baseline hashes, final workspace, user-authorized directories and raw tool contents",
+  "authorization": ["src/", "outputs/"],
+  "baseline": "Automated flat-log analysis. Parse native calls chronologically and infer file operations without importing/building/reading graphs. Include child calls at the parent task, retain failed/invalid returns. No known injection path or scenario labels supplied.",
+  "shared_components": "Trajectory parsing/normalization, lexical authorization, raw-call serialization, existing shell.py heuristics, and a graph-free implementation of the fixed C2-v1 content scoring/visibility rules. Sharing does not provide extra observations to either method.",
+  "graph": "C1 unreconciled graph writer detection and backward reachability; C2 source identity from file READ edges and the same fixed content score",
+  "detection_unit": "Actual native write operations identified by run/session/call/path; exclude delegated parent summary duplicates. Also compare final changed protected paths independently.",
+  "acceptance_reference": "Existing manual review/handover native edits plus independent before/final file hashes; known run/call/document labels are lookup-only after both methods finish",
+  "source_eligibility": "Only effective violating starts with confirmed prior complete payload exposure. Report 4 runs and 8 starts separately. Do not force sources for six legal runs.",
+  "candidate_unit": "Single file source for direct read/skill returns; other returns remain individual candidates. Same-session earlier-turn and timestamp constraints on both sides; no parent history presumed visible in child. Repeated file reads take max score; ties retained.",
+  "source_metrics": "Per-start candidate count, controlled-document coverage, score and tie rank interval on both sides. Coverage is lookup, not source causality.",
+  "volume_metrics": {
+    "graph_fraction": "Ancestor nodes excluding target / all nodes in same complete session graph excluding target. All node kinds counted; child and parent separate.",
+    "comparable_prefix": "Count native call identities excluding target in graph ancestors versus flat same-session prior-turn calls satisfying the same temporal boundary. This removes the advantage of comparing a time prefix to a full future log.",
+    "record_counts": "Report complete-run parent+child native call counts for input parity; graph node counts are not directly divided by flat-log rows or files."
+  },
+  "rarity": "Keep C3 exploratory results separate. No tuned fusion or source ranking weights.",
+  "human_time": "Not measured; no reading-time, productivity or human-effort claim.",
+  "interpretation": "Equal localization/ranking or no call-prefix reduction is an admissible result. Do not weaken the baseline or tune rules after seeing results."
+}
