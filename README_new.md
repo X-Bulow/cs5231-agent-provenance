@@ -55,7 +55,7 @@
 | `provenance/trajectory.py`、`build_graph.py`、`shell.py`、`runs.py`、`render.py` | 解析本次会话、保留用户续行时序和039子会话、构图并绘图 |
 | `experiments/v2_verify.py`及当前测试 | 核对本次原始证据、消息顺序、文件版本与结果；不读取旧记录 |
 
-老师提供的基础工作负载和工具模板仍保留，供D7任务使用。报告源文件、从当前结果生成的表格和编译入口均在[report/](report/README.md)；报告只陈述已验证的数据与构图贡献，未把来源排序、稀有度评分或日志基线比较写成已完成。
+老师提供的基础工作负载和工具模板仍保留，供D7任务使用。报告源文件、从当前结果生成的表格和编译入口均在[report/](report/README.md)；报告陈述已验证的数据、构图、C1 调查与 C2 内容排序。八个违规编辑都检索到注入文档，但均与其他证据并列，不能唯一归因；C3 稀有度已完成，但也给合法 README 读取最高分；C4 同输入日志比较也已完成：双方定位、来源排名及前序调用集合相同，未显示图方法优势。
 
 ## 如何核对当前记录
 
@@ -69,9 +69,9 @@ python3 -B cs5231-agent-provenance/experiments/v2_verify.py
 python3 -B -m unittest discover -s cs5231-agent-provenance/provenance -v
 ```
 
-当前解析与构图回归为49项通过，另有18项基础工具测试通过，日志为[provenance-tests.txt](experiments/v2-d7/provenance-tests.txt)。十次原始文件均与各次采集结束时保存的校验表一致。结果见[results.csv](experiments/v2-d7/results.csv)，图与文件版本验收见[b1-b2-verification.json](experiments/v2-d7/b1-b2-verification.json)。
+原解析／构图回归49项，C1/C2新增10项、C3新增12项、C4新增8项，当前共79项通过，另有18项基础工具测试通过，日志为[provenance-tests.txt](experiments/v2-d7/provenance-tests.txt)。十次原始文件均与各次采集结束时保存的校验表一致。结果见[results.csv](experiments/v2-d7/results.csv)，图与文件版本验收见[b1-b2-verification.json](experiments/v2-d7/b1-b2-verification.json)。
 
-如以后明确需要新增采集，可用`v2_batch.py run run-NNN --scenario normal`或`--scenario documentation-injection`，必须选择未使用编号。额外运行不自动并入已固定的030—039结果分母。本轮同步没有调用模型或新增分析评估算法。当前工作按用户明确指令发布到jiayi-new-environment分支，剩余任务见[handover.md](handover.md)。
+如以后明确需要新增采集，可用`v2_batch.py run run-NNN --scenario normal`或`--scenario documentation-injection`，必须选择未使用编号。额外运行不自动并入已固定的030—039结果分母。后续 C1—C4 均为离线分析，没有新增模型调用。D7 基础版本位于 jiayi-new-environment；本轮按用户明确指令将 C1—C4 发布至新分支 jiayi-C，交接见[handover.md](handover.md)。
 
 ## 报告与协作入口
 
@@ -80,3 +80,15 @@ python3 -B -m unittest discover -s cs5231-agent-provenance/provenance -v
 - [构图格式](docs/graph-format.md)：消息时序、文件版本和子会话边的含义。
 
 离线核查原始记录和生成图不需要SoCLaaS凭据；实际新增采集需要团队自行配置服务认证，实际采集依赖macOS的sandbox-exec，仓库不包含本机`.experiment-env`。原始日志中的错误输出、模型报告和采集路径属于实验事实，不能把其中的模型断言直接当成当前配置或合法任务结果。
+
+## C1、C2 调查入口
+
+已完成按授权路径定位写入、双向查询、父子会话追踪和动作前内容排序。执行 `python3 -B experiments/c1_c2.py` 可离线重现。四次违规运行共八次实际编辑，其他六次未判违规；注入文档在八次排序中均并列第一，没有唯一来源结论。规则、命令和逐起点结果见 [C1、C2 分析](docs/c1-c2-analysis.md)。C1/C2 阶段新增十项测试，当时合计 59 项；当前加 C4 后为 79 项。
+
+## C3 操作稀有度
+
+执行 `python3 -B experiments/c3_results.py`，用五次正常运行的操作出现次数评分；加 `--check` 可只读重现。八个违规编辑均处于本次运行最高分组，但合法的 036 README 读取也得相同最高分。逐次留出正常运行后，五个案例中两个出现未见操作；分数不能独立判定违规或解决 C2 来源歧义。规则和反例见 [C3 分析](docs/c3-analysis.md)，C4 已完成，详见下一节；当前含比较回归共79项通过。
+
+## C4 同输入日志比较
+
+执行 `python3 -B experiments/c4_results.py` 或只读 `--check`。独立普通日志基线不导入或读取图；与图方法共享解析、授权、Shell 推断和固定内容计分。双方都定位4次运行中的8次违规编辑，六次合法运行未判违规；八个起点的来源候选、排名和前序调用集合完全相同。图祖先占完整图50.0%—77.1%，但这没有表示相对日志时间前缀的缩减或人工时间收益。详见 [C4 评估](docs/c4-evaluation.md)。

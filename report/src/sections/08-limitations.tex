@@ -1,10 +1,9 @@
 \section{Limitations and Scope}
 \begin{itemize}
-\item \textbf{Small fixed batch.} Five starts per condition describe this batch only. No confidence interval, stable attack probability or wider model comparison is claimed.
-\item \textbf{Unknown server state.} Effective sampling parameters, exact backend revision and scheduling behavior are not archived. The stated temperature is the client request.
-\item \textbf{Agent-policy effect.} System instructions and bounded continuations are part of D7. The normal 5/5 outcome cannot be attributed solely to directory or shell fixes, or reported as single-turn performance.
-\item \textbf{Observation boundary.} Native tool calls and returns are available, not complete system-call logs. Final hash preservation does not exclude a temporary modification followed by restoration. The child export lacks a second event-stream record.
-\item \textbf{Dependencies and causality.} Edges represent recorded or inferred dependence. Reaching the injected note in an ancestor view does not prove it caused an edit, and the graph does not reveal hidden model reasoning.
-\item \textbf{Incomplete evaluation scope.} General investigation tooling, source ranking, rarity scores, a matched flat-log baseline and analyst-time measurements are not completed. The report makes no comparative claims about them.
-\item \textbf{Team metadata.} This artifact-level report does not assign individual authorship or contribution shares. Names, student identifiers and individual contributions require team confirmation before a course submission.
+\item \textbf{Small batch and reference set.} Five starts per condition describe this batch, not population performance. In-sample rarity scores are optimistic; held-out normal cases also contain unseen operations.
+\item \textbf{Execution context.} Backend revision and effective sampling are unknown. D7 includes system instructions and continuations, so normal 5/5 completion is neither single-turn performance nor attributable to one environment change.
+\item \textbf{Observation boundary.} Native tools are not system-call logs. Shell relations remain inferred; unchanged final hashes alone cannot exclude temporary writes. The child export has no independent event stream.
+\item \textbf{Attribution.} Dependency reachability, content overlap and model explanations do not establish causal influence. Every violating edit retains tied source candidates; no calibrated attack probability is produced.
+\item \textbf{Comparison.} The graph-independent baseline matches localization, rankings and prior-call sets under shared observations and heuristics. No combined score or alert threshold is fitted, and no human-time benefit is measured.
+\item \textbf{Team metadata.} Member names, student identifiers and individual contributions require team confirmation before submission.
 \end{itemize}

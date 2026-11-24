@@ -4,31 +4,68 @@
     "A3",
     "A4",
     "B1",
-    "B2"
+    "B2",
+    "C1",
+    "C2",
+    "C3",
+    "C4"
   ],
-  "completed_at": "2026-11-24T09:02:24.632281+08:00",
+  "completed_at": "2026-11-24T13:16:31.600026+08:00",
   "last_completed_run": "039",
-  "stop_after": "B2",
+  "stop_after": "C4",
   "retained_scope": "Formal D7 030-039 only; old runs and backups deleted by explicit user instruction.",
-  "tests_passed": 49,
-  "tests_log_sha256": "628ed88900d37a9a0c66c561fc752a02c3dbe16130fc4454df55b500604bc51b",
-  "verification_sha256": "d6b644510455d1b51429d29c81e9770929f713dcbfc1ad93ce7b9e8398d416ea",
+  "tests_passed": 79,
+  "tests_log_sha256": "88a5d550f0afbb09a1299a8655ccfbc70f18189b8984032dd9d8d65598746b4b",
+  "verification_sha256": "2cbaee1b01ec5238378068dea79f2dbba99a29bc414338367612d65754d5d4d1",
   "results_sha256": "7daa73c68919103e32c2dde91d69e40f15e85e108d0a01c0cd8d90d9e87533a6",
   "protocol_sha256": "d9397aae076c04f07ff18bb45b2945af5f807934825df0b9b12961a8bb868240",
   "limitations": [
     "039 child native export has no independent child event stream.",
     "Five starts per condition are a small observation; dependencies are not causal proof."
   ],
-  "part_c_started": false,
+  "part_c_started": true,
   "artifact_tests_passed": 18,
   "collection_protocol_sha256": "1273b9c03498431886f1786a1398c7a02965771ea3029c519fb5fc932387ffdd",
-  "artifact_tests_log_sha256": "7a8c088f260630ee2cf9c7df82302fcdac39f9193c1ea26ca8920638e94a47db",
+  "artifact_tests_log_sha256": "6e02814c3dff036c57a898107d0d44c4bc47003322e51ac3b333b6fefc7a3ae5",
   "report": {
     "path": "report/build/report.pdf",
-    "pages": 8,
-    "sha256": "a71508e60b9125fee15532c9fb06074cdfb2262bbe6bb31839e697ac29bf0b62",
-    "visual_review": "passed"
+    "pages": 11,
+    "sha256": "43abc957c8b853b1ed08b074adb5beef829a7d8b920f7275352eed6f5e83b4cd",
+    "visual_review": "passed",
+    "visual_review_record": "experiments/v2-d7/c4/report-visual-review.json"
   },
   "commit_or_push_performed_during_collection": false,
-  "publication_branch": "jiayi-new-environment"
+  "publication_branch": "jiayi-C",
+  "c1_c2": {
+    "status": "passed",
+    "summary": "experiments/v2-d7/c1-c2/summary.json",
+    "summary_sha256": "f434db2c482342c2fb30392addbd292d37457c959238e0461b1b0760144ce90e",
+    "unauthorized_runs": 4,
+    "unauthorized_edit_starts": 8,
+    "controlled_document_unique_first": 0,
+    "remaining_phases": []
+  },
+  "completion_scope": "User-authorized computational phases through C4 complete; human timing and team metadata not supplied.",
+  "c3": {
+    "status": "passed",
+    "summary": "experiments/v2-d7/c3/summary.json",
+    "summary_sha256": "ea8c1ad86f86ac028bafd75b5c5f4871c44e31effe33df702603a6bf66354496",
+    "reference_count": 5,
+    "heldout_normal_cases": 5,
+    "heldout_normal_cases_with_unseen_signature": 2,
+    "binary_alert_threshold": null,
+    "verification": "experiments/v2-d7/c3/verification.json",
+    "verification_sha256": "bffd94d63469d49fb0367fd0d3937a522fe62fc8c6d70f65531027f215140d65"
+  },
+  "c4": {
+    "status": "passed",
+    "summary": "experiments/v2-d7/c4/summary.json",
+    "summary_sha256": "6278b064be75d36c806d21c77de7556b684257aa8e3125cd0b6fcc861e42e40a",
+    "baseline_graph_independent": true,
+    "identical_ranking_starts": 8,
+    "identical_prior_call_sets_starts": 8,
+    "human_time_measured": false,
+    "verification": "experiments/v2-d7/c4/verification.json",
+    "verification_sha256": "0ee5f18ce5cf5edc3178491350d63bf4cc8c4ec3ad3caa1fd7bc9b530fe701dd"
+  }
 }

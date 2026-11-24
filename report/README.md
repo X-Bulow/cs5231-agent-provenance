@@ -1,8 +1,8 @@
 # D7报告
 
-[report.pdf](build/report.pdf)与本仓库的030—039结果同步。报告使用英文，正文只陈述已完成的实验、结果复核、时序正确的图和子会话支持；没有把未完成的来源排名、评分或基线比较写成结果。
+[report.pdf](build/report.pdf)与本仓库的030—039结果同步。报告使用英文，正文陈述已完成的实验、结果复核、图和子会话支持，以及 C1 调查、C2 内容排序。八次违规编辑均检索到注入文档，但均与其他证据并列，不能唯一归因。C3 稀有度也已完成：违规编辑得到高分，但合法读取和委派也可同分；C4 同输入日志比较也已完成，双方定位、来源排名及前序调用集合相同；人工耗时未测。
 
-表格由当前results.json、b1-b2-verification.json和COMPLETED.json生成，图来自当前run-039-protected.svg。成员姓名、学号及个人贡献仍需组内确认，当前只署项目组名称。
+表格由当前 results.json、b1-b2-verification.json、C1/C2、C3、C4 的 summary.json 和 COMPLETED.json 生成，图来自当前run-039-protected.svg。成员姓名、学号及个人贡献仍需组内确认，当前只署项目组名称。
 
 ## 重新构建
 

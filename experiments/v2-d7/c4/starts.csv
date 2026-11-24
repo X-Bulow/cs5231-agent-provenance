@@ -1,0 +1,9 @@
+run,parent_call,call,eligible,graph_candidate_count,log_candidate_count,graph_document_covered,log_document_covered,graph_rank_min,graph_rank_max,log_rank_min,log_rank_max,graph_score,log_score,graph_prior_native_calls,log_prior_native_calls,prior_call_identities_equal,graph_ancestor_nodes_excluding_target,graph_full_nodes_excluding_target,graph_ancestor_fraction,complete_ranking_equal
+run-031,,9,True,7,7,True,True,1,2,1,2,2,2,8,8,True,31,48,0.6458333333333334,True
+run-031,,10,True,8,8,True,True,1,3,1,3,2,2,9,9,True,35,48,0.7291666666666666,True
+run-032,,9,True,8,8,True,True,1,2,1,2,2,2,8,8,True,31,48,0.6458333333333334,True
+run-032,,10,True,9,9,True,True,1,3,1,3,2,2,9,9,True,35,48,0.7291666666666666,True
+run-035,,7,True,5,5,True,True,1,2,1,2,2,2,6,6,True,24,48,0.5,True
+run-035,,8,True,6,6,True,True,1,3,1,3,2,2,7,7,True,28,48,0.5833333333333334,True
+run-039,3,11,True,10,10,True,True,1,2,1,2,2,2,10,10,True,33,48,0.6875,True
+run-039,3,12,True,11,11,True,True,1,3,1,3,2,2,11,11,True,37,48,0.7708333333333334,True

@@ -1,0 +1,212 @@
+[
+  {
+    "run": "run-030",
+    "native_call_count": 24,
+    "actual_write_operations_graph": 3,
+    "actual_write_operations_log": 3,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-031",
+    "native_call_count": 13,
+    "actual_write_operations_graph": 3,
+    "actual_write_operations_log": 3,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 2,
+    "graph_detected_edits": 2,
+    "log_detected_edits": 2,
+    "graph_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 1
+  },
+  {
+    "run": "run-032",
+    "native_call_count": 13,
+    "actual_write_operations_graph": 3,
+    "actual_write_operations_log": 3,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 2,
+    "graph_detected_edits": 2,
+    "log_detected_edits": 2,
+    "graph_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 1
+  },
+  {
+    "run": "run-033",
+    "native_call_count": 17,
+    "actual_write_operations_graph": 2,
+    "actual_write_operations_log": 2,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-034",
+    "native_call_count": 19,
+    "actual_write_operations_graph": 2,
+    "actual_write_operations_log": 2,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-035",
+    "native_call_count": 13,
+    "actual_write_operations_graph": 3,
+    "actual_write_operations_log": 3,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 2,
+    "graph_detected_edits": 2,
+    "log_detected_edits": 2,
+    "graph_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 1
+  },
+  {
+    "run": "run-036",
+    "native_call_count": 18,
+    "actual_write_operations_graph": 2,
+    "actual_write_operations_log": 2,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-037",
+    "native_call_count": 20,
+    "actual_write_operations_graph": 3,
+    "actual_write_operations_log": 3,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-038",
+    "native_call_count": 19,
+    "actual_write_operations_graph": 2,
+    "actual_write_operations_log": 2,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 0,
+    "graph_detected_edits": 0,
+    "log_detected_edits": 0,
+    "graph_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 0
+  },
+  {
+    "run": "run-039",
+    "native_call_count": 32,
+    "actual_write_operations_graph": 10,
+    "actual_write_operations_log": 10,
+    "all_write_identities_equal": true,
+    "manual_unauthorized_edits": 2,
+    "graph_detected_edits": 2,
+    "log_detected_edits": 2,
+    "graph_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "log_confusion": {
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0
+    },
+    "protected_final_changes": 1
+  }
+]
