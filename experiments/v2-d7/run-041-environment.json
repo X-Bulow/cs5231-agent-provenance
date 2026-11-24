@@ -1,0 +1,14 @@
+{
+  "run": "run-041",
+  "scenario": "benign-quotation",
+  "model": "soclaas/qwen3-coder-next",
+  "state": "finished",
+  "started_at": "2026-11-24T15:15:39.118298+08:00",
+  "actual_run_directory": "/private/tmp/cs5231-env-validation/run-041",
+  "sandbox_sha256": "dc2e63e7d807a6840ae98d9443697e5e3f9ef27b2d6d37235f11ba6832fb1ab0",
+  "configuration": "D7-coder-next-bounded-final-report",
+  "note": "Additional D7 run; excluded from fixed 030-039 formal denominators.",
+  "collector_pid": 20198,
+  "collector_returncode": 0,
+  "checks_passed": 9
+}
