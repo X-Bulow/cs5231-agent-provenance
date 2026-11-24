@@ -307,7 +307,7 @@ To inspect a run, rebuild the graphs, draw one, find and trace an unauthorized e
 ```sh
 python3 provenance/trajectory.py artifact/runs/run-031 --calls
 python3 provenance/build_graph.py --all artifact/runs graphs
-python3 provenance/render.py graphs/run-031.json run-031-backward-slice.svg \
+python3 provenance/render.py graphs/run-031.json /tmp/run-031-backward-slice.svg \
     --ancestors-of "O:file:tests/test_expense_summary.py@v1" --highlight C:2 C:9
 python3 provenance/detect.py artifact/runs/run-031 --allow src/ --allow outputs/
 python3 provenance/query.py artifact/runs/run-031 --call 9
@@ -348,7 +348,7 @@ python3 scripts/collect.py opencode runs/run-040 --model 'soclaas/qwen3-coder-ne
 python3 scripts/check.py runs/run-040
 ```
 
-`build_graph.py --all` and the verification scripts accept only the runs listed in `experiments/manifest.json`, and stop with an error when `artifact/runs/` contains any other run. Build the graph of a new run on its own: `python3 provenance/build_graph.py artifact/runs/run-040 graphs/run-040.json`.
+`build_graph.py --all`, the tests and the verification scripts accept only the runs listed in `experiments/manifest.json`, and stop with an error when `artifact/runs/` contains any other run. Build the graph of a new run on its own: `python3 provenance/build_graph.py artifact/runs/run-040 graphs/run-040.json`.
 
 Name run directories by number and keep scenario names out of the path, because the agent can see its own working directory. Do not overwrite or delete existing runs; failed attempts are kept too.
 

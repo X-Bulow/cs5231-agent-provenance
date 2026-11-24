@@ -109,7 +109,7 @@ The graph format is specified in `docs/graph-format.md`. The code is in `provena
 
 ```sh
 python3 provenance/build_graph.py --all artifact/runs graphs
-python3 provenance/render.py graphs/run-031.json run-031.svg
+python3 provenance/render.py graphs/run-031.json /tmp/run-031.svg
 python3 -m unittest discover -s provenance
 ```
 
