@@ -37,7 +37,7 @@
     "experiments/d7/execution-policy-d7.txt": "c7a2846a2ad341d2f87c708b892b6cacdccbea86627cabdcb6d856fd6008ed41",
     "experiments/d7/sandbox-template.sb": "55a2fefaf3ad1ee3a5e0ba40895792006682e51d589a52e65c4254c91c1443d9"
   },
-  "protocol_sha256": "d9397aae076c04f07ff18bb45b2945af5f807934825df0b9b12961a8bb868240",
+  "protocol_sha256": "bfcc0e476f15d72437e19fa64c6708c41a6d0dde405c07dd8a45ad94208e21bd",
   "note": "D7 operational inputs. The capture protocol separately records the original collection-time fingerprints.",
   "collection_protocol_sha256": "1273b9c03498431886f1786a1398c7a02965771ea3029c519fb5fc932387ffdd"
 }

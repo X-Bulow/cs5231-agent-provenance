@@ -8,7 +8,7 @@ Our approach applies the system provenance techniques from Module 2 to agents. W
 
 The proposed division of work is in [docs/work-split.md](docs/work-split.md).
 
-**Status on 2026-11-24.** All three parts are implemented. The results in Section 4 come from ten matched runs collected under one fixed configuration. The eight exploratory runs that the method was first developed against are kept at tag `partb-v1` (Section 4.4). Detailed notes on the experiment configuration are in [README_new.md](README_new.md), in Chinese.
+**Status on 2026-11-24.** All three parts are implemented. The results in Section 4 come from ten matched runs collected under one fixed configuration, extended by ten runs of the two remaining scenarios. The eight exploratory runs that the method was first developed against are kept at tag `partb-v1` (Section 4.5). Detailed notes on the experiment configuration are in [README_new.md](README_new.md), in Chinese.
 
 ## 1. Direction: forensic reconstruction
 
@@ -19,7 +19,7 @@ The project guide lists six possible directions. We chose **forensic reconstruct
 Reasons for this choice:
 
 - **It maps most directly onto the course material.** It is the agent version of Homework 2 Part B2 (reconstructing an attack subgraph from an anchor event) and of the BackTracker paper. Problem analysis and technical design carry 10 marks each out of 30, and both ask how we see the new problem as an old one.
-- **We have real unauthorized trajectories to analyze.** See the four violating runs in Section 4.1 and run-006 in Section 4.4.
+- **We have real unauthorized trajectories to analyze.** See the four violating runs in Section 4.1 and run-006 in Section 4.5.
 - **Runs where the attack failed are still useful.** For those, forward tracking from the injected file shows that the injection reached the model but contaminated no protected file.
 
 How the other five directions relate to our work:
@@ -79,7 +79,7 @@ We use the artifact supplied by the course (see [artifact/README.md](artifact/RE
 
 Each run records `events.jsonl` (the event stream), `session.json` (the full session, including model reasoning), `baseline.json` (initial file hashes), and `check.json` (the independent outcome check).
 
-The matched dataset in Section 4.1 uses `normal` and `documentation-injection`. The other two scenarios were run only in the exploratory set (Section 4.4).
+The matched dataset in Section 4.1 uses `normal` and `documentation-injection`. The other two scenarios were run five times each under the same configuration as an extension (Section 4.4), and once each in the exploratory set (Section 4.5).
 
 ### 3.2 Build the provenance graph
 
@@ -154,7 +154,7 @@ Explanations written by the model, including the reasoning in `session.json`, ar
 ### 3.7 Evaluation
 
 - **Forensic effectiveness:** whether the backward-tracking result contains the true injected source; how much smaller the returned subgraph is than the full graph; where the true source ranks.
-- **Baseline comparison:** against an analysis of the flat call log that answers the same questions without building a graph, given the same inputs and the same rules (`provenance/log_baseline.py`). The comparison with keyword search on `benign-quotation`, which contains suspicious wording but no attack, was planned and has not been run, because that scenario is not in the matched dataset.
+- **Baseline comparison:** against an analysis of the flat call log that answers the same questions without building a graph, given the same inputs and the same rules (`provenance/log_baseline.py`). On the `benign-quotation` runs, which contain suspicious wording but no attack, both were checked for false alarms (Section 4.4). The comparison with a plain keyword search was planned and has not been run.
 - **Outcome classification:** following the project guide, each run is placed in one of five classes: the payload never reached the model; it reached the model and the agent continued the legitimate task; a violation was attempted but blocked; a violation occurred; the task failed for an unrelated reason.
 - **Limits:** with few runs this is a case study, and we make no claims about detection rates.
 
@@ -225,7 +225,16 @@ The same question on the graph built from the recorded run. Everything drawn her
 
 The method and full results are written up in [docs/c1-c2-analysis.md](docs/c1-c2-analysis.md), [docs/c3-analysis.md](docs/c3-analysis.md) and [docs/c4-evaluation.md](docs/c4-evaluation.md), in Chinese.
 
-### 4.4 Earlier exploratory runs
+### 4.4 Extension: the two remaining scenarios
+
+Ten more runs were collected under the same configuration, model and collector: `benign-quotation` in runs 040 to 044 and `tool-output-injection` in runs 045 to 049. They are not part of the matched dataset and do not enter its numbers. They are stored under `artifact/runs-extension/`, and the analysis tools were run on each of them directly.
+
+- **Outcome.** All ten runs completed the task: each makes one edit to `src/expense_summary.py` and one write to `outputs/report.md`, passes all 9 independent checks, and changes no protected file.
+- **The injected text did reach the model.** In the `tool-output-injection` runs the directive appears in the test runner's output two or three times per run, once per test execution. The same attacker objective changed the tests in 4 of 5 runs when it arrived through the project notes, and in 0 of 5 when it arrived through tool output.
+- **No false alarm from detection.** The graph detector and the flat-log baseline flag nothing in any of the ten runs and agree on every run.
+- **Rarity score.** Four of the ten runs contain harmless operations that the normal runs never contain: calls to the `todowrite` tool in runs 041, 047 and 049, and a read of `README.md` in run 048. They get the same top score as the unauthorized edits of Section 4.3. The reads that carry the payload get the lowest possible score, because the normal runs read the same two files. The score cannot see an injection arrive, and it does rank harmless operations first.
+
+### 4.5 Earlier exploratory runs
 
 The first 8 runs were collected on 2026-11-13, all with OpenCode 1.19.5 and models served by SoC's SoCLaaS. Each condition was run once. The working tree now keeps only the matched dataset; these runs, their graphs and the first draft of the report remain at tag [`partb-v1`](https://github.com/X-Bulow/cs5231-agent-provenance/tree/partb-v1).
 
@@ -263,6 +272,7 @@ artifact/            Demo setting supplied by the course
   scripts/           prepare.py / collect.py / check.py
   task.md            Task instruction sent to the agent
   runs/run-03X/      Workspace and records for each run of the matched dataset
+  runs-extension/    The ten extension runs, 040 to 049
 docs/
   graph-format.md    Provenance graph JSON format (interface between Parts B and C)
   work-split.md      Proposed division of work, with its current status
@@ -291,6 +301,7 @@ provenance/
   log_baseline.py    Answers the same questions from the flat call log
   test_*.py          Checks against the recorded runs and the format document
 graphs/run-03X.json  Provenance graph of each run; run-039-child.json is the sub-session
+graphs/run-04X.json  Provenance graphs of the extension runs
 figures/v2-d7/       Rendered graphs of the matched dataset
 figures/run-00X*.svg Rendered graphs of the earlier runs 001 and 006
 report/
@@ -335,7 +346,7 @@ Requires Python 3.10+ and OpenCode configured with a model.
 A run under the fixed configuration of the matched dataset is collected from the repository root:
 
 ```sh
-python3 experiments/v2_batch.py run run-040 --scenario documentation-injection
+python3 experiments/v2_batch.py run run-050 --scenario documentation-injection
 ```
 
 This needs macOS, because the collector confines the agent with `sandbox-exec`, and a local runtime directory beside the repository that holds the OpenCode configuration and the SoCLaaS credentials. Neither is part of the repository; [README_new.md](README_new.md) describes the setup. A new run does not enter the results of Section 4, whose ten runs are fixed.
@@ -343,12 +354,12 @@ This needs macOS, because the collector confines the agent with `sandbox-exec`, 
 The course scripts collect a run without that configuration. From `artifact/`:
 
 ```sh
-python3 scripts/prepare.py documentation-injection --output runs/run-040
-python3 scripts/collect.py opencode runs/run-040 --model 'soclaas/qwen3-coder-next'
-python3 scripts/check.py runs/run-040
+python3 scripts/prepare.py documentation-injection --output runs-extension/run-050
+python3 scripts/collect.py opencode runs-extension/run-050 --model 'soclaas/qwen3-coder-next'
+python3 scripts/check.py runs-extension/run-050
 ```
 
-`build_graph.py --all`, the tests and the verification scripts accept only the runs listed in `experiments/manifest.json`, and stop with an error when `artifact/runs/` contains any other run. Build the graph of a new run on its own: `python3 provenance/build_graph.py artifact/runs/run-040 graphs/run-040.json`.
+`build_graph.py --all`, the tests and the verification scripts accept only the runs listed in `experiments/manifest.json`, and stop with an error when `artifact/runs/` contains any other run. `v2_batch.py` stores a new run in `artifact/runs/`; move it to `artifact/runs-extension/` afterwards, as was done for runs 040 to 049. Build the graph of such a run on its own: `python3 provenance/build_graph.py artifact/runs-extension/run-050 graphs/run-050.json`.
 
 Name run directories by number and keep scenario names out of the path, because the agent can see its own working directory. Do not overwrite or delete existing runs; failed attempts are kept too.
 

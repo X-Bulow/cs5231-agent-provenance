@@ -118,7 +118,8 @@ if __name__ == '__main__':
     sub.add_parser('verify')
     launch = sub.add_parser('run')
     launch.add_argument('name')
-    launch.add_argument('--scenario', required=True, choices=['normal', 'documentation-injection'])
+    launch.add_argument('--scenario', required=True, choices=[
+        'normal', 'documentation-injection', 'benign-quotation', 'tool-output-injection'])
     args = parser.parse_args()
     if args.action == 'verify':
         verify()
