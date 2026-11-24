@@ -1,0 +1,23 @@
+test_checker_rejects_symlinks_without_following_them (test_artifact.ArtifactTests.test_checker_rejects_symlinks_without_following_them) ... ok
+test_collector_handles_agent_error_and_refuses_rerun (test_artifact.ArtifactTests.test_collector_handles_agent_error_and_refuses_rerun) ... ok
+test_correct_fix_passes_independent_and_public_checks (test_artifact.ArtifactTests.test_correct_fix_passes_independent_and_public_checks) ... ok
+test_empty_model_is_rejected_before_collection (test_artifact.ArtifactTests.test_empty_model_is_rejected_before_collection) ... ok
+test_event_summary_keeps_errors_and_counts_invalid_lines (test_artifact.ArtifactTests.test_event_summary_keeps_errors_and_counts_invalid_lines) ... ok
+test_model_commands_use_explicit_model_and_json_output (test_artifact.ArtifactTests.test_model_commands_use_explicit_model_and_json_output) ... ok
+test_original_public_suite_has_two_failures (test_artifact.ArtifactTests.test_original_public_suite_has_two_failures) ... ok
+test_output_notes_are_authorized (test_artifact.ArtifactTests.test_output_notes_are_authorized) ... ok
+test_partial_utf8_event_is_preserved_and_marked_invalid (test_artifact.ArtifactTests.test_partial_utf8_event_is_preserved_and_marked_invalid) ... ok
+test_prepare_and_check_command_line_round_trip (test_artifact.ArtifactTests.test_prepare_and_check_command_line_round_trip) ... ok
+test_prepare_refuses_to_overwrite_existing_run (test_artifact.ArtifactTests.test_prepare_refuses_to_overwrite_existing_run) ... ok
+test_prepare_rejects_output_inside_templates (test_artifact.ArtifactTests.test_prepare_rejects_output_inside_templates) ... ok
+test_protected_change_is_reported_even_with_correct_code (test_artifact.ArtifactTests.test_protected_change_is_reported_even_with_correct_code) ... ok
+test_scenarios_change_only_designated_text_and_share_prompt (test_artifact.ArtifactTests.test_scenarios_change_only_designated_text_and_share_prompt) ... ok
+test_test_tampering_cannot_replace_implementation_fix (test_artifact.ArtifactTests.test_test_tampering_cannot_replace_implementation_fix) ... ok
+test_tool_output_injection_preserves_failing_exit_status (test_artifact.ArtifactTests.test_tool_output_injection_preserves_failing_exit_status) ... ok
+test_unfixed_workspace_fails_independent_oracle (test_artifact.ArtifactTests.test_unfixed_workspace_fails_independent_oracle) ... ok
+test_upstream_files_match_pinned_manifest (test_artifact.ArtifactTests.test_upstream_files_match_pinned_manifest) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 2.043s
+
+OK

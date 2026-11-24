@@ -15,9 +15,9 @@ checked for color-vision-deficiency separation, and every color-coded item
 also carries a text label.
 
 Usage:
-    python3 provenance/render.py graphs/run-001.json figures/run-001.svg
-    python3 provenance/render.py graphs/run-006.json figures/run-006-slice.svg \\
-        --ancestors-of "O:file:tests/test_expense_summary.py@v1" --highlight C:2 C:12
+    python3 provenance/render.py graphs/run-030.json figures/run-030.svg
+    python3 provenance/render.py graphs/run-031.json figures/run-031-slice.svg \\
+        --ancestors-of "O:file:tests/test_expense_summary.py@v1" --highlight C:2 C:9
 """
 
 from __future__ import annotations
@@ -117,7 +117,7 @@ class Renderer:
         self.columns = max(column, 1)
         self.right = self.left + self.columns * COL
 
-        self.y_turn = 74.0
+        self.y_turn = 92.0
         self.y_call = self.y_turn + TURN_H + 20
         y = self.y_call + CALL_H + 26
         self.lane_y: dict[str, float] = {}
@@ -133,7 +133,7 @@ class Renderer:
             self.lane_y[path] = y
             y += LANE_GAP
         self.lanes_bottom = y
-        self.height = y + 86
+        self.height = y + 140
         self.width = self.right + 36
 
     # -- drawing helpers -----------------------------------------------------
@@ -150,6 +150,7 @@ class Renderer:
 
     def render(self, title: str, subtitle: str) -> str:
         self.layout()
+        self.width=max(self.width,len(subtitle)*6.1+40)
         self.add(f'<svg xmlns="http://www.w3.org/2000/svg" width="{self.width:.0f}" height="{self.height:.0f}" '
                  f'viewBox="0 0 {self.width:.0f} {self.height:.0f}" role="img" aria-label="{escape(title)}">')
         self.add(f'<rect width="100%" height="100%" fill="{SURFACE}"/>')
@@ -311,6 +312,16 @@ class Renderer:
             self.text(x0 - 55, self.y_turn + 15, "user prompt", size=10, anchor="middle")
             self.add(f'<line x1="{x0 - 18:.1f}" y1="{y:.1f}" x2="{x0:.1f}" y2="{y:.1f}" stroke="{INK_2}" '
                      'stroke-width="1" marker-end="url(#arrow)"/>')
+        for node in self.graph['nodes']:
+            if node['kind']!='prompt' or 'before_turn' not in node or not self.kept(node['id']):
+                continue
+            if node['before_turn'] not in self.turn_span:
+                continue
+            x0,x1=self.turn_span[node['before_turn']]
+            x=(x0+x1)/2
+            tip=f"{node['id']}: user message arrives before T{node['before_turn']}; {node['content']}"
+            self.text(x,self.y_turn-22,f"user {node['user_index']}",size=10,anchor='middle')
+            self.add(f'<path d="M{x:.1f},{self.y_turn-18:.1f} L{x:.1f},{self.y_turn-2:.1f}" stroke="{INK}" marker-end="url(#arrow)"><title>{escape(tip)}</title></path>')
 
     def draw_legend(self) -> None:
         y = self.lanes_bottom + 26
@@ -322,7 +333,7 @@ class Renderer:
             ("write", "call writes a new version"),
             ("delete", "call removes the file"),
             ("solid", "recorded in the trajectory"),
-            ("dashed", "inferred from a shell command"),
+            ("dashed", "inferred: command or child evidence"),
             ("failed", "failed call"),
         ]
         if self.highlight:
@@ -350,8 +361,8 @@ class Renderer:
                          f'stroke="{INK}" stroke-width="2.2"/>')
             self.text(x + 20, y, label, size=10.5, fill=INK_2)
             x += 34 + len(label) * 5.9
-        self.text(20, y + 22, "Each call's result is read by the next turn (thin line joining the arrow between turns). "
-                  "Lane color shows where the current file content came from.", size=10, fill=INK_2)
+        self.text(20, y + 22, "Tool results feed the next turn; thin connectors represent this history.", size=10, fill=INK_2)
+        self.text(20, y + 38, "Lane color marks file origin. Dashed edges are inferences, not causal proof.", size=10, fill=INK_2)
 
 
 def render_graph(graph: dict[str, Any], *, ancestors_of: str | None = None,
@@ -365,8 +376,8 @@ def render_graph(graph: dict[str, Any], *, ancestors_of: str | None = None,
         if ancestors_of not in ids:
             raise ValueError(f"{ancestors_of} is not a node of {graph['run']}")
         keep = ancestors(graph, ancestors_of)
-        subtitle = (f'Backward slice from {ancestors_of}: {len(keep) - 1} of the other {total - 1} nodes '
-                    f'can have influenced it · {graph["source"]["model"]}')
+        subtitle = (f'Ancestors of {ancestors_of}: {len(keep) - 1}/{total - 1} other nodes '
+                    f'· {graph["source"]["model"]}')
     for node_id in highlight or []:
         if node_id not in {n["id"] for n in graph["nodes"]}:
             raise ValueError(f"{node_id} is not a node of {graph['run']}")
@@ -376,7 +387,7 @@ def render_graph(graph: dict[str, Any], *, ancestors_of: str | None = None,
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Render a provenance graph as an SVG timeline.")
-    parser.add_argument("graph", type=Path, help="graph JSON, e.g. graphs/run-006.json")
+    parser.add_argument("graph", type=Path, help="graph JSON, e.g. graphs/run-031.json")
     parser.add_argument("output", type=Path, help="output SVG file")
     parser.add_argument("--ancestors-of", metavar="NODE",
                         help="draw only the nodes that have a path to NODE (a backward slice)")

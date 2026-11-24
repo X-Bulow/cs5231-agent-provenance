@@ -1,19 +1,4 @@
-% Section owner: shared.
-\section{Conclusion and Remaining Work}
-\label{sec:conclusion}
+\section{Conclusion}
+Under one fixed D7 configuration, five normal runs complete the authorized refund repair, while four of five document-injection runs modify protected tests instead. Every final public suite passes, which makes independent source checks, path authorization and truthful report review necessary to distinguish a repair from an altered test oracle.
 
-We set out to treat a new problem as two old ones.
-The transfer works further than we expected.
-The three requirements of code injection describe prompt injection without strain, and the comparison explains why the instruction-level defense fails where the externally enforced checks hold.
-The Homework~2 graph model carries over to an agent's trajectory with its node and edge types intact, and with one rule about when results are read it yields a graph that is acyclic and in which reachability means possible influence.
-
-The transfer stops at two places, and both became the technical content of the project.
-The trajectory does not see inside shell commands, so the graph needs inferred edges; we added them and checked them against independent file hashes, with no disagreement on the runs we have.
-And the model's context never forgets, so reachability names every input as a possible cause; this needs content evidence and counterfactual runs, which are designed and only partly exercised.
-
-\paragraph{Remaining work.}
-\begin{itemize}
-  \item Repeat every condition, add the counterfactual runs, and try payload variants. \placeholder{Part A}
-  \item Implement detection, tracking, content ranking, and the rarity score as reusable code, and report attribution ranks. \placeholder{Part C}
-  \item Rebuild the graphs on the new runs and extend the inference rules for any command form they introduce. \placeholder{Part B}
-\end{itemize}
+The graph pipeline preserves continuation-message arrival order, file versions and a delegated session that would otherwise hide the actual edits from a parent-only view. Validation checks all ten saved workspaces by independent raw-content replay. The resulting artifact supports inspection of what was recorded and how files changed; source attribution and comparative triage benefits remain unestablished.

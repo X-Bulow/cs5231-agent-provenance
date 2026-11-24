@@ -42,6 +42,7 @@ NO_CONTENT_READ = {
 PYTHON = re.compile(r"^python(\d(\.\d+)?)?$")
 HEREDOC = re.compile(r"<<-?[ \t]*(['\"]?)(\w+)\1([^\n]*)\n(.*?)\n[ \t]*\2(?=\n|$)", re.S)
 PLACEHOLDER = re.compile(r"^__HEREDOC_(\d+)__$")
+HereDoc = tuple[bool, str, str]  # quoted delimiter, analysis body, original body
 
 IMPORT_FROM = re.compile(r"(?:^|[;\n])[ \t]*from[ \t]+([\w.]+)[ \t]+import")
 IMPORT_PLAIN = re.compile(r"(?:^|[;\n])[ \t]*import[ \t]+([\w., \t]+)")
@@ -84,12 +85,19 @@ def _module_files(module: str) -> list[str]:
 
 
 class _Analyzer:
-    def __init__(self, existing: set[str], exit_code: int | None):
+    def __init__(self, existing: set[str], exit_code: int | None,
+                 output: str = "", raw_command: str | None = None):
         self.existing = set(existing)
         self.exit_code = exit_code
         self.cwd = "."
         self.result = Analysis()
-        self.heredocs: list[tuple[bool, str]] = []   # (delimiter quoted, body)
+        self.heredocs: list[HereDoc] = []
+        self.raw_command = raw_command
+        self.failed_redirections = {
+            match.group(1).strip("'\"") for match in re.finditer(
+                r"(?m)^zsh:\d+: (?:no such file or directory|permission denied|operation not permitted): (.+)$", output)
+        }
+        self.heredoc_failed = "can't create temp file for here document:" in output
 
     # -- recording -----------------------------------------------------------
 
@@ -112,8 +120,12 @@ class _Analyzer:
     # -- parsing -------------------------------------------------------------
 
     def run(self, command: str) -> Analysis:
+        literal_bodies = [m.group(4) for m in HEREDOC.finditer(self.raw_command or command)]
+
         def stash(match: re.Match) -> str:
-            self.heredocs.append((bool(match.group(1)), match.group(4)))
+            index = len(self.heredocs)
+            original = literal_bodies[index] if index < len(literal_bodies) else match.group(4)
+            self.heredocs.append((bool(match.group(1)), match.group(4), original))
             return f" __HEREDOC_{len(self.heredocs) - 1}__ {match.group(3)}"
 
         text = HEREDOC.sub(stash, command)
@@ -141,7 +153,7 @@ class _Analyzer:
             self.result.notes.append("part of the command uses parentheses, which are not analyzed")
             return
         words: list[str] = []
-        bodies: list[tuple[bool, str]] = []
+        bodies: list[HereDoc] = []
         outputs: list[tuple[str, bool]] = []
         inputs: list[str] = []
         i = 0
@@ -184,16 +196,20 @@ class _Analyzer:
             self.read(resolve(path, self.cwd))
         self.program(program, args, bodies)
 
-        # A redirection takes effect even when the command itself fails.
+        # A later program failure does not undo a redirection. Explicit shell
+        # redirection/here-document errors, however, do not support a write.
         for target, append in outputs:
+            if target in self.failed_redirections or (bodies and self.heredoc_failed):
+                self.result.notes.append(f"shell reports redirection failure for {target}; no write inferred")
+                continue
             sha256 = None
             if program == "cat" and not args and len(bodies) == 1 and len(outputs) == 1 and not append:
-                quoted, body = bodies[0]
-                if quoted or not re.search(r"[$`\\]", body):
-                    sha256 = hashlib.sha256((body + "\n").encode("utf-8")).hexdigest()
+                quoted, body, original = bodies[0]
+                if quoted or not re.search(r"[$`\\]", original):
+                    sha256 = hashlib.sha256((original + "\n").encode("utf-8")).hexdigest()
             self.write(resolve(target, self.cwd), append=append, sha256=sha256)
 
-    def program(self, program: str, args: list[str], bodies: list[tuple[bool, str]]) -> None:
+    def program(self, program: str, args: list[str], bodies: list[HereDoc]) -> None:
         plain = [arg for arg in args if not arg.startswith("-")]
         paths = [resolve(arg, self.cwd) for arg in plain]
 
@@ -229,8 +245,8 @@ class _Analyzer:
             for path in paths:
                 self.read(path)
 
-    def python(self, args: list[str], bodies: list[tuple[bool, str]]) -> None:
-        code: list[str] = [body for _, body in bodies]
+    def python(self, args: list[str], bodies: list[HereDoc]) -> None:
+        code: list[str] = [body for _, body, _ in bodies]
         rest: list[str] = []
         i = 0
         while i < len(args):
@@ -288,13 +304,14 @@ class _Analyzer:
                     f"with status {self.exit_code}; no write inferred")
 
 
-def analyze_command(command: str, existing: set[str], exit_code: int | None) -> Analysis:
+def analyze_command(command: str, existing: set[str], exit_code: int | None,
+                    output: str = "", raw_command: str | None = None) -> Analysis:
     """Infer the file operations of one shell command.
 
     existing is the set of file paths that exist when the command starts. Reads
     are reported only for files in that set or created earlier in the command.
     """
-    return _Analyzer(existing, exit_code).run(command)
+    return _Analyzer(existing, exit_code, output, raw_command).run(command)
 
 
 def grep_output_paths(output: str) -> list[str]:

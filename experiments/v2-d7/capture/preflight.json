@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-24T02:55:48.938615+08:00",
+  "protocol_sha256": "1273b9c03498431886f1786a1398c7a02965771ea3029c519fb5fc932387ffdd",
+  "runtime_verified": true,
+  "old_files": 604,
+  "allocated_ids_unoccupied": true,
+  "process_check": "Read-only ps: no collector or opencode run in progress before freeze."
+}

@@ -1,6 +1,6 @@
 """Build the provenance graph of one recorded run.
 
-Output format: docs/graph-format.md (version 1). The builder creates
+Output format: docs/graph-format.md (versions 1 and 2). The builder creates
 
   * the edges the trajectory records directly (patterns 1 to 7);
   * edges inferred for shell commands (patterns 8 and 9), see shell.py;
@@ -10,7 +10,7 @@ After construction it reconciles the graph with the independent before/after
 file comparison in check.json and reports anything the graph cannot explain.
 
 Usage:
-    python3 provenance/build_graph.py artifact/runs/run-006 graphs/run-006.json
+    python3 provenance/build_graph.py artifact/runs/run-030 graphs/run-030.json
     python3 provenance/build_graph.py --all artifact/runs graphs
 """
 
@@ -26,8 +26,9 @@ from typing import Any
 
 from shell import analyze_command, grep_output_paths
 from trajectory import Call, Trajectory, load_run
+from runs import select_runs
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 RELATIONS = ("EXEC", "READ", "WRITE", "NEXT")
 SKILL_PREFIX = ".agents/skills/"
 
@@ -121,6 +122,12 @@ class GraphBuilder:
             })
         if t.turns:
             self._add_edge("O:prompt", "READ", "T:1", [])                    # pattern 1
+        for message in t.user_messages[1:]:
+            node_id=self._add_node({'id':f'O:user:{message.index}','kind':'prompt','trust':'user',
+                'content':message.text,'message_id':message.message_id,'user_index':message.index,
+                'before_turn':message.before_turn,'time_start':message.time_start})
+            if message.before_turn<=len(t.turns):
+                self._add_edge(node_id,'READ',f'T:{message.before_turn}',[])
         for turn in t.turns[1:]:
             self._add_edge(f"T:{turn.index - 1}", "NEXT", f"T:{turn.index}", [])  # pattern 2
 
@@ -144,12 +151,14 @@ class GraphBuilder:
             if call.status == "completed":
                 self._recorded_file_edges(call, call_id, evidence)
                 self._inferred_file_edges(call, call_id, evidence)
+                if call.index in t.delegated:
+                    self._delegated_file_edges(call,call_id,evidence)
 
         self._reconcile()
         nodes = sorted(self.nodes.values(), key=_node_order)
         edges = sorted(self.edges.values(), key=_edge_order)
         return {
-            "schema_version": SCHEMA_VERSION,
+            "schema_version": SCHEMA_VERSION if len(t.user_messages)>1 or t.delegated else 1,
             "run": t.run,
             "source": {
                 "session_id": t.session_id, "agent": t.agent,
@@ -159,6 +168,35 @@ class GraphBuilder:
             "nodes": nodes,
             "edges": edges,
         }
+
+    def _delegated_file_edges(self,call: Call,call_id: str,evidence: list[int]) -> None:
+        """Summarize verified native child operations at the parent task boundary.
+
+        The child graph retains its internal versions; this graph has one
+        boundary version per written path, not a fabricated parent edit call.
+        """
+        child=self.trajectory.delegated[call.index]
+        baseline={path:(self._latest_node(path) or {}).get('sha256',self.baseline.get(path))
+                  for path in self.existing_files()}
+        graph=GraphBuilder(child,baseline,changes=None).build()
+        nodes={n['id']:n for n in graph['nodes']}
+        read_paths={nodes[e['src']]['path'] for e in graph['edges']
+            if e['rel']=='READ' and nodes[e['src']]['kind']=='file' and nodes[e['src']]['version']==0}
+        writes={nodes[e['dst']]['path'] for e in graph['edges']
+            if e['rel']=='WRITE' and nodes[e['dst']]['kind']=='file'}
+        for path in sorted(read_paths):
+            src=self.current_version(path,call)
+            self._add_edge(src,'READ',call_id,evidence,rule='delegated-session')
+            self.edges[(src,'READ',call_id)]['child_session_id']=child.session_id
+        for path in sorted(writes):
+            last=max((n for n in graph['nodes'] if n['kind']=='file' and n['path']==path),key=lambda n:n['version'])
+            dst=self.next_version(path,last['sha256'])
+            self.nodes[dst]['deleted']=last['deleted']
+            self._add_edge(call_id,'WRITE',dst,evidence,rule='delegated-session')
+            edge=self.edges[(call_id,'WRITE',dst)]
+            edge['child_session_id']=child.session_id
+            edge['child_call_evidence']=sorted({i for e in graph['edges'] if e['rel']=='WRITE' and nodes[e['dst']]['kind']=='file' and nodes[e['dst']]['path']==path for i in e['evidence']})
+        self.notes.append(f'C:{call.index}: delegated native session {child.session_id} is summarized at task boundary; child export has no independent event stream')
 
     def _recorded_file_edges(self, call: Call, call_id: str, evidence: list[int]) -> None:
         """Patterns 6 and 7: file reads and writes that the tool call records."""
@@ -186,7 +224,7 @@ class GraphBuilder:
             self._add_edge(self.current_version(path, call), "READ", call_id, evidence)
             self._add_edge(call_id, "WRITE", self.next_version(path), evidence)
         else:
-            content = call.input.get("content")
+            content = (call.raw_input if call.raw_input is not None else call.input).get("content")
             sha256 = (hashlib.sha256(content.encode("utf-8")).hexdigest()
                       if isinstance(content, str) else None)
             self._add_edge(call_id, "WRITE", self.next_version(path, sha256), evidence)
@@ -203,7 +241,9 @@ class GraphBuilder:
         if call.tool != "bash" or not isinstance(call.input.get("command"), str):
             return
 
-        analysis = analyze_command(call.input["command"], self.existing_files(), call.exit_code)
+        analysis = analyze_command(call.input["command"], self.existing_files(), call.exit_code,
+                                   output=call.output,
+                                   raw_command=(call.raw_input or call.input).get("command"))
         self.notes.extend(f"C:{call.index}: {note}" for note in analysis.notes)
         written: dict[str, str] = {}      # path -> version node this call created
 
@@ -317,16 +357,22 @@ _ALLOWED_SHAPES = {
     ("file", "READ", "call"),       # patterns 6 and 8
     ("call", "WRITE", "file"),      # patterns 7 and 9
 }
-_RULES = {"command-text", "known-script", "tool-output", "hash-diff"}
+_RULES = {"command-text", "known-script", "tool-output", "hash-diff", "delegated-session"}
 
 
 def validate(graph: dict[str, Any]) -> list[str]:
     """Return every way the graph departs from docs/graph-format.md."""
     problems: list[str] = []
+    version=graph.get('schema_version')
+    if version not in (1,2):
+        problems.append('unsupported schema version')
+    if version==1 and (any('before_turn' in n for n in graph['nodes']) or any(e.get('rule')=='delegated-session' for e in graph['edges'])):
+        problems.append('continuation or delegated evidence requires schema version 2')
     ids = [node["id"] for node in graph["nodes"]]
     if len(ids) != len(set(ids)):
         problems.append("duplicate node ids")
     kinds = {node["id"]: node["kind"] for node in graph["nodes"]}
+    by_id = {node['id']:node for node in graph['nodes']}
     seen: set[tuple[str, str, str]] = set()
     successors: dict[str, list[str]] = {node_id: [] for node_id in kinds}
     indegree = {node_id: 0 for node_id in kinds}
@@ -352,6 +398,9 @@ def validate(graph: dict[str, Any]) -> list[str]:
             problems.append(f"evidence not ascending in {label}")
         if (kinds[src], rel, kinds[dst]) not in _ALLOWED_SHAPES:
             problems.append(f"edge shape not allowed: {label}")
+        if kinds[src]=='prompt' and 'before_turn' in by_id[src] and rel=='READ' and kinds[dst]=='turn':
+            if by_id[dst]['index'] != by_id[src]['before_turn']:
+                problems.append(f'user message linked before or after its arrival boundary: {label}')
         successors[src].append(dst)
         indegree[dst] += 1
 
@@ -372,7 +421,7 @@ def validate(graph: dict[str, Any]) -> list[str]:
 
 def build_run(run_dir: str | Path) -> tuple[dict[str, Any], list[str]]:
     """Build the graph of one run. Returns the graph and notes on what it cannot explain."""
-    run_dir = Path(run_dir)
+    run_dir = Path(run_dir).resolve()
     trajectory = load_run(run_dir)
     baseline = json.loads((run_dir / "baseline.json").read_text(encoding="utf-8"))
     changes = None
@@ -385,7 +434,7 @@ def build_run(run_dir: str | Path) -> tuple[dict[str, Any], list[str]]:
     problems = validate(graph)
     if problems:
         raise ValueError(f"{run_dir.name}: invalid graph: " + "; ".join(problems))
-    return graph, list(trajectory.warnings) + builder.notes
+    return graph, list(trajectory.warnings) + trajectory.normalization_notes + builder.notes
 
 
 def write_graph(graph: dict[str, Any], output: Path) -> None:
@@ -411,13 +460,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Build the provenance graph of a recorded run.")
     parser.add_argument("--all", action="store_true",
                         help="treat the arguments as a directory of runs and an output directory")
+    parser.add_argument("--manifest", type=Path, help="reviewed run inventory for --all")
     parser.add_argument("run", type=Path, help="run directory (or runs directory with --all)")
     parser.add_argument("output", type=Path, help="output JSON file (or directory with --all)")
     args = parser.parse_args()
 
     if args.all:
-        jobs = [(run, args.output / f"{run.name}.json")
-                for run in sorted(args.run.glob("run-*")) if (run / "session.json").is_file()]
+        selection = select_runs(args.run, args.manifest)
+        jobs = [(run, args.output / f"{run.name}.json") for run in selection.graph_runs]
+        for name, reason in selection.excluded.items():
+            print(f"excluded: {name}: {reason}")
+        for name, reason in selection.ungraphable.items():
+            print(f"ungraphable: {name}: {reason}")
     else:
         jobs = [(args.run, args.output)]
     if not jobs:

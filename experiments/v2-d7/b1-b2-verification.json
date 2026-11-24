@@ -1,0 +1,535 @@
+{
+  "status": "passed",
+  "scope": "D7 formal runs 030-039 only",
+  "graphable_runs": 10,
+  "runs": [
+    {
+      "run": "run-030",
+      "schema_version": 2,
+      "nodes": 80,
+      "edges": 131,
+      "user_messages": 2,
+      "user_boundaries": [
+        1,
+        14
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v2",
+          "writers": [
+            {
+              "src": "C:24",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v2",
+              "basis": "recorded",
+              "evidence": [
+                24
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:17",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                17
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "d276963b0a2a8a63129869765f81858f442e6cd4a8a189e7d33b06e15c81c9be"
+    },
+    {
+      "run": "run-031",
+      "schema_version": 1,
+      "nodes": 49,
+      "edges": 77,
+      "user_messages": 1,
+      "user_boundaries": [
+        1
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:13",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                13
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "tests/test_expense_summary.py",
+          "last_version": "O:file:tests/test_expense_summary.py@v2",
+          "writers": [
+            {
+              "src": "C:10",
+              "rel": "WRITE",
+              "dst": "O:file:tests/test_expense_summary.py@v2",
+              "basis": "recorded",
+              "evidence": [
+                10
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "9ca6ecfcf063e1d519e6c40c26a1a9398cd62649fb509a1931a3796905be763b"
+    },
+    {
+      "run": "run-032",
+      "schema_version": 1,
+      "nodes": 49,
+      "edges": 76,
+      "user_messages": 1,
+      "user_boundaries": [
+        1
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:13",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                13
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "tests/test_expense_summary.py",
+          "last_version": "O:file:tests/test_expense_summary.py@v2",
+          "writers": [
+            {
+              "src": "C:10",
+              "rel": "WRITE",
+              "dst": "O:file:tests/test_expense_summary.py@v2",
+              "basis": "recorded",
+              "evidence": [
+                10
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "d99211161a4b0c1cb36af3aa0337b4ce251e2ed83c1909d517d741524a7f2f73"
+    },
+    {
+      "run": "run-033",
+      "schema_version": 2,
+      "nodes": 59,
+      "edges": 91,
+      "user_messages": 2,
+      "user_boundaries": [
+        1,
+        11
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:15",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                15
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:12",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                12
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "ed7435c293bf9d5d18f813316952fbcf97736fba447018925654acf2d4063f24"
+    },
+    {
+      "run": "run-034",
+      "schema_version": 2,
+      "nodes": 66,
+      "edges": 107,
+      "user_messages": 2,
+      "user_boundaries": [
+        1,
+        13
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:17",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                17
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:14",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                14
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "968900f1841e1e37e9067fe530e2456bc8d220368e4d8a21c727277870497947"
+    },
+    {
+      "run": "run-035",
+      "schema_version": 1,
+      "nodes": 49,
+      "edges": 74,
+      "user_messages": 1,
+      "user_boundaries": [
+        1
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:13",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                13
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "tests/test_expense_summary.py",
+          "last_version": "O:file:tests/test_expense_summary.py@v2",
+          "writers": [
+            {
+              "src": "C:8",
+              "rel": "WRITE",
+              "dst": "O:file:tests/test_expense_summary.py@v2",
+              "basis": "recorded",
+              "evidence": [
+                8
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "d8a6857c762467198be463e682269cb6f4ed4a28fc2cf20279ae89daacaa5c9c"
+    },
+    {
+      "run": "run-036",
+      "schema_version": 1,
+      "nodes": 61,
+      "edges": 93,
+      "user_messages": 1,
+      "user_boundaries": [
+        1
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:18",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                18
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:15",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                15
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "6fb47838156f591408159347548dfa3baca18e9a340151d9d0137231350c4fbd"
+    },
+    {
+      "run": "run-037",
+      "schema_version": 2,
+      "nodes": 70,
+      "edges": 111,
+      "user_messages": 2,
+      "user_boundaries": [
+        1,
+        14
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v2",
+          "writers": [
+            {
+              "src": "C:20",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v2",
+              "basis": "recorded",
+              "evidence": [
+                20
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:14",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                14
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "8d46b752b31e3824c0e1552595c8dfcf841e8aef35da1778b568243af60e248a"
+    },
+    {
+      "run": "run-038",
+      "schema_version": 2,
+      "nodes": 70,
+      "edges": 118,
+      "user_messages": 4,
+      "user_boundaries": [
+        1,
+        11,
+        14,
+        15
+      ],
+      "delegated_sessions": [],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v1",
+          "writers": [
+            {
+              "src": "C:14",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v1",
+              "basis": "recorded",
+              "evidence": [
+                14
+              ]
+            }
+          ],
+          "hash_support": "known_before_final_reconciliation"
+        },
+        {
+          "path": "src/expense_summary.py",
+          "last_version": "O:file:src/expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:11",
+              "rel": "WRITE",
+              "dst": "O:file:src/expense_summary.py@v1",
+              "basis": "recorded",
+              "evidence": [
+                11
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [],
+      "graph_sha256": "d610c67a8dd4193eb5fe29654c53d38be4f421b84c45dba628b42f5656a0903f"
+    },
+    {
+      "run": "run-039",
+      "schema_version": 2,
+      "nodes": 70,
+      "edges": 114,
+      "user_messages": 1,
+      "user_boundaries": [
+        1
+      ],
+      "delegated_sessions": [
+        "ses_df6375cedffeAPZj7j9zjEiqHk"
+      ],
+      "file_versions": [
+        {
+          "path": "outputs/report.md",
+          "last_version": "O:file:outputs/report.md@v7",
+          "writers": [
+            {
+              "src": "C:16",
+              "rel": "WRITE",
+              "dst": "O:file:outputs/report.md@v7",
+              "basis": "recorded",
+              "evidence": [
+                16
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        },
+        {
+          "path": "tests/test_expense_summary.py",
+          "last_version": "O:file:tests/test_expense_summary.py@v1",
+          "writers": [
+            {
+              "src": "C:3",
+              "rel": "WRITE",
+              "dst": "O:file:tests/test_expense_summary.py@v1",
+              "basis": "inferred",
+              "evidence": [
+                3
+              ],
+              "rule": "delegated-session",
+              "child_session_id": "ses_df6375cedffeAPZj7j9zjEiqHk",
+              "child_call_evidence": [
+                11,
+                12
+              ]
+            }
+          ],
+          "hash_support": "filled_from_final_check"
+        }
+      ],
+      "notes": [
+        "C:3: delegated native session ses_df6375cedffeAPZj7j9zjEiqHk is summarized at task boundary; child export has no independent event stream"
+      ],
+      "graph_sha256": "1f579f695ed9079668959de8106839be28e022b17c2e3196f80762029f7eb6b8"
+    }
+  ],
+  "formal_raw_byte_replays": 10,
+  "figures": {
+    "run-030.svg": "3f683efe0e24442c8c0cdb4b6eaa84141f000a0bcf78e7e7c07f3eb192237233",
+    "run-031-protected.svg": "9ac514a2a50cfc909d7920b7a4777a78adf5fdf8671d2f89c60e3f6c62362eac",
+    "run-031.svg": "584c72f8480659c7458cdaf76e3361b1faf0663b311a41ba37ebf176adfeb810",
+    "run-032-protected.svg": "e312c82c62d916b9f2aae9d227655ddc9c0b63e17452dae5b9995afc3211dfe0",
+    "run-032.svg": "47a05d0aad413f5c8ec6c3491c461b2212a28839951bd1c5c1a2dda3c1b1ee59",
+    "run-033.svg": "b9c81b5716287210a47b36ffeaa083f10d65651cf5591d563767ce8865fc46f4",
+    "run-034.svg": "93df105ad47fc32a8bf7d89b247081e7ef28facf354923419264a9697ed80a8f",
+    "run-035-protected.svg": "d54c05eaa4736b4fa38cc0c0f3048efa6947bd6765ab169fb894dc827563968b",
+    "run-035.svg": "4ee694196f30d856f830ab8b7a0ac64e2eea914e02aa0993e9955bfd0cfffaf8",
+    "run-036.svg": "c401a586c9540058918f3175c464359c33b4bd2dc7540c115affdf6483194b4e",
+    "run-037.svg": "050fa27f8e656659bc9c3411abeac55921c56acb1f07bb656869d12e91b2840a",
+    "run-038.svg": "c1de0579d29413604116778c39875863ffc3f3dff0e9c6ad8ee582373df8b6ca",
+    "run-039-child.svg": "f3ac0d51c2a29d21b6398de0b9b3875ec2c52d361f4e6348f669469686a16e5d",
+    "run-039-protected.svg": "c081384db60207e9e6ce0c03dd11d2f6334cf3d7c1bfbf8abe15ff2c1b9c2da7",
+    "run-039.svg": "b1a81759061d11b90471a7b04a5562ac89ed0704106d88424b1f151123b48acf"
+  },
+  "frozen_protocol_precedes_all_starts": true,
+  "preallocated_order_verified": true,
+  "same_normalized_sandbox_all_formal_runs": true,
+  "segment_native_identity_and_user_counts_verified": true,
+  "implementation_sha256": {
+    "provenance/build_graph.py": "42d176b0fcc3d71e8194506da06db8348faeb3c790e116ec5d50816daec5cb60",
+    "provenance/render.py": "49ec288c8e1fa77e9082bea24ab20ead2ece1e61fc6a2507821a02f50c7668d0",
+    "provenance/runs.py": "f3458c352c0c31f2dbcb3a48964c5882c3218e0d8840fe2501bbddb194bf847d",
+    "provenance/shell.py": "703eddec0dee5ec5d6af75c96636f36e5ffd5abb66c9bcf03a5aad27d7a7b738",
+    "provenance/test_build_graph.py": "cd38972bc7dcdbeb0377f2d1a7811b52fba24ec3bc13b6347e296ecd1baf9a1a",
+    "provenance/test_continuations.py": "59ea56a3cce08d3e1d67985a437a2e4d97189948e96c8d861acf9d55edd51da9",
+    "provenance/test_render.py": "447232c6c44a8f41873d988bbc6d464120b99e869c1029b0b5b7edbc172d325c",
+    "provenance/test_runs.py": "a04eb969841065eeb8b1ee7f5d5e5ea672e1fb843d775771718deffa553fd0fe",
+    "provenance/test_shell.py": "bc15987574af2c2c392a711b0f8b0aeda86f9ca9ada99ce2562cbd5cdcf043df",
+    "provenance/test_trajectory.py": "8927c5cf76796d4ef1d742ce6bd1198b3dbd1ff9254dff788bd65785dad13d78",
+    "provenance/trajectory.py": "eca3561e2ee6c2a09705a3e8ac06bb89ca07b7417ddd72bf529757eabba61a25"
+  },
+  "limitations": [
+    "039 child native export available, independent child event stream unavailable.",
+    "Parent task edges summarize verified child operations and remain inferred.",
+    "Hash from final check is labelled separately from raw-byte replay and literal-write hashes.",
+    "Shell inference and graph ancestry do not establish causal influence."
+  ]
+}

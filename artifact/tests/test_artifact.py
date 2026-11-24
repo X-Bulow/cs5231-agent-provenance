@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -195,13 +196,18 @@ class ArtifactTests(unittest.TestCase):
         binaries = self.temp / "bin"
         binaries.mkdir()
         fake = binaries / "opencode"
-        fake.write_text(f"#!{sys.executable}\nimport sys,json,os\n"
+        script = binaries / 'fake_agent.py'
+        script.write_text("import sys,json,os\n"
                         "assert os.getcwd() == os.environ['PWD'] == os.environ['INIT_CWD']\n"
                         "if '--version' in sys.argv:\n print('test-double')\n"
                         "else:\n"
                         " assert sys.argv[sys.argv.index('--dir')+1] == os.getcwd()\n"
                         " print(json.dumps({'type':'error','error':{'message':'test failure'}}))\n",
                         encoding="utf-8")
+        # A Python executable inside a path with spaces is invalid as a raw
+        # shebang. Use a quoted shell exec so this test also works in such checkouts.
+        fake.write_text('#!/bin/sh\nexec ' + shlex.quote(sys.executable) + ' ' +
+                        shlex.quote(str(script)) + ' "$@"\n', encoding='utf-8')
         fake.chmod(0o755)
         env = os.environ.copy()
         env["PATH"] = str(binaries) + os.pathsep + env.get("PATH", "")

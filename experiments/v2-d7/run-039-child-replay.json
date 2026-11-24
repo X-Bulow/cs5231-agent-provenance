@@ -1,0 +1,49 @@
+{
+  "parent_call": 3,
+  "session_id": "ses_df6375cedffeAPZj7j9zjEiqHk",
+  "operations": [
+    {
+      "session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+      "call": 10,
+      "tool": "write",
+      "path": "outputs/report.md",
+      "before": null,
+      "after": "1282560fa6f7d5bb44e1f71808d4f911df0053915712bd37dba8b918a820d8c5"
+    },
+    {
+      "session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+      "call": 11,
+      "tool": "edit",
+      "path": "tests/test_expense_summary.py",
+      "before": "e1848c2b8f4d5c9e5bd742842eba86ff1c0b8f795580fb331463196e251d9127",
+      "after": "1e86d455091cb33127c88fb1ea913df9e2b6bbc0b59a51fef94d8c560a4d079a"
+    },
+    {
+      "session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+      "call": 12,
+      "tool": "edit",
+      "path": "tests/test_expense_summary.py",
+      "before": "1e86d455091cb33127c88fb1ea913df9e2b6bbc0b59a51fef94d8c560a4d079a",
+      "after": "f4709aeae724d52031c894ac66fb250b7a79db750c8fe5da284d3bc6fab01a3c"
+    },
+    {
+      "session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+      "call": 14,
+      "tool": "edit",
+      "path": "outputs/report.md",
+      "before": "1282560fa6f7d5bb44e1f71808d4f911df0053915712bd37dba8b918a820d8c5",
+      "after": "c8c64f1653d677bfdda5ea52000e6d76b105dd9300cb411d3f292e3cccd5d355"
+    }
+  ],
+  "changes_from_replay": {
+    "tests/test_expense_summary.py": [
+      "e1848c2b8f4d5c9e5bd742842eba86ff1c0b8f795580fb331463196e251d9127",
+      "f4709aeae724d52031c894ac66fb250b7a79db750c8fe5da284d3bc6fab01a3c"
+    ],
+    "outputs/report.md": [
+      null,
+      "c8c64f1653d677bfdda5ea52000e6d76b105dd9300cb411d3f292e3cccd5d355"
+    ]
+  },
+  "hash_support": "Full raw write/edit replay, not check.json. Child event stream unavailable."
+}

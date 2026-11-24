@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "runs": {
+    "run-039": [
+      {
+        "parent_call_id": "chatcmpl-tool-bc176d3501f81e17",
+        "session_id": "ses_df6375cedffeAPZj7j9zjEiqHk",
+        "parent_session_id": "ses_df6376e36ffej3Me36XgoUBA95",
+        "path": "experiments/v2-d7/run-039-child-session.json",
+        "sha256": "0b7cddecbd7591fdf4b42f26bf2494a1a1e38fbcff245eb0a3041981012e70fb",
+        "note": "Read-only post-run native child export; original parent evidence untouched. No separate child event stream was archived."
+      }
+    ]
+  }
+}

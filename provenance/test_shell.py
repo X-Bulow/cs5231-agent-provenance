@@ -72,6 +72,36 @@ class Reads(unittest.TestCase):
 
 
 class Writes(unittest.TestCase):
+    def test_explicit_failed_redirection_does_not_create_a_file(self):
+        analysis = analyze_command("echo x > output/test.csv; python3 missing.py", set(FILES), 2,
+                                   output="zsh:1: no such file or directory: output/test.csv\n")
+        self.assertEqual(analysis.ops, [])
+        self.assertTrue(any("no write inferred" in n for n in analysis.notes))
+
+    def test_later_program_failure_keeps_successful_redirection(self):
+        analysis = analyze_command("echo x > tests/test.csv; python3 missing.py", set(FILES), 2,
+                                   output="python3: can't open file 'missing.py': No such file or directory")
+        self.assertEqual([(op.kind, op.path) for op in analysis.ops], [("write", "tests/test.csv")])
+
+    def test_explicit_heredoc_failure_does_not_create_a_version(self):
+        command = "cat > outputs/a.txt << 'EOF'\nx\nEOF"
+        analysis = analyze_command(command, set(FILES), 1,
+                                   output="zsh:1: can't create temp file for here document: operation not permitted")
+        self.assertEqual(analysis.ops, [])
+
+    def test_heredoc_hash_uses_original_content_not_path_display(self):
+        raw = "cat > outputs/a.txt << 'EOF'\n/Users/a/workspace/src/x.py\nEOF"
+        display = "cat > outputs/a.txt << 'EOF'\nsrc/x.py\nEOF"
+        analysis = analyze_command(display, set(FILES), 0, raw_command=raw)
+        self.assertEqual(analysis.ops[0].sha256,
+                         hashlib.sha256(b"/Users/a/workspace/src/x.py\n").hexdigest())
+
+    def test_unquoted_raw_expansion_is_not_hidden_by_normalization(self):
+        raw = "cat > outputs/a.txt << EOF\n/Users/a\\ b/workspace/src/x.py\nEOF"
+        display = "cat > outputs/a.txt << EOF\nsrc/x.py\nEOF"
+        analysis = analyze_command(display, set(FILES), 0, raw_command=raw)
+        self.assertIsNone(analysis.ops[0].sha256)
+
     def test_tee_and_redirection(self):
         result = ops("python3 tools/run_tests.py 2>&1 | tee outputs/before.txt")
         self.assertEqual(result[-1], ("write", "outputs/before.txt", "command-text"))
