@@ -86,3 +86,16 @@ python3 -B -m unittest discover -s provenance -v
 结果保存在 [c4/](../experiments/v2-d7/c4/)：flat-log.json 是基线操作表与最终差异，graph-detection.json 是图侧定位，paired-queries.json 保留八个起点的双方完整证据及039父边界，starts.csv 是逐起点指标，run-comparison.json 是逐运行定位核对，summary.json 是摘要，input-sha256.json 锁定输入与实现。
 
 本轮新增八项测试，解析／构图／调查／评分／比较合计 79 项通过。C1—C3 实质结果未变；没有新增模型请求，原始十次记录保持不变。人工耗时没有测量，本文不报告时间收益。
+
+## 补充：在 run-040—049 上交叉核对图与日志基线
+
+2026-11-24，对另外采集的 run-040—049（benign-quotation、tool-output-injection 各五次，非正式十次样本，不在锁定的 `experiments/v2-d7/c4/protocol.json` 范围内）逐一执行图端与日志端检测，例如 run-045：
+
+```bash
+python3 -B provenance/detect.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+  --output /tmp/detect-045.json
+python3 -B provenance/log_baseline.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+  --output /tmp/logbase-045.json
+```
+
+十次运行里，图端与日志端对每一次都给出相同结果：两个原生动作，均在 `src/`、`outputs/` 授权范围内，零个越权写入。双方没有分歧，延续了正式十次上“图与日志在这些指标上没有差异”的结论——但这十次本身没有发生违规，所以没有来源候选、名次或祖先比例可比较；C4 原有的八起点表（第 45—54 行）仍只来自正式违规样本，本节不新增行，只确认两种方法在干净样本上同样不产生误报。
