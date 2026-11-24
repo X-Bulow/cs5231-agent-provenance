@@ -1,0 +1,1054 @@
+[
+  {
+    "run": "run-031",
+    "edit_session": "ses_df63bb75bffee6DWPhaalkCxUV",
+    "edit_call": 9,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63bb75bffee6DWPhaalkCxUV/C:7",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 4,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63bb75bffee6DWPhaalkCxUV/C:8",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 4,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 7,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          },
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 7,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 7,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-031",
+    "edit_session": "ses_df63bb75bffee6DWPhaalkCxUV",
+    "edit_call": 10,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63bb75bffee6DWPhaalkCxUV/C:7",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          },
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63bb75bffee6DWPhaalkCxUV/C:8",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63bb75bffee6DWPhaalkCxUV/C:9",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 9,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 2.807354922057604,
+            "max_rarity_bits": 2.807354922057604
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-032",
+    "edit_session": "ses_df63b1d36ffe365PBiRul1bV7c",
+    "edit_call": 9,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:6",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:3",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 3,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:8",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 8,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-032",
+    "edit_session": "ses_df63b1d36ffe365PBiRul1bV7c",
+    "edit_call": 10,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:6",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:3",
+        "content_score": 1,
+        "content_rank_min": 4,
+        "content_rank_max": 4,
+        "return_rarity": [
+          {
+            "call": 3,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 9,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 9,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 9,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:8",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 9,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df63b1d36ffe365PBiRul1bV7c/C:9",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 9,
+        "return_rarity": [
+          {
+            "call": 9,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 2.807354922057604,
+            "max_rarity_bits": 2.807354922057604
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-035",
+    "edit_session": "ses_df639b992ffeJv8Oxyp1HRTW5e",
+    "edit_call": 7,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df639b992ffeJv8Oxyp1HRTW5e/C:6",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          },
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-035",
+    "edit_session": "ses_df639b992ffeJv8Oxyp1HRTW5e",
+    "edit_call": 8,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df639b992ffeJv8Oxyp1HRTW5e/C:6",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 6,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          },
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 6,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df639b992ffeJv8Oxyp1HRTW5e/C:7",
+        "content_score": 0,
+        "content_rank_min": 4,
+        "content_rank_max": 6,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 2.807354922057604,
+            "max_rarity_bits": 2.807354922057604
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-039",
+    "edit_session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+    "edit_call": 11,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:8",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 2,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:2",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:9",
+        "content_score": 1,
+        "content_rank_min": 3,
+        "content_rank_max": 5,
+        "return_rarity": [
+          {
+            "call": 9,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 10,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 10,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 10,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:10",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 10,
+        "return_rarity": [
+          {
+            "call": 10,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:3",
+        "content_score": 0,
+        "content_rank_min": 6,
+        "content_rank_max": 10,
+        "return_rarity": [
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "run": "run-039",
+    "edit_session": "ses_df6375cedffeAPZj7j9zjEiqHk",
+    "edit_call": 12,
+    "combination": "none; C2 ordering unchanged",
+    "candidates": [
+      {
+        "source": "file:docs/project-notes.md",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 4,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:tests/test_expense_summary.py",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 5,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:8",
+        "content_score": 2,
+        "content_rank_min": 1,
+        "content_rank_max": 3,
+        "return_rarity": [
+          {
+            "call": 8,
+            "content_score": 2,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:2",
+        "content_score": 1,
+        "content_rank_min": 4,
+        "content_rank_max": 4,
+        "return_rarity": [
+          {
+            "call": 2,
+            "content_score": 1,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:.agents/skills/systematic-debugging/SKILL.md",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 1,
+            "content_score": 0,
+            "call_rarity_bits": 0.4854268271702417,
+            "max_file_rarity_bits": 0.4854268271702417,
+            "max_rarity_bits": 0.4854268271702417
+          }
+        ]
+      },
+      {
+        "source": "file:data/expenses.csv",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 7,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "file:src/expense_summary.py",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 6,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:10",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 10,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:11",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 11,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 2.807354922057604,
+            "max_rarity_bits": 2.807354922057604
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:3",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 3,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": null,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      },
+      {
+        "source": "return:ses_df6375cedffeAPZj7j9zjEiqHk/C:9",
+        "content_score": 0,
+        "content_rank_min": 5,
+        "content_rank_max": 11,
+        "return_rarity": [
+          {
+            "call": 9,
+            "content_score": 0,
+            "call_rarity_bits": 0.22239242133644802,
+            "max_file_rarity_bits": 0.22239242133644802,
+            "max_rarity_bits": 0.22239242133644802
+          }
+        ]
+      }
+    ]
+  }
+]

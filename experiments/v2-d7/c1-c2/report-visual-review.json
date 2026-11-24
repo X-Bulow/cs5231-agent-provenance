@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "pdf_sha256": "a10c7808d76067d61798c87262f661e1cbcf458177426a67b09734b3ba3905e8",
+  "pages": 9,
+  "reviewed_at": "2026-11-24T11:53:18.220484+08:00",
+  "method": "Rendered all nine final pages with Poppler. Visually inspected pages 1-9; final rebuild changed only page 5, which was inspected again. Other eight page rasters are byte-identical in RGB pixels to the inspected version.",
+  "checks": [
+    "No clipping, overlap or missing glyphs",
+    "Tables, delegated-session figure and captions legible",
+    "C1/C2 table matches ranking.csv",
+    "59-test count appears in final page 5"
+  ],
+  "compile_notes": [
+    "One Tectonic warning: PDF figure accessibility tags are ignored; no overfull/underfull boxes."
+  ],
+  "page_png_sha256": {
+    "c1-c2-final-1.png": "b65cab7cfd710fe605ba85edf5f9a7618149247f7fa90569c1a7467115921568",
+    "c1-c2-final-2.png": "99a7523c2d514c14ab34cca568e057b31be22e47120bf45e94ec0c2c56952085",
+    "c1-c2-final-3.png": "b062cbd02d6a577b1de2789cc70c71d2215f038fd600c5dc382282242ec6ff74",
+    "c1-c2-final-4.png": "6ae0148b1b5a6239a12c67f9c5a2dd54a7bd907cc3fd7d72220bf12843c36f45",
+    "c1-c2-final-5.png": "902ef4ea76930fc433daf7dcfe645d1d84e8e9cc395ddfc53f3f3076bb0f50a8",
+    "c1-c2-final-6.png": "b148e04ea63b0ea29d8cd1d0660635bbffdd6eaf8f9ce919f6c0a8a6929f0991",
+    "c1-c2-final-7.png": "91adbbb6a34345635908e03aadfcb0185faf2c7559c700dc9924bf1efe2a4b17",
+    "c1-c2-final-8.png": "f265dbc41a789c919b0e70903c31d5d6463967d72d4de8ab7d520bfe76845e1c",
+    "c1-c2-final-9.png": "3bbbdd8c32144a7f89ee475a2df9e293bcce508192325fe3422e2a0faef6aefc"
+  }
+}

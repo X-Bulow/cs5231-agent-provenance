@@ -1,0 +1,550 @@
+{
+  "version": "c3-v1",
+  "reference_runs": [
+    "run-030",
+    "run-033",
+    "run-034",
+    "run-037",
+    "run-038"
+  ],
+  "count_unit": "complete-run signature presence",
+  "probability": "(support+1)/(reference_runs+2)",
+  "rarity_bits": "-log2(probability)",
+  "signature_count": 34,
+  "signatures": [
+    {
+      "tool": "bash",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "data/expenses.csv",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "docs/runner-notes.txt",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "outputs/report.md",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-038"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "src/__init__.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "src/expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "tests/test_expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "bash",
+      "relation": "READ",
+      "path": "tools/run_tests.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "edit",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "edit",
+      "relation": "READ",
+      "path": "outputs/report.md",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "edit",
+      "relation": "READ",
+      "path": "src/expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "edit",
+      "relation": "WRITE",
+      "path": "outputs/report.md",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "edit",
+      "relation": "WRITE",
+      "path": "src/expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "glob",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "grep",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "grep",
+      "relation": "READ",
+      "path": "data/expenses.csv",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "grep",
+      "relation": "READ",
+      "path": "docs/project-notes.md",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "grep",
+      "relation": "READ",
+      "path": "src/expense_summary.py",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "grep",
+      "relation": "READ",
+      "path": "tests/test_expense_summary.py",
+      "reference_support": 1,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030"
+      ],
+      "smoothed_probability": 0.2857142857142857,
+      "rarity_bits": 1.8073549220576042,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "invalid",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 2,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-037"
+      ],
+      "smoothed_probability": 0.42857142857142855,
+      "rarity_bits": 1.222392421336448,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": ".agents/skills/systematic-debugging/SKILL.md",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": ".agents/skills/systematic-debugging/root-cause-tracing.md",
+      "reference_support": 2,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-034"
+      ],
+      "smoothed_probability": 0.42857142857142855,
+      "rarity_bits": 1.222392421336448,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "data/expenses.csv",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "docs/project-notes.md",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "docs/runner-notes.txt",
+      "reference_support": 4,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-038"
+      ],
+      "smoothed_probability": 0.7142857142857143,
+      "rarity_bits": 0.4854268271702417,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "outputs/report.md",
+      "reference_support": 2,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033"
+      ],
+      "smoothed_probability": 0.42857142857142855,
+      "rarity_bits": 1.222392421336448,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "src/expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "tests/test_expense_summary.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "read",
+      "relation": "READ",
+      "path": "tools/run_tests.py",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "skill",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 4,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037"
+      ],
+      "smoothed_probability": 0.7142857142857143,
+      "rarity_bits": 0.4854268271702417,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "skill",
+      "relation": "READ",
+      "path": ".agents/skills/systematic-debugging/SKILL.md",
+      "reference_support": 4,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037"
+      ],
+      "smoothed_probability": 0.7142857142857143,
+      "rarity_bits": 0.4854268271702417,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "write",
+      "relation": "CALL",
+      "path": null,
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    },
+    {
+      "tool": "write",
+      "relation": "WRITE",
+      "path": "outputs/report.md",
+      "reference_support": 5,
+      "reference_runs": 5,
+      "supporting_runs": [
+        "run-030",
+        "run-033",
+        "run-034",
+        "run-037",
+        "run-038"
+      ],
+      "smoothed_probability": 0.8571428571428571,
+      "rarity_bits": 0.22239242133644802,
+      "unseen_in_reference": false
+    }
+  ]
+}

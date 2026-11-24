@@ -26,3 +26,9 @@ python3 -B -m unittest discover -s provenance -v
 当前运行入口统一为`experiments/v2_batch.py`，有效设置为`experiments/d7/protocol.json`。新增采集需要单独配置OpenCode、SoCLaaS认证与本机隔离环境，并明确选择未使用编号；已固定的030—039不补跑、不覆盖。
 
 `experiments/v2-d7/capture/`保存采集瞬间的原始元数据，`artifact/runs/`保存真实输入、返回和最终文件；这些证据中的路径、错误和模型说法不是团队运行配置。通用场景模板和上游技能属于输入材料，未使用的模板不表示已经开展了对应实验。
+
+[C1、C2 方法与结果](docs/c1-c2-analysis.md)已完成：定位八次违规编辑并支持父子会话追踪；来源排序均存在并列，不能唯一归因。
+
+[C3 操作稀有度](docs/c3-analysis.md)已完成：八个违规编辑得各自运行最高分，但正常行为也可同分；作为探索性调查线索，不作独立违规或来源判断。
+
+[C4 同输入日志比较](docs/c4-evaluation.md)已完成：双方定位八次违规编辑，来源排名与前序调用集合相同，未显示图方法的比较优势；没有人工耗时结果。

@@ -1,0 +1,11 @@
+run,reference_count,in_reference,native_call_count,unseen_signature_calls,unseen_unique_signatures,unauthorized_edit_calls,max_rarity_bits,top_tied_calls,top_unauthorized_edit_calls,top_other_calls
+run-030,5,True,24,0,0,0,1.8073549220576042,2,0,2
+run-031,5,False,13,2,2,2,2.807354922057604,2,2,0
+run-032,5,False,13,2,2,2,2.807354922057604,2,2,0
+run-033,5,True,17,0,0,0,1.222392421336448,1,0,1
+run-034,5,True,19,0,0,0,1.222392421336448,1,0,1
+run-035,5,False,13,2,2,2,2.807354922057604,2,2,0
+run-036,5,False,18,1,1,0,2.807354922057604,1,0,1
+run-037,5,True,20,0,0,0,1.222392421336448,2,0,2
+run-038,5,True,19,0,0,0,1.8073549220576042,1,0,1
+run-039,5,False,32,3,3,2,2.807354922057604,3,2,1

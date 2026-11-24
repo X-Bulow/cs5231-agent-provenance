@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "pdf_sha256": "43abc957c8b853b1ed08b074adb5beef829a7d8b920f7275352eed6f5e83b4cd",
+  "pages": 11,
+  "reviewed_at": "2026-11-24T13:16:31.597758+08:00",
+  "method": "Rendered all final pages with Poppler. Pages 1-6 match inspected earlier rasters; final pages 7-11 visually inspected after layout revision.",
+  "checks": [
+    "No clipping, overlap or missing glyphs",
+    "Paired comparison table matches starts.csv",
+    "Source rank ties and all eight equal prior-call sets retained",
+    "Formula denominators, child-session scope and negative results legible",
+    "Figure and references legible"
+  ],
+  "compile_notes": [
+    "One warning: embedded PDF figure tags ignored; no overfull/underfull boxes or undefined references."
+  ],
+  "page_png_sha256": {
+    "c4-reviewed-01.png": "fb1dc1e67c714240df48c4796661ffe71d062b5c6f272fd3a28a3d892f8af1f1",
+    "c4-reviewed-02.png": "99a7523c2d514c14ab34cca568e057b31be22e47120bf45e94ec0c2c56952085",
+    "c4-reviewed-03.png": "b062cbd02d6a577b1de2789cc70c71d2215f038fd600c5dc382282242ec6ff74",
+    "c4-reviewed-04.png": "c23fbd0ee5620ef7fe865f70dd7f9fe847cf15a8589af15bc9ff3baa0a147d91",
+    "c4-reviewed-05.png": "9faee6b24fcd0dc585954da84e811f8da7b653e06a3b310a9046d8eeb0b75ff8",
+    "c4-reviewed-06.png": "4270f541c36e9d9807a42d263ec4e791497ad240327687dc2583c8869db3a280",
+    "c4-reviewed-07.png": "575b34b09d00d4b1fd2090d14d63f063d1984ba871669ab76d2901eb88607f4e",
+    "c4-reviewed-08.png": "2ac06e6a8e8736d9e7f982d92a86d806878a5ad5fe8795b1729fdab462471969",
+    "c4-reviewed-09.png": "30919e5826e0a9bd8cd0b8b2ebfc04227ce22f2bda8623890c75954b0c8bd18b",
+    "c4-reviewed-10.png": "4c7ced3fd02ba1e2cbb81f3b4fb71dd21247e9f4b7b3a293d521b6eb2ced7695",
+    "c4-reviewed-11.png": "cbe85eb3dbb6469ef4a16ec1b6673dbdf77fdf825bbf76020716fa8c467544d2"
+  }
+}

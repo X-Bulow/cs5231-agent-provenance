@@ -41,6 +41,37 @@ def prepare_tables():
         inferred = sum(e['basis'] == 'inferred' for e in graph['edges'])
         rows.append(f"{row['run'][4:]} & {row['nodes']} & {row['edges']} & {inferred} & {len(row['file_versions'])} " + r'\\')
     (generated / 'graph-table.tex').write_text('\n'.join(rows + [r'\bottomrule', r'\end{tabular}']) + '\n')
+    investigation = load(ROOT / 'experiments/v2-d7/c1-c2/summary.json')
+    if investigation['unauthorized_edit_starts'] != 8 or investigation['controlled_document_unique_first'] != 0:
+        raise ValueError('C1/C2 changed: review report prose before rebuilding')
+    rows = [r'\begin{tabular}{@{}llrr@{}}', r'\toprule',
+            r'Run and call & Added number & Candidates & Note rank interval \\', r'\midrule']
+    for row in investigation['ranking_rows']:
+        label = row['run'][4:] + (' child' if row['parent_call'] else '') + ' C' + str(row['call'])
+        rows.append(f"{label} & {row['added_tokens']} & {row['candidate_count']} & {row['controlled_document_rank_min']}--{row['controlled_document_rank_max']} " + r'\\')
+    (generated / 'ranking-table.tex').write_text('\n'.join(rows + [r'\bottomrule', r'\end{tabular}']) + '\n')
+    rarity = load(ROOT / 'experiments/v2-d7/c3/summary.json')
+    if len(rarity['unauthorized_edits']) != 8 or rarity['heldout_normal_runs_with_unseen_signature'] != 2 or rarity['c2_top_tie_cases_with_equal_return_rarity'] != 8:
+        raise ValueError('C3 changed: review report prose before rebuilding')
+    rows = [r'\begin{tabular}{@{}lrrr@{}}', r'\toprule',
+            r'Run and call & Rarity (bits) & Rank interval & Calls in run \\', r'\midrule']
+    for row in rarity['unauthorized_edits']:
+        label = row['run'][4:] + (' child' if row['parent_call'] else '') + ' C' + str(row['call'])
+        rows.append(f"{label} & {row['max_rarity_bits']:.3f} & {row['rank_min']}--{row['rank_max']} & {row['native_call_count']} " + r'\\')
+    events = load(ROOT / 'experiments/v2-d7/c3/events.json')
+    for run, call in [('run-036', 13), ('run-039', 3)]:
+        row = next(r for r in events[run] if r['call'] == call and r['parent'] is None)
+        rows.append(f"{run[4:]} C{call} ({row['tool']}) & {row['max_rarity_bits']:.3f} & {row['rank_min']}--{row['rank_max']} & {len(events[run])} " + r'\\')
+    (generated / 'rarity-table.tex').write_text('\n'.join(rows + [r'\bottomrule', r'\end{tabular}']) + '\n')
+    comparison = load(ROOT / 'experiments/v2-d7/c4/summary.json')
+    if comparison['identical_ranking_starts'] != 8 or comparison['identical_prior_call_sets_starts'] != 8:
+        raise ValueError('C4 changed: review report prose before rebuilding')
+    rows = [r'\begin{tabular}{@{}lrrrr@{}}', r'\toprule',
+            r'Start & Candidates G=L & Note rank G=L & Prior calls G/L & Ancestors / full \\', r'\midrule']
+    for row in comparison['per_start']:
+        label = row['run'][4:] + (' child' if row['parent_call'] else '') + ' C' + str(row['call'])
+        rows.append(f"{label} & {row['graph_candidate_count']} & {row['graph_rank_min']}--{row['graph_rank_max']} & {row['graph_prior_native_calls']}/{row['log_prior_native_calls']} & {row['graph_ancestor_nodes_excluding_target']}/{row['graph_full_nodes_excluding_target']} " + r'\\')
+    (generated / 'comparison-table.tex').write_text('\n'.join(rows + [r'\bottomrule', r'\end{tabular}']) + '\n')
     completed = load(ROOT / 'experiments/v2-d7/COMPLETED.json')
     (generated / 'numbers.tex').write_text(r'\newcommand{\TestCount}{' + str(completed['tests_passed']) + '}\n')
 

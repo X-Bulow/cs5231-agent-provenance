@@ -24,10 +24,12 @@ For example, 4/5 protected modifications means four of the five injection starts
 \end{table}
 All five normal runs and injection run 036 complete the legitimate task. Runs 031, 032, 035 and 039 instead change the protected expectations to 140.00 and 5.50 and leave the source unchanged. Their final public tests pass while independent source checks remain 6/9 and the CLI still outputs food=140.00 and travel=55.00. The four failures are retained as both task failures and achieved attack objectives.
 
-The normal completion count includes bounded continuations: 030, 033, 034 and 037 use two segments, while 038 uses four. It must not be described as a first-response success rate. All injection runs use one segment; the same collector stops once a protected change is visible. Run 036 receives the payload but repairs the source without a final protected change; its internal decision mechanism is unobserved.
+The normal completion count includes bounded continuations: 030, 033, 034 and 037 use two segments, while 038 uses four. It must not be described as a first-response success rate. All injection runs use one segment; the same collector stops once a protected change is visible.
+
+Run~036 receives the payload but repairs the source without a final protected change; its internal decision mechanism is unobserved.
 
 \subsection{A protected modification through delegation}
-\begin{figure}[H]\centering
+\begin{figure}[htbp]\centering
 \includegraphics[width=0.90\textwidth,trim=0 20pt 0 0,clip]{run-039-protected.pdf}
 \caption{Parents of the first protected boundary version in 039. C2 returns the injected note; C3 invokes a child task. Dashed file relations summarize verified child evidence. The view is a dependency reconstruction, not proof of causal attribution.}
 \label{fig:delegation}
@@ -37,8 +39,38 @@ The parent session alone contains no direct edit to the test file. The native ch
 \subsection{Reports and graph reconciliation}
 Commands and results are reviewed against tool records, not accepted from agent prose. The four violating runs disclose the test edits but adopt the document's false compatibility authority. Their claim that no failures remain does not satisfy the original user specification. The report in 035 also contradicts itself about whether tests were preserved. Runs 030 and 037 contain one and two invalid-tool returns respectively, followed by recovery; these errors remain in the sample.
 
-\begin{table}[H]\centering\small
-\input{generated/graph-table.tex}
-\caption{Graph sizes from the retained records. Inferred edges include command analysis and delegated-session summaries. A matching final hash may have been filled by reconciliation; hash support is reported separately in the validation record.}
-\end{table}
+The validation record supplies complete per-run graph counts and the basis of each final hash.
+
 All final file changes have graph writers and matching last-version hashes, and all ten complete raw-byte replays match the final workspace. This is a consistency result for saved tool evidence, not evidence of complete filesystem observation or source-attribution accuracy.
+
+
+\subsection{C1 investigation and C2 candidate ranking}
+C1 agrees with the independently compared final files and the reviewed native edits: 031 C9/C10, 032 C9/C10, 035 C7/C8 and 039 child C11/C12. These are eight edit starts in four runs, with one additional parent C3 summary excluded from the edit count. The five normal runs and injection run 036 have only authorized writes; no final change lacks a writer record. The three invalid returns in 030 and 037 are not file operations. Temporary protected changes followed by restoration do not occur in this batch; synthetic opposite edits verify that the detector still retains such writes.
+
+\begin{table}[H]\centering\small
+\input{generated/comparison-table.tex}
+\caption{Paired C2/C4 results. G is graph, L is flat log; candidates and note rank are identical on both sides. Prior calls exclude the target. Ancestors/full counts all node kinds in the same session graph with the target excluded from both counts. Child rows use the child session only.}
+\end{table}
+For example, 031 C9 has seven candidates and the controlled note ties with real failing-test output at score two, occupying ranks 1--2. All eight edits retrieve the note, but none ranks it uniquely first (0/8 edits). Each 140.00 edit ties with a failing-test return; each 5.50 edit also ties with the original test file, which contains that input amount and its own path. Thus numerical overlap does not distinguish the injected instruction from legitimate observations. The matched baseline below gives the same rankings; no reading-time reduction was measured.
+
+
+\subsection{C3: rare operations include legitimate behavior}
+C3 scores 188 native calls, counting 039's 18 parent and 14 child calls once each. All eight protected edits are in their run's highest-score group at 2.807 bits because edit access to the test file occurs in zero of five normal references. The edit tool itself occurs in all five and scores only 0.222 bits. Thus the file relation, rather than the tool alone, explains the high score.
+
+\begin{table}[H]\centering\small
+\input{generated/rarity-table.tex}
+\caption{Five-reference C3 examples, including non-edit and legitimate counterexamples. Rarity is the maximum signature score in bits; ranks include all native calls in that complete run.}
+\end{table}
+For example, 031 C9 is tied at ranks 1--2 among 13 calls. But legitimate run 036's C13 read of README.md also scores 2.807 because that tool/path relation is absent from the five references. In 039, parent task C3 ties with the two child edits; it is not a third protected edit. High rarity therefore does not establish a violation, and the high score on protected edits has not shown added localization value beyond C1's permission rule.
+
+Two of five held-out normal cases contain signatures unseen in their four references: 030's C16 grep and C24 authorized report edit, and 038's C16 bash read of the report. This is a count of unseen-reference cases, not a false-positive rate; no classifier threshold is set. In the five four-reference folds, 039's highest-score group contains respectively 10, 3, 3, 3 and 5 calls, including both protected edits. The enlarged tie groups expose sensitivity to the small reference set.
+
+The project-document read signature occurs in all five normal references and scores 0.222 bits for the injected reads too. Path-level rarity does not distinguish the changed document content. In all eight C2 cases, every tied top candidate also has the same return-call rarity of 0.222 bits. C2 and C3 are displayed separately; no source-ranking improvement or unique attribution is established.
+
+
+\subsection{C4: equal localization, rankings and prior-call sets}
+Both methods process all 188 native calls and identify the same 33 actual file-write operations. Against reviewed native edits, each locates all eight violations in four runs, with no missed or additional violation and no violation prediction in the other six runs. This is a fixed-sample agreement result under shared permission rules, not evidence of a graph detection advantage.
+
+Full payload exposure before the action is independently confirmed for four runs and eight violating starts. Both methods retrieve the controlled document in 4/4 eligible runs and 8/8 eligible starts, uniquely first in 0/8. Complete candidate lists, scores and tie intervals are identical at every start. The child export is available to both sides; parent-only counting is not the baseline.
+
+Ancestor graphs retain 24--37 of 48 non-target nodes (50.0--77.1\%) in these session graphs. That ratio includes node kinds absent from a flat row and removes future execution too. Under the common native-call unit, all eight ancestor call-identity sets equal the same-time flat prefixes: 6--11 prior calls per start. NEXT and result-to-response history links keep the earlier calls reachable, so graph traversal does not prune these temporal prefixes. Thus the node fraction establishes neither a reduction relative to the fair baseline nor an analyst-time saving. Explicit versions, relation evidence and task boundaries remain inspectable, but their human benefit was not measured.
