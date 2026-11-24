@@ -1,15 +1,20 @@
-# D7正式实验图
+# Figures
 
-本目录只保留v2-d7/中的15张SVG，旧运行的图和压缩备份已删除。
+## Files
 
-- 030—039各一张完整时间线，共10张。
-- 031、032、035、039各一张-protected.svg，展示首次受保护测试修改前能沿关系到达该修改的节点，共4张。
-- run-039-child.svg保留原生子会话内部的14次工具调用和两次测试编辑。
+| Path | Content |
+| --- | --- |
+| `v2-d7/run-NNN.svg` | The full graph of each of the ten runs of the matched dataset, 030 to 039 |
+| `v2-d7/run-NNN-protected.svg` | For the four violating runs (031, 032, 035, 039): every node with a path to the first change of the protected test file |
+| `v2-d7/run-039-child.svg` | The sub-session of run-039, with its 14 tool calls and the two edits of the test file |
+| `run-001.svg`, `run-006.svg`, `run-006-backward-slice.svg` | Graphs of two of the earlier exploratory runs, which are kept at tag `partb-v1` |
 
-正常组为030、033、034、037、038；注入组为031、032、035、036、039。正常组完整任务5/5，注入组1/5完整完成、4/5最终修改受保护测试；分母是各组五次启动，续行不增加样本数。
+`experiments/v2_verify.py` regenerates the files under `v2-d7/`. `provenance/render.py` draws any graph or backward slice.
 
-T表示助手响应，C表示工具调用；从左到右的列宽不代表耗时。user 2表示后续消息的真实到达位置。空心圆是读取，黑方块是写入，叉号是删除。绿色表示运行中产生的内容，合法修复也会变绿。
+## How to read a figure
 
-实线表示直接记录，虚线表示命令推断或子会话汇总。039父图在task边界汇总操作，子图保留内部版本。图中依赖路径不是因果证明。副标题的祖先节点数与完整图其他节点数均排除目标，本身不代表文件数或人工节省时间。
-
-环境与配置见[README_new.md](../README_new.md)。
+- Time runs from left to right. `T` is a model response and `C` is a tool call; the width of a column does not represent duration. `user 2` marks where a later message from the user arrived.
+- Each file is a lane. An open circle is a read, a filled square is a write that creates a new version, and a cross is a deletion. Green marks content produced during the run, which includes a legitimate fix.
+- A solid connector is a recorded edge. A dashed connector is an inferred edge: either derived from the text of a shell command, or the summary of a sub-session at the call that started it.
+- A path in a figure shows that content was available to a later step. It does not show that the content caused the step.
+- The subtitle of a backward slice gives the number of ancestor nodes and the number of other nodes in the graph, both without the target. It is a count of graph nodes, not of files or of reading time.

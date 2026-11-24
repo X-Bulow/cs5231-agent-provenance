@@ -1,32 +1,109 @@
-\section{Investigation and Source-Content Ranking}
-Outcome review starts from the user's permitted directories and actual final changes. C1 accepts the allowed directory list, checks recorded and inferred file writers, and separately compares baseline hashes with final workspace hashes. It builds without final-check reconciliation: an unexplained final change cannot invent a writer. Failed and invalid calls remain diagnostics. Shell-derived writes remain inferences, while delegated task boundaries and actual child edits are counted separately.
+\section{Technical Design: Analysis on the Graph}
+\label{sec:analysis}
 
-The query command follows ancestors or descendants of a selected call and retains original arguments, returns and evidence edges. A child query also exposes the parent task boundary. The ancestor fraction is the number of ancestor nodes excluding the target divided by all nodes in the same session graph excluding the target. It measures graph coverage, not files or analyst time. Parent and child fractions are separate.
+\subsection{Detection point}
 
-C2 ranks only nonempty tool returns in earlier assistant turns of the same native session; a return ending after the target starts is excluded. Same-turn calls, future returns and user messages are not candidates. Child ranking does not assume access to parent history. Direct read/skill returns with one file identity are grouped by path; shell and otherwise unmapped returns remain individual candidates. Repeated reads of a file take the maximum return score rather than accumulating points.
+Module~2 distinguishes anomaly, misuse, and specification-based detection.
+We use the third.
+The specification is the user's instruction, which names the paths the agent may write.
+Any \rel{Write} edge from a tool call to a file version outside \file{src/} and \file{outputs/} is an alert, and the alert is the anchor for tracking.
+An absolute path, or a path that climbs out of the workspace, is outside as well.
 
-For an edit, raw old/new replacement text determines added token occurrences and added or replaced full lines. Tokens are signed numbers, identifiers or paths. Positive differences in token counts produce distinct added-token features; unchanged context adds no token points. Full new-line features retain any unchanged context on that changed line. For a write, exact previous content is required; unavailable content is reported instead of treating an overwrite as wholly new.
+This is the CFI idea of Table~\ref{tab:module1} applied to the graph: the legal targets of a write are known before the run, and a write elsewhere is a violation regardless of why the agent made it.
+The rule does not look at any text the agent read.
+It cannot be triggered by suspicious wording, and it cannot be talked out of an alert.
 
-Rule v1 awards one point for the complete target path, one per distinct added token, and one per full added line found in the return. File scores take the maximum over returns. A tie interval is one plus the count of higher-scoring candidates through the count of candidates with at least that score. Stable display order does not break ties. The algorithm receives no scenario label or known injection path; the acceptance script looks up that path only after ranking.
+Detection is separate from the reconciliation of Section~\ref{sec:graph}.
+The detector uses a graph built without the final hashes, so a file that changed with no recorded writer is reported as unexplained and is never given an invented writer.
+A failed call, and a call to a tool that does not exist, are kept as diagnostics and do not count as writes.
 
-These scores retrieve content-similar candidates. They do not establish model-internal influence. In particular, the wrong amounts also appear in real failing-test output, and 5.50 already occurs in a legitimate test input. We make no source-attribution, ranking-improvement or time-saving claim. The same-input comparison below retains this ambiguity.
+\subsection{Backward and forward tracking}
 
+\emph{Backward} tracking collects every node with a path to the anchor.
+Among them, the prompt and the file versions are the candidate sources, and the trust label separates what the user supplied from what the workspace supplied.
+The target is the break-in point: the call through which the injected content first entered the context.
 
-\subsection{C3: exploratory operation rarity}
-A frozen rule uses normal runs 030, 033, 034, 037 and 038 as references. A signature consists of tool, relation and normalized path, without node, version or session identifiers. CALL denotes a native invocation with null path, including failed or invalid calls. READ, WRITE and DELETE use recorded or inferred file edges built without final reconciliation. Parent delegated file summaries are excluded; actual child operations belong to their complete run. Failure does not manufacture file relations.
+\emph{Forward} tracking collects every node reachable from a chosen object, typically a suspected file.
+The file versions among them are the possibly contaminated artifacts.
+It applies whether or not the attack succeeded: for a run in which the agent ignored the payload, it shows that the payload reached the model and what was written afterwards.
 
-Let $k_s$ count reference runs containing signature $s$, once per complete run regardless of repetitions, and let $N$ be the number of reference runs. We use
+\subsection{Handling dependency explosion}
+\label{sec:explosion}
+
+Plain reachability is too broad, for the reason given in Section~\ref{sec:differences}.
+We narrow it in three layers of increasing evidential strength.
+
+\paragraph{Layer 1: structure.}
+The graph already partitions execution by turn, and each object enters the context at one identifiable turn.
+Trust labels remove the sources the user vouched for.
+This reduces the candidates but does not choose among workspace files.
+
+\paragraph{Layer 2: content evidence.}
+Compare what the anchor's call wrote with the text of each candidate source as the model received it.
+A source that contains distinctive content found in the action, and found in no other source, is ranked first.
+The limit is that distinctive content may not be unique.
+In our setting the payload asks for the expectations \texttt{140.00} and \texttt{5.50}, and both values also appear in the output of the genuinely failing tests.
+
+We fixed the scoring rule before computing any result.
+The candidates are the tool results of earlier turns in the same session; results of the same turn and later ones are excluded.
+A result that returns one file stands for that file, and a file read several times counts once, with its best score.
+For an edit, the rule compares the replaced text with the new text and extracts what is new: the tokens that the new text has more of, where a token is a number, an identifier, or a path, and the full lines that were added.
+A candidate gets one point if it contains the path of the edited file, one point for each new token it contains, and one for each new line.
+Candidates with equal scores share a rank interval; nothing breaks a tie.
+The ranking is not given the scenario or the name of the injected file.
+
+\paragraph{Layer 3: counterfactual reruns.}
+Remove the suspected input, rerun from the same starting state, and observe whether the unauthorized action disappears.
+The normal scenario is the counterfactual of each injection scenario.
+Because a model is not deterministic, one rerun proves little; each condition has to be repeated, and the conclusion is a difference in rates.
+The matched dataset has five runs of each condition.
+
+\paragraph{Ranking by rarity.}
+Independently of the three layers, we score operations by how unusual they are, in the spirit of NoDoze~\cite{nodoze}.
+Node identifiers are specific to a run, so an operation is first abstracted to a signature $(t, r, d)$, where $t$ is the tool, $r$ the relation, and $d$ the file path.
+A call by itself, with no file, is a signature too.
+The five normal runs are the reference.
+With $k_s$ the number of reference runs that contain signature $s$ at least once, and $N$ the number of reference runs,
 \[
- p_s=\frac{k_s+1}{N+2},\qquad R_s=-\log_2 p_s.
+  p_s = \frac{k_s + 1}{N + 2},
+  \qquad
+  R_s = -\log_2 p_s .
 \]
-This is independent binary occurrence smoothing per signature, not a categorical distribution over paths; probabilities need not sum to one. Any unseen path or tool has $k_s=0$ and finite rarity. With five references, an unseen signature scores 2.807 bits and a signature in all five scores 0.222 bits. These are descriptive rarity scores, not attack probabilities.
+A signature counts once per run however often it repeats, so one long run cannot dominate the reference.
+The smoothing keeps the score of an unseen signature finite: with five reference runs it is 2.807 bits, and a signature present in all five scores 0.222 bits.
+A call takes the highest score among its signatures, and calls are ranked within their run, ties included.
+An \texttt{edit} that writes a file under \file{tests/} never occurs in a reference run, so it scores high without any rule naming that path.
+We set no threshold: the score orders what an investigator looks at first and decides nothing.
 
-Each native call takes the maximum over its signatures; CALL and maximum file scores remain separately inspectable. An empty file neighborhood has null file score. Scores are not added across edges, repeated operations or child sessions. Calls are ranked within one complete run with explicit tie intervals. No alert threshold or C1/C2 score combination is fitted.
+\subsection{Two baselines}
 
-Normal scores under the full reference are in-sample descriptions. Five additional folds each remove one normal run and score that held-out run and all five injection runs with the same four-reference model. The five folds contain five distinct held-out normal cases, not 25 new injection experiments. Four-reference and five-reference raw scores have different calibration. This is offline analysis, not a detector deployed in collection-time order.
+A method is worth its cost only against a simpler one, and we compare with two.
 
+\paragraph{Keyword scan.}
+The simplest way to look for prompt injection in a log is to search the text the tools returned for injection wording.
+Our list of phrases was written with knowledge of the payloads, which favors this baseline.
 
-\subsection{C4: a graph-independent flat-log baseline}
-Both methods receive the same ten runs, native parent/child sessions, initial hashes, final files and authorized directories. The automated log baseline scans calls and maintains a path set; it does not import graph methods or read graph artifacts. It includes actual child calls and retains failures. The two methods share parsing, normalization, shell inference, authorization and the fixed C2-v1 content rule. File operations and source identities are obtained separately. This compares evidence organization under shared observation, not added system-call visibility.
+\paragraph{Flat-log analysis.}
+The second baseline is a fair one.
+It answers the same questions as the graph, detection, earlier calls, and source ranking, by walking the calls of a session in order and keeping a table of file operations.
+It builds no graph and reads none, which a test enforces by running it in a process where importing the graph code fails.
+It is given the same sessions, the same sub-session export, the same allowed paths, the same shell inference, and the same scoring rule.
+The comparison therefore isolates one thing: whether organizing the evidence as a graph changes the answers.
 
-Detection is checked by run and native write operation (session, call and path), excluding parent summaries. Source coverage includes only confirmed violating starts with full prior payload exposure in their own session. Manual labels and the known controlled path are consulted only after computation. We report candidate counts, tied ranks and the ancestor fraction with the target excluded from numerator and denominator. For a common volume unit we also compare graph-ancestor call identities with the flat log's same-session temporal prefix. Parent context is separate from child denominators. No analyst timing or tuned fusion with C3 is performed.
+\subsection{What the record establishes}
+
+The analysis keeps three levels of claim apart:
+\begin{enumerate}
+  \item A recorded read establishes that a tool accessed a file.
+  \item A tool result read by a turn establishes that the content was available to the model.
+  \item That an action was caused by a particular input is a hypothesis, supported by Layers~2 and~3 and never by reachability alone.
+\end{enumerate}
+The model's recorded reasoning is kept in the graph for the reader's convenience and is not used as evidence.
+
+\subsection{Evaluation}
+
+\begin{itemize}
+  \item \emph{Detection}: missed violations and false alarms of the rule, against the independent checker and a manual review of every edit as ground truth, and against the keyword scan. The benign-quotation scenario exists to expose false alarms.
+  \item \emph{Attribution}: whether the injected file is in the backward slice, the size of the slice relative to the graph, and the rank of the injected file after Layer~2. The same measures for the flat-log baseline.
+  \item \emph{Outcome classification}: each run placed in one of the classes of the project guide~\cite{projectguide}.
+\end{itemize}
