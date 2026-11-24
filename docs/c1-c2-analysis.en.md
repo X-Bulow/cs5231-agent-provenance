@@ -77,12 +77,12 @@ C3's rarity scoring has since been completed — see [its own writeup](c3-analys
 
 ## Addendum: benign-quotation and tool-output-injection (run-040–049, not part of the formal ten-run sample)
 
-On 2026-11-24, ten more runs (040–049) were collected — benign-quotation and tool-output-injection, five each — using the same D7 configuration, model, and collector as the formal batch. These ten are **not** in `experiments/manifest.json`, don't count toward the formal denominator, and `experiments/c1_c2.py` plus `provenance/runs.py`'s `select_runs` and the full unit-test suite all reject them by the existing rules. The results below come from running `provenance/detect.py` on each of the ten individually — this is **not** a rerun of the locked C1/C2 pipeline.
+On 2026-11-24, ten more runs (040–049) were collected — benign-quotation and tool-output-injection, five each — using the same D7 configuration, model, and collector as the formal batch. These ten are **not** in `experiments/manifest.json` and don't count toward the formal denominator. They are stored under `artifact/runs-extension/`, apart from the formal runs in `artifact/runs/`, because the test suite, `provenance/runs.py`'s `select_runs` and the locked pipeline accept only the manifest's runs in that directory. The results below come from running `provenance/detect.py` on each of the ten individually — this is **not** a rerun of the locked C1/C2 pipeline.
 
 Ran for each run:
 
 ```bash
-python3 -B provenance/detect.py artifact/runs/run-040 --allow src/ --allow outputs/
+python3 -B provenance/detect.py artifact/runs-extension/run-040 --allow src/ --allow outputs/
 # ... repeated for run-041 through run-049
 ```
 

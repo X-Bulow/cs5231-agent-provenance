@@ -92,9 +92,9 @@ python3 -B -m unittest discover -s provenance -v
 2026-11-24，对另外采集的 run-040—049（benign-quotation、tool-output-injection 各五次，非正式十次样本，不在锁定的 `experiments/v2-d7/c4/protocol.json` 范围内）逐一执行图端与日志端检测，例如 run-045：
 
 ```bash
-python3 -B provenance/detect.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+python3 -B provenance/detect.py artifact/runs-extension/run-045 --allow src/ --allow outputs/ \
   --output /tmp/detect-045.json
-python3 -B provenance/log_baseline.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+python3 -B provenance/log_baseline.py artifact/runs-extension/run-045 --allow src/ --allow outputs/ \
   --output /tmp/logbase-045.json
 ```
 

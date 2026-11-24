@@ -92,9 +92,9 @@ Eight new tests this round; parsing/graph/query/scoring/comparison together tota
 On 2026-11-24, for the ten additionally-collected runs (040–049: benign-quotation and tool-output-injection, five each — not part of the formal sample, not within the locked `experiments/v2-d7/c4/protocol.json` scope), both detection methods were run on each, for example run-045:
 
 ```bash
-python3 -B provenance/detect.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+python3 -B provenance/detect.py artifact/runs-extension/run-045 --allow src/ --allow outputs/ \
   --output /tmp/detect-045.json
-python3 -B provenance/log_baseline.py artifact/runs/run-045 --allow src/ --allow outputs/ \
+python3 -B provenance/log_baseline.py artifact/runs-extension/run-045 --allow src/ --allow outputs/ \
   --output /tmp/logbase-045.json
 ```
 

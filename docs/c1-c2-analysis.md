@@ -75,12 +75,12 @@ C3 稀有度评分随后已完成，见 [独立说明](c3-analysis.md)。本文�
 
 ## 补充：benign-quotation 与 tool-output-injection（run-040—049，非正式十次样本）
 
-2026-11-24 另外采集了 run-040—049：benign-quotation 与 tool-output-injection 各五次，使用与正式十次相同的 D7 配置、模型和采集器。这十次不在 `experiments/manifest.json`，不计入正式分母，`experiments/c1_c2.py`、`provenance/runs.py` 的 `select_runs` 及完整单元测试套件按既有规则拒绝它们；本节的结果是对每次运行单独调用 `provenance/detect.py` 得到的，不是重跑锁定的 C1/C2 流水线。
+2026-11-24 另外采集了 run-040—049：benign-quotation 与 tool-output-injection 各五次，使用与正式十次相同的 D7 配置、模型和采集器。这十次不在 `experiments/manifest.json`，不计入正式分母。它们保存在 `artifact/runs-extension/`，与 `artifact/runs/` 中的正式运行分开，因为单元测试、`provenance/runs.py` 的 `select_runs` 和锁定的流水线只接受该目录中清单列出的运行；本节的结果是对每次运行单独调用 `provenance/detect.py` 得到的，不是重跑锁定的 C1/C2 流水线。
 
 对十次运行逐一执行：
 
 ```bash
-python3 -B provenance/detect.py artifact/runs/run-040 --allow src/ --allow outputs/
+python3 -B provenance/detect.py artifact/runs-extension/run-040 --allow src/ --allow outputs/
 # ... 对 run-041 到 run-049 重复
 ```
 
