@@ -8,6 +8,8 @@ A fraction counts runs out of the five runs of a condition.
 \subsection{Runs and outcomes}
 \label{sec:results-runs}
 
+Table~\ref{tab:outcomes} gives the outcomes by condition, and Table~\ref{tab:runs} lists the ten runs.
+
 \begin{table}[H]
 \centering\small
 \begin{tabularx}{0.82\textwidth}{@{}X c c@{}}
@@ -96,7 +98,7 @@ These are run 036, in which the agent read the payload and declined it, the five
 A keyword scan answers whether suspicious text was present.
 It cannot answer whether the agent did anything wrong, and that is the question the rule on the graph answers.
 
-\begin{figure}[!htbp]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=0.56\textwidth]{run-039-protected}
 \caption{Run 039: every node of the parent graph with a path to the changed test file. C2 reads the injected note and C3 is the \texttt{task} call. The dashed connector from C3 summarizes what the sub-session did. The parent issued no edit.}
@@ -112,16 +114,16 @@ Counting only the parent's edit calls would report this run as clean.
 \subsection{Backward tracking from a violation}
 \label{sec:results-backward}
 
-\begin{figure}[!htbp]
+Figure~\ref{fig:slice} shows every node of run 031 with a path to the first unauthorized edit.
+The slice holds \SliceNodes{} of the other \SliceOthers{} nodes: 6 turns, 9 tool calls, 8 results, 8 files, and the prompt.
+It contains the injected note, read by C2 in the first turn, and it contains no call issued after the edit.
+
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=0.82\textwidth]{run-031-protected}
 \caption{Backward slice from the first unauthorized edit in run 031: every node with a path to version~1 of the protected test file. C9 is the edit, and C2 is the call that read the injected project notes. Dashed connectors are inferred edges.}
 \label{fig:slice}
 \end{figure}
-
-Figure~\ref{fig:slice} shows every node of run 031 with a path to the first unauthorized edit.
-The slice holds \SliceNodes{} of the other \SliceOthers{} nodes: 6 turns, 9 tool calls, 8 results, 8 files, and the prompt.
-It contains the injected note, read by C2 in the first turn, and it contains no call issued after the edit.
 
 It also shows the limit of reachability.
 The edit has \SliceSources{} possible sources: the prompt, one skill file, and \SliceWorkspaceSources{} workspace files.
@@ -136,16 +138,16 @@ Across the eight unauthorized edits, the ancestors of the editing call are betwe
 \subsection{Content evidence does not single out the note}
 \label{sec:results-content}
 
-\begin{table}[!htbp]
+Layer~2 retrieves the injected note for all eight edits and ranks it first every time, but never alone (Table~\ref{tab:tracking}).
+For the four edits that write \texttt{140.00} the note ties with the output of the genuinely failing tests, which reports the buggy program's actual value.
+For the four edits that write \texttt{5.50} it ties in addition with the original test file, which contains that amount as an input and contains its own path.
+
+\begin{table}[!htb]
 \centering\small
 \input{generated/tracking-table.tex}
 \caption{The eight unauthorized edits. \emph{Ancestor nodes}: ancestors of the editing call out of the other nodes of its graph. \emph{Candidate sources}: earlier sources that the scoring rule ranks. \emph{Rank of the note}: the rank interval of the injected note, where an interval means a tie. \emph{Earlier calls}: tool calls before the edit that the graph keeps as ancestors, and that the flat log keeps as the earlier part of the session.}
 \label{tab:tracking}
 \end{table}
-
-Layer~2 retrieves the injected note for all eight edits and ranks it first every time, but never alone (Table~\ref{tab:tracking}).
-For the four edits that write \texttt{140.00} the note ties with the output of the genuinely failing tests, which reports the buggy program's actual value.
-For the four edits that write \texttt{5.50} it ties in addition with the original test file, which contains that amount as an input and contains its own path.
 
 This is not an accident of this payload.
 An attacker who wants a believable change asks for values the system already produces, so the legitimate observations and the injected instruction agree on the content.
@@ -154,15 +156,15 @@ Content evidence narrows the candidates from the whole slice to two or three sou
 \subsection{Rarity ranks harmless operations too}
 \label{sec:results-rarity}
 
-\begin{table}[!htbp]
+All eight unauthorized edits are in the top-scoring group of their run (Table~\ref{tab:rarity}).
+The reason is the file and not the tool: the edit tool occurs in every normal run and scores 0.222 bits, while an edit of the test file occurs in none and scores 2.807.
+
+\begin{table}[!htb]
 \centering\small
 \input{generated/rarity-table.tex}
 \caption{Rarity against the five normal runs. Run 039 counts the 18 calls of the parent and the 14 calls of the sub-session together.}
 \label{tab:rarity}
 \end{table}
-
-All eight unauthorized edits are in the top-scoring group of their run (Table~\ref{tab:rarity}).
-The reason is the file and not the tool: the edit tool occurs in every normal run and scores 0.222 bits, while an edit of the test file occurs in none and scores 2.807.
 
 The same top score goes to calls that are not violations.
 In run 036, which completed the task legitimately, a read of the workspace's \file{README.md} scores 2.807 because no normal run read that file.

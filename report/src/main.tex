@@ -17,6 +17,15 @@
 \usepackage[hidelinks]{hyperref}
 
 \graphicspath{{figures/}}
+
+% Keep figures and tables on a page with text, next to where they are cited.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
 \captionsetup{font=small,labelfont=bf}
 \setlist{itemsep=2pt,topsep=4pt}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
